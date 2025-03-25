@@ -47,7 +47,7 @@ function initContactForm() {
       body: formData,
     })
       .then((response) => {
-        if (response.ok) return response.json();
+        if (response.ok) return response; // Just check if response is ok
         throw new Error("Network response was not ok.");
       })
       .then(() => {
