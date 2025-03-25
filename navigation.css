@@ -2,7 +2,7 @@
    ------ SPIRIT & BONE - NAVIGATION ------
    =========================================== */
 
-/* ---- NAVIGATION STYLES ---- */
+/* Nav base styles */
 nav {
   font-family: "Vina Sans", serif;
   display: flex;
@@ -11,6 +11,7 @@ nav {
   width: 100%;
 }
 
+/* Menu circle (burger) */
 .menu-circle {
   position: fixed;
   top: 20px;
@@ -42,6 +43,7 @@ nav {
   transform: scale(1.15);
 }
 
+/* Navigation links */
 .nav-links {
   list-style: none;
   padding: 20px;
@@ -81,18 +83,11 @@ nav {
   opacity: 1;
   transform: translateY(0);
 }
-.nav-links.active li:nth-child(1) {
-  transition-delay: 0.1s;
-}
-.nav-links.active li:nth-child(2) {
-  transition-delay: 0.2s;
-}
-.nav-links.active li:nth-child(3) {
-  transition-delay: 0.3s;
-}
-.nav-links.active li:nth-child(4) {
-  transition-delay: 0.4s;
-}
+
+.nav-links.active li:nth-child(1) { transition-delay: 0.1s; }
+.nav-links.active li:nth-child(2) { transition-delay: 0.2s; }
+.nav-links.active li:nth-child(3) { transition-delay: 0.3s; }
+.nav-links.active li:nth-child(4) { transition-delay: 0.4s; }
 
 .nav-links li a {
   color: white;
@@ -119,11 +114,12 @@ nav {
 .nav-links li a:hover::after {
   width: 100%;
 }
+
 .nav-links li a:hover {
   animation: glitch 0.3s linear forwards;
 }
 
-/* Close button styles */
+/* Close button */
 .close-menu {
   position: fixed;
   top: 10%;
@@ -141,6 +137,7 @@ nav {
   opacity: 1;
   animation: rotateIn 0.5s ease forwards;
 }
+
 .close-menu:hover {
   transform: translateY(-50%) scale(1.1);
 }
@@ -166,9 +163,11 @@ nav {
 .close-icon::before {
   transform: rotate(45deg);
 }
+
 .close-icon::after {
   transform: rotate(-45deg);
 }
+
 .close-menu:hover .close-icon::before,
 .close-menu:hover .close-icon::after {
   background-color: var(--main-red);
@@ -195,25 +194,30 @@ nav {
 .menu-icon span:nth-child(1) {
   transform: rotate(0);
 }
+
 .menu-icon span:nth-child(2) {
   transform: rotate(90deg);
 }
+
 .nav-links.active + .menu-circle .menu-icon span:nth-child(1) {
   transform: rotate(45deg);
 }
+
 .nav-links.active + .menu-circle .menu-icon span:nth-child(2) {
   transform: rotate(135deg);
 }
 
-/* Navigation classes */
+/* Navigation animation classes */
 .nav-selected {
   animation: brighten-and-fade 1s forwards;
   z-index: 10;
   position: relative;
 }
+
 .nav-fading {
   animation: fade-out 0.5s forwards;
 }
+
 .nav-background-fade {
   animation: background-fade 1s forwards;
 }
@@ -235,11 +239,12 @@ nav {
 .page-transition.active {
   transform: translateY(0);
 }
+
 .page-transition.fade-out {
   transform: translateY(100%);
 }
 
-/* ---- UI COMPONENTS ---- */
+/* UI Components */
 
 /* Section indicator dots */
 .section-indicator {
@@ -250,7 +255,7 @@ nav {
   z-index: 100;
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Increased spacing between dots */
+  gap: 20px;
 }
 
 .indicator-dot {
@@ -330,15 +335,12 @@ nav {
   animation: bounceArrow 2s infinite;
 }
 
-/* Navigation animations */
+/* Animations */
 @keyframes glitch {
-  0%,
-  20%,
-  90% {
+  0%, 20%, 90% {
     color: transparent;
   }
-  10%,
-  40% {
+  10%, 40% {
     color: white;
   }
   100% {
@@ -388,11 +390,7 @@ nav {
 }
 
 @keyframes bounceArrow {
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
+  0%, 20%, 50%, 80%, 100% {
     transform: translateY(0);
   }
   40% {
@@ -434,7 +432,6 @@ nav {
 }
 
 @media (max-width: 768px) {
-  /* Navigation adjustments */
   .close-menu {
     top: 20px;
     transform: none;
@@ -445,18 +442,20 @@ nav {
   .nav-links.active .close-menu {
     animation: rotateInMobile 0.5s ease forwards;
   }
+  
   .close-menu:hover {
     transform: scale(1.1);
   }
+  
   .close-icon::before,
   .close-icon::after {
     height: 14px;
   }
 
-  /* Section indicator adjustments */
   .section-indicator {
     right: 10px;
   }
+  
   .indicator-dot {
     width: 10px;
     height: 10px;
@@ -464,11 +463,11 @@ nav {
 }
 
 @media (max-width: 480px) {
-  /* Layout adjustments for mobile */
   .close-menu {
     width: 40px;
     height: 40px;
   }
+  
   .close-icon::before,
   .close-icon::after {
     height: 6px;

@@ -3,13 +3,13 @@
    =========================================== */
 
 /* Import base styles and variables */
-@import '/base.css';
+@import "/base.css";
 
 /* Import component styles */
-@import '/navigation.css';
+@import "/navigation.css";
 
 /* Import section-specific styles */
-@import '/home.css';
-@import '/project.css';
-@import '/team.css';
-@import '/contact.css';
+@import "/home.css";
+@import "/project.css";
+@import "/team.css";
+@import "/contact.css";

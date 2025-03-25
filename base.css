@@ -2,7 +2,7 @@
    ------ SPIRIT & BONE - BASE STYLES ------
    =========================================== */
 
-/* ---- 1. VARIABLES & CONSTANTS ---- */
+/* ---- VARIABLES & CONSTANTS ---- */
 :root {
   --main-red: #c00001;
   --textured: url(/images/texture1.jpg);
@@ -17,7 +17,7 @@
   --bg-overlay: rgba(0, 0, 0, 0.85);
 }
 
-/* ---- 2. TYPOGRAPHY ---- */
+/* ---- TYPOGRAPHY ---- */
 .font-chiller {
   font-family: "Chiller", sans-serif;
 }
@@ -44,7 +44,7 @@
   font-style: normal;
 }
 
-/* ---- 3. BASE STYLES ---- */
+/* ---- BASE STYLES ---- */
 html,
 body {
   scroll-behavior: smooth;
@@ -84,6 +84,7 @@ body.is-transitioning {
 h1 {
   color: var(--main-red);
 }
+
 header {
   background-color: transparent;
   position: relative;
@@ -91,26 +92,14 @@ header {
   margin: 0;
   width: 100%;
 }
+
 main {
   min-height: 100vh;
   padding: 0;
   margin: 0;
 }
 
-/* Base Media Queries */
-@media (max-width: 1024px) {
-  /* Base style adjustments for large tablets */
-}
-
-@media (max-width: 768px) {
-  /* Base style adjustments for tablets */
-}
-
-@media (max-width: 480px) {
-  /* Base style adjustments for mobile */
-}
-
-/* ---- 4. LAYOUT COMPONENTS ---- */
+/* ---- LAYOUT COMPONENTS ---- */
 
 /* Fixed background for parallax effect */
 .fixed-background {
@@ -125,14 +114,14 @@ main {
   z-index: 0;
   opacity: 0.2;
   pointer-events: none;
-  will-change: transform, opacity; /* Performance optimization */
+  will-change: transform, opacity;
 }
 
 .section .fixed-background {
-  opacity: 0.1; /* Minimal opacity on home page */
+  opacity: 0.1;
 }
 
-/* 4.1 Footer */
+/* Footer */
 footer {
   background-color: rgba(0, 0, 0, 0.411);
   color: white;
@@ -147,7 +136,6 @@ footer {
   font-weight: 600;
   box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
   z-index: 2;
-  margin-top: 0;
 }
 
 footer p {
@@ -163,14 +151,12 @@ footer.visible {
 /* Section base styles */
 .section {
   opacity: 0;
-  transform: translateY(50px);
-  transition: opacity var(--transition-slow), transform var(--transition-slow);
   margin: 0;
   padding: 0;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
-  z-index: 1; /* Above the fixed background */
+  z-index: 1;
 }
 
 .section-spacerX {
@@ -186,14 +172,13 @@ footer.visible {
     rgba(0, 0, 0, 1) 100%
   );
 }
+
 .section-spacer {
   width: 100%;
   height: 40vh;
   position: relative;
   z-index: 1;
   display: block;
-  /* background: transparent;
-  background-color: #c00000aa; */
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 1) 0%,
@@ -204,7 +189,7 @@ footer.visible {
 
 .section::before,
 .section::after {
-  z-index: 0; /* Place existing pseudo-elements behind content */
+  z-index: 0;
 }
 
 .section::after {
@@ -262,7 +247,7 @@ footer.visible {
   height: 100vh;
   position: relative;
   z-index: 2;
-  background-color: #000; /* Ensure home has solid background */
+  background-color: #000;
 }
 
 @supports (-webkit-touch-callout: none) {
@@ -316,7 +301,7 @@ footer.visible {
   margin-bottom: 0 !important;
 }
 
-/* Ensure banner takes full viewport height without scrolling */
+/* Banner styling */
 .banner {
   height: 100vh;
   min-height: 100%;
@@ -327,6 +312,7 @@ footer.visible {
   padding: 0;
 }
 
+/* Animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -352,4 +338,17 @@ footer.visible {
   60% {
     transform: translateY(-10px) translateX(-50%);
   }
+}
+
+/* Media Queries */
+@media (max-width: 1024px) {
+  /* Base style adjustments for large tablets */
+}
+
+@media (max-width: 768px) {
+  /* Base style adjustments for tablets */
+}
+
+@media (max-width: 480px) {
+  /* Base style adjustments for mobile */
 }

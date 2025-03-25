@@ -1,6 +1,5 @@
 /**
  * Spirit&Bone - Video Reveal Module
- * Handles the video reveal functionality when clicking the ampersand symbol
  */
 
 // Initialize video reveal functionality
@@ -14,9 +13,7 @@ function initVideoReveal() {
   const homeBanner = document.querySelector(".banner");
 
   // If key elements don't exist, exit early
-  if (!videoContainer || !homeBanner) {
-    return;
-  }
+  if (!videoContainer || !homeBanner) return;
 
   // Create close button element (will be hidden initially)
   const closeVideoBtn = document.createElement("div");

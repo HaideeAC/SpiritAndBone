@@ -1,9 +1,7 @@
 /**
  * Spirit&Bone - Scroll Effects Module
- * Handles scroll detection, parallax effects, and section transitions
  */
 
-// Import from utils to get smoother animations
 import { debounce } from "./utils.js";
 import { updateActiveIndicator } from "./main.js";
 
@@ -13,21 +11,17 @@ function initScrollEffects() {
   const footer = document.querySelector("footer");
   const menuCircle = document.getElementById("menu-circle");
   const fixedBackground = document.querySelector(".fixed-background");
-  const windowHeight = window.innerHeight;
 
-  // Track the last scroll position for direction detection
+  // Track scroll position for direction detection
   let lastScrollTop = 0;
-  let scrollDirection = "down";
 
   // If key elements don't exist, exit early
-  if (!sections.length) {
-    return;
-  }
+  if (!sections.length) return;
 
   // Ensure we're at the top of the page on init
   window.scrollTo(0, 0);
 
-  // Enhanced Intersection Observer with more precise thresholds
+  // Intersection Observer for section visibility
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -62,13 +56,13 @@ function initScrollEffects() {
         }
       });
     },
-    { root: null, rootMargin: "-10% 0px -10% 0px", threshold: [0.1, 0.5, 0.8] }
+    { root: null, rootMargin: "-5% 0px -5% 0px", threshold: [0.05, 0.25] } // Reduced margins and thresholds for faster triggering
   );
 
   // Observe all sections
   sections.forEach((section) => observer.observe(section));
 
-  // Enhanced scroll event handling with smoother effects
+  // Scroll event handling
   window.addEventListener(
     "scroll",
     debounce(() => {
@@ -77,15 +71,12 @@ function initScrollEffects() {
       const fullHeight = document.body.scrollHeight - windowHeight;
 
       // Detect scroll direction
-      scrollDirection = scrollTop > lastScrollTop ? "down" : "up";
       lastScrollTop = scrollTop;
 
       // Update progress bar
       const progress = (scrollTop / fullHeight) * 100;
       const progressBar = document.getElementById("scroll-progress");
-      if (progressBar) {
-        progressBar.style.width = `${progress}%`;
-      }
+      if (progressBar) progressBar.style.width = `${progress}%`;
 
       // Show footer when at or near bottom
       if (fullHeight - scrollTop < 50 || scrollTop >= fullHeight) {
@@ -95,7 +86,7 @@ function initScrollEffects() {
       // Dynamic circle size
       updateCircleSize(scrollTop);
 
-      // Enhanced parallax effects for multiple elements
+      // Apply parallax effects
       applyParallaxEffects(scrollTop, windowHeight);
     }, 10)
   );
@@ -116,10 +107,12 @@ function initScrollEffects() {
         scrollDown.style.opacity = "1";
       }, 100);
     }
+
     const scrollDown2 = document.querySelector(".scroll-down2");
     if (!scrollDown2) return;
 
-    if (sectionId !== "home") {
+    if (sectionId !== "project") {
+      // Changed from "home" to "project"
       scrollDown2.style.opacity = "0";
       setTimeout(() => {
         scrollDown2.style.display = "none";
@@ -132,7 +125,7 @@ function initScrollEffects() {
     }
   }
 
-  // Simple function to ensure footer is visible and correctly positioned
+  // Show footer and ensure correct positioning
   function showFooter() {
     if (footer) {
       footer.style.opacity = "1";
@@ -155,6 +148,7 @@ function initScrollEffects() {
     const shrinkFactor = 0.9;
     const scrollFactor = Math.min(scrolled / 300, 1);
     const newSize = baseSize * (1 - scrollFactor * (1 - shrinkFactor));
+
     circle.style.width = `${newSize}px`;
     circle.style.height = `${newSize}px`;
   }
@@ -177,7 +171,7 @@ function initScrollEffects() {
         Math.max((scrolled - windowHeight * 0.3) / (windowHeight * 0.7), 0),
         0.5
       );
-      // More aggressive zoom factor to create a more noticeable effect
+      // More aggressive zoom factor
       const zoomFactor = 1 + Math.min(scrolled * 0.0005, 0.3);
 
       fixedBackground.style.opacity = opacity.toString();

@@ -1,6 +1,5 @@
 /**
  * Spirit&Bone - Utility Functions
- * Reusable utility functions used across multiple modules
  */
 
 // Debounce function to limit how often a function can run

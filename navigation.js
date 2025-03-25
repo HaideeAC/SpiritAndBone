@@ -1,10 +1,7 @@
 /**
  * Spirit&Bone - Navigation Module
- * Handles navigation menu, links, and section transitions
  */
 
-// Import from main.js, not main.js
-// Fix the import statement - main.js should export updateActiveIndicator
 import { updateActiveIndicator } from "/main.js";
 
 // Initialize navigation functionality
@@ -13,13 +10,9 @@ function initNavigation(pageTransition) {
   const menuCircle = document.getElementById("menu-circle");
   const navLinks = document.getElementById("nav-links");
   const closeMenu = document.getElementById("close-menu");
-  const sections = document.querySelectorAll(".section");
-  const indicatorDots = document.querySelectorAll(".indicator-dot");
 
   // If key elements don't exist, exit early
-  if (!menuCircle || !navLinks) {
-    return;
-  }
+  if (!menuCircle || !navLinks) return;
 
   // Menu functionality
   menuCircle.addEventListener("click", () => {
@@ -47,7 +40,7 @@ function initNavigation(pageTransition) {
       navLinks.classList.remove("active");
 
       if (pageTransition && pageTransition.parentNode) {
-        // Orkenworld-style transition
+        // Transition animation
         link.classList.add("nav-selected");
         pageTransition.classList.add("active");
 
@@ -94,7 +87,7 @@ function initNavigation(pageTransition) {
   });
 
   // Section indicator dots
-  indicatorDots.forEach((dot) => {
+  document.querySelectorAll(".indicator-dot").forEach((dot) => {
     dot.addEventListener("click", () => {
       const sectionId = dot.getAttribute("data-section");
       const sectionElement = document.getElementById(sectionId);

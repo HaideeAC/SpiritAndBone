@@ -1,6 +1,5 @@
 /**
  * Spirit&Bone - Team Members Module
- * Handles team member flip effects and interactions
  */
 
 // Initialize team section
@@ -19,26 +18,19 @@ function initTeamSection() {
     const memberImageContainer = member.querySelector(
       ".member-image-container"
     );
-
     if (!memberImageContainer) return;
 
     // Handle mouse interactions (desktop)
     member.addEventListener("mouseenter", () => {
       // Pause the floating animation
-      if (memberImageContainer) {
-        memberImageContainer.style.animationPlayState = "paused";
-      }
-
+      memberImageContainer.style.animationPlayState = "paused";
       // Add flipped class to trigger the CSS transition
       member.classList.add("flipped");
     });
 
     member.addEventListener("mouseleave", () => {
       // Resume the floating animation
-      if (memberImageContainer) {
-        memberImageContainer.style.animationPlayState = "running";
-      }
-
+      memberImageContainer.style.animationPlayState = "running";
       // Remove flipped class to revert the flip
       member.classList.remove("flipped");
     });
@@ -47,12 +39,10 @@ function initTeamSection() {
     member.addEventListener(
       "touchstart",
       (e) => {
-        // Prevent default touch behavior to avoid scrolling/zooming
+        // Prevent default touch behavior
         e.preventDefault();
-
         // Toggle the flipped state
         member.classList.toggle("flipped");
-
         // Toggle animation play state
         const currentState = memberImageContainer.style.animationPlayState;
         memberImageContainer.style.animationPlayState =
@@ -66,7 +56,7 @@ function initTeamSection() {
   adjustTeamLayout();
   window.addEventListener("resize", adjustTeamLayout);
 
-  // Add touchend listener to document for better mobile experience
+  // Add touchend listener for better mobile experience
   document.addEventListener("touchend", (e) => {
     // If the touch ends outside any team member, reset all flipped states
     const touchedMember = e.target.closest(".team-member");

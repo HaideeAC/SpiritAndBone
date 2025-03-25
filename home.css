@@ -127,11 +127,11 @@ svg {
 .svg-mask.video-reveal-active #text-mask-mobile rect {
   rx: 15px;
   ry: 15px;
-  transition: all 0.5s ease;
+  transition: all 1.5s ease;
 }
 
 .amp-grow-animation {
-  animation: ampGrowThrough 0.8s forwards cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  animation: ampGrowThrough 1.5s forwards cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 
 /* Close button */
@@ -145,7 +145,7 @@ svg {
   z-index: 100;
   opacity: 0;
   transform: scale(0.8);
-  transition: all 0.3s zoomOut;
+  transition: all 0.3s ease;
 }
 
 .close-video.active {

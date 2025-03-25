@@ -1,6 +1,5 @@
 /**
  * Spirit&Bone - Contact Form Module
- * Handles contact form interactions, validation, and submission
  */
 
 // Initialize contact form
@@ -13,7 +12,7 @@ function initContactForm() {
     return;
   }
 
-  // Make form elements visible immediately
+  // Make form elements visible
   contactFormContainer.classList.add("visible");
 
   // Get form reference
@@ -28,9 +27,7 @@ function initContactForm() {
     event.preventDefault();
 
     // Basic validation
-    if (!validateForm(form)) {
-      return;
-    }
+    if (!validateForm(form)) return;
 
     // Add visual feedback during submission
     const submitButton = form.querySelector('button[type="submit"]');
@@ -42,23 +39,18 @@ function initContactForm() {
 
     // Prepare form data
     const formData = new FormData(form);
-    formData.append("recipient", "alexanderopera@gmail.com"); // Add recipient email
+    formData.append("recipient", "alexanderopera@gmail.com");
 
-    // You can use one of these methods to send the email:
-
-    // Method 1: Using fetch to submit to a server endpoint
-    // Replace 'your-server-endpoint' with the actual server endpoint that will process the email
+    // Submit to server endpoint
     fetch("your-server-endpoint", {
       method: "POST",
       body: formData,
     })
       .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
+        if (response.ok) return response.json();
         throw new Error("Network response was not ok.");
       })
-      .then((data) => {
+      .then(() => {
         // Success message
         alert("Thank you for your message! We will get back to you soon.");
         form.reset();
@@ -76,73 +68,11 @@ function initContactForm() {
 
         // Show footer
         const footer = document.querySelector("footer");
-        if (footer) {
-          footer.classList.add("visible");
-        }
+        if (footer) footer.classList.add("visible");
 
         // Ensure no extra space below footer
         fixFooterSpace();
       });
-
-    /* 
-    // Method 2: Using mailto link (fallback)
-    // Note: This opens the user's email client and doesn't actually send the email automatically
-    // It's a fallback option if server-side processing isn't available
-    
-    const name = form.querySelector("#name").value;
-    const email = form.querySelector("#email").value;
-    const message = form.querySelector("#message").value;
-    
-    const mailtoLink = `mailto:alexanderopera@gmail.com?subject=Message from ${encodeURIComponent(name)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
-    
-    window.location.href = mailtoLink;
-    
-    // Reset button and form after a delay
-    setTimeout(() => {
-      submitButton.disabled = false;
-      submitButton.textContent = originalText;
-      form.reset();
-      
-      // Show footer
-      const footer = document.querySelector("footer");
-      if (footer) {
-        footer.classList.add("visible");
-      }
-      
-      // Ensure no extra space below footer
-      fixFooterSpace();
-    }, 1000);
-    */
-
-    /* 
-    // Method 3: Using a third-party email service (like EmailJS)
-    // This requires including the EmailJS library and setting up an account
-    
-    // Example with EmailJS:
-    // Include this in your HTML: <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-    
-    emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', form, 'YOUR_USER_ID')
-      .then(function() {
-        alert("Thank you for your message! We will get back to you soon.");
-        form.reset();
-      }, function(error) {
-        console.error('Email error:', error);
-        alert("There was an issue sending your message. Please try again later.");
-      })
-      .finally(() => {
-        submitButton.disabled = false;
-        submitButton.textContent = originalText;
-        
-        // Show footer
-        const footer = document.querySelector("footer");
-        if (footer) {
-          footer.classList.add("visible");
-        }
-        
-        // Ensure no extra space below footer
-        fixFooterSpace();
-      });
-    */
   });
 
   // Set up visibility observer
@@ -154,7 +84,6 @@ function initContactForm() {
 
 // Validate form inputs
 function validateForm(form) {
-  // Get form fields
   const name = form.querySelector("#name")?.value.trim();
   const email = form.querySelector("#email")?.value.trim();
   const message = form.querySelector("#message")?.value.trim();
@@ -183,7 +112,7 @@ function setupVisibilityObserver(container) {
     group.style.transitionDelay = `${index * 0.1}s`;
   });
 
-  // Add intersection observer to trigger animation when form is in viewport
+  // Add intersection observer
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {

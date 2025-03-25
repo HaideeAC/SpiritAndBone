@@ -1,6 +1,5 @@
 /**
  * Spirit&Bone - Main JavaScript Entry Point
- * Initializes all modules and handles main event listeners
  */
 
 // Clear the URL hash if it's #home
@@ -13,13 +12,13 @@ if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
 
-// Import all modules with fixed paths
+// Import all modules
 import { initVideoReveal } from "/video-reveal.js";
 import { initNavigation } from "/navigation.js";
 import { initScrollEffects } from "/scroll-effect.js";
 import { initTeamSection } from "/team-members.js";
 import { initContactForm } from "/contact-form.js";
-import { initProjectParallax } from "/project.js"; // Updated import path
+import { initProjectParallax } from "/project.js";
 import { debounce } from "/utils.js";
 
 // Create page transition element
@@ -49,7 +48,7 @@ window.onload = function () {
   // Force scroll to top
   window.scrollTo(0, 0);
 
-  // Also try with a small delay to ensure it happens after any other scripts
+  // Retry after small delay
   setTimeout(() => {
     window.scrollTo(0, 0);
   }, 50);
@@ -165,7 +164,6 @@ function fixFooterSpace() {
 function preloadAssets() {
   // Preload critical images
   const criticalImages = ["/images/texture1.jpg", "/images/texture.jpg"];
-
   criticalImages.forEach((src) => {
     const img = new Image();
     img.src = src;
@@ -185,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Force scroll to top
   window.scrollTo(0, 0);
 
-  // Add home-page class to body if we're on the home page (no hash or #home)
+  // Add home-page class to body if we're on the home page
   if (!window.location.hash || window.location.hash === "#home") {
     document.body.classList.add("home-page");
   }
@@ -198,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initContactForm();
   initProjectParallax();
 
-  // Check URL hash for initial scrolling - but only if it's not the home page
+  // Check URL hash for initial scrolling - only if not home page
   const hash = window.location.hash;
   if (hash && hash !== "#home") {
     const targetSection = document.querySelector(hash);
