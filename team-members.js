@@ -17,7 +17,7 @@ function initTeamSection() {
   }
 
   // Initialize the audio element for the pandeiro
-  pandeiro = new Audio("audio/pandeiro2.mp3");
+  pandeiro = new Audio("audio/pandeiro.mp3");
   pandeiro.preload = "auto";
 
   // Set up audio toggle for member10 (pandeiro)
