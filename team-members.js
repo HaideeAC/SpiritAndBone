@@ -2,6 +2,9 @@
  * Spirit&Bone - Team Members Module
  */
 
+// Create audio element for pandeiro sound
+let pandeiro = null;
+
 // Initialize team section
 function initTeamSection() {
   // Get references to all team members
@@ -13,10 +16,48 @@ function initTeamSection() {
     return;
   }
 
+  // Initialize the audio element for the pandeiro
+  pandeiro = new Audio("audio/pandeiro2.mp3");
+  pandeiro.preload = "auto";
+
+  // Set up audio toggle for member10 (pandeiro)
+  const pandeiroMember = document.getElementById("member10");
+  if (pandeiroMember) {
+    pandeiroMember.isPlaying = false;
+
+    pandeiroMember.addEventListener("click", function () {
+      // Toggle audio playback
+      if (this.isPlaying) {
+        pandeiro.pause();
+        pandeiro.currentTime = 0; // Reset playback position
+        this.isPlaying = false;
+
+        // Stop any animation related to audio playback
+        const memberImageContainer = this.querySelector(
+          ".member-image-container1"
+        );
+        if (memberImageContainer) {
+          memberImageContainer.classList.remove("audio-playing");
+        }
+      } else {
+        pandeiro.play();
+        this.isPlaying = true;
+
+        // Add animation class to indicate audio is playing
+        const memberImageContainer = this.querySelector(
+          ".member-image-container1"
+        );
+        if (memberImageContainer) {
+          memberImageContainer.classList.add("audio-playing");
+        }
+      }
+    });
+  }
+
   // Set up interactions for each team member
   teamMembers.forEach((member) => {
     const memberImageContainer = member.querySelector(
-      ".member-image-container"
+      ".member-image-container, .member-image-container1"
     );
     if (!memberImageContainer) return;
 
@@ -55,6 +96,8 @@ function initTeamSection() {
   // Make sure team layout is appropriate for screen size
   adjustTeamLayout();
   window.addEventListener("resize", adjustTeamLayout);
+  adjustTeamLayout1();
+  window.addEventListener("resize", adjustTeamLayout1);
 
   // Add touchend listener for better mobile experience
   document.addEventListener("touchend", (e) => {
@@ -63,7 +106,9 @@ function initTeamSection() {
     if (!touchedMember) {
       teamMembers.forEach((member) => {
         member.classList.remove("flipped");
-        const container = member.querySelector(".member-image-container");
+        const container = member.querySelector(
+          ".member-image-container, .member-image-container1"
+        );
         if (container) {
           container.style.animationPlayState = "running";
         }
@@ -74,6 +119,24 @@ function initTeamSection() {
 
 // Adjust team layout based on screen size
 function adjustTeamLayout() {
+  const teamContainer = document.querySelector(".team-container");
+  if (!teamContainer) return;
+
+  // Get current viewport width
+  const viewportWidth = window.innerWidth;
+
+  if (viewportWidth <= 480) {
+    // Mobile layout
+    mobileLayout();
+  } else if (viewportWidth <= 768) {
+    // Tablet layout
+    tabletLayout();
+  } else {
+    // Desktop layout
+    resetTeamPositions();
+  }
+}
+function adjustTeamLayout1() {
   const teamContainer = document.querySelector(".team-container");
   if (!teamContainer) return;
 
@@ -130,6 +193,7 @@ function resetTeamPositions() {
     { id: "member7", top: "40%", left: "83%" },
     { id: "member8", top: "65%", left: "20%" },
     { id: "member9", top: "65%", left: "70%" },
+    { id: "member10", top: "70%", left: "45%" },
   ];
 
   positions.forEach((pos) => {

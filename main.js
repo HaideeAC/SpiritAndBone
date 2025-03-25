@@ -16,6 +16,7 @@ if ("scrollRestoration" in history) {
 import { initVideoReveal } from "/video-reveal.js";
 import { initNavigation } from "/navigation.js";
 import { initScrollEffects } from "/scroll-effect.js";
+console.log("Scroll effects module imported successfully!");
 import { initTeamSection } from "/team-members.js";
 import { initContactForm } from "/contact-form.js";
 import { initProjectParallax } from "/project.js";
@@ -260,7 +261,6 @@ document.addEventListener("DOMContentLoaded", function () {
       fixFooterSpace();
     }, 200)
   );
-
 });
 
 // Add loader styles

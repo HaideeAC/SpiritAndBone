@@ -267,7 +267,7 @@ footer.visible {
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.30858280812324934) 20%,
+    rgba(0, 0, 0, 0.6) 50%,
     rgba(0, 0, 0, 1) 100%
   );
 }
