@@ -1,0 +1,314 @@
+/* ===========================================
+   ------ SPIRIT & BONE - HOME SECTION ------
+   =========================================== */
+
+.banner {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  z-index: 1;
+}
+
+/* Video Container */
+.video-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+  transition: all 0.5s ease;
+}
+
+.video-container.video-revealed {
+  z-index: 5;
+}
+
+#video-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* SVG Mask Styling */
+.svg-mask {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 2;
+  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+}
+
+.rect {
+  width: 100%;
+  height: 100%;
+}
+
+/* Typography */
+.tittle {
+  font-size: 30rem;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.tittleY,
+.vertical-amp {
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  transform-origin: center;
+}
+
+.tittleY:hover,
+.vertical-amp:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 15px rgba(192, 0, 1, 0.9));
+}
+
+.tittleY {
+  font-size: 20rem;
+}
+
+.vertical-letter {
+  font-size: 22vw;
+}
+
+.vertical-letter2 {
+  font-size: 28vw;
+}
+
+.vertical-amp {
+  font-size: 32vw;
+  fill: var(--main-red);
+}
+
+/* Display toggles */
+.desktop-title {
+  display: block;
+}
+
+.mobile-title {
+  display: none;
+}
+
+/* Video reveal effects */
+.svg-mask.video-reveal-active {
+  transform: scale(0.9);
+}
+
+.svg-mask.video-reveal-active text {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.svg-mask.video-reveal-active #text-mask rect,
+.svg-mask.video-reveal-active #text-mask-mobile rect {
+  rx: 15px;
+  ry: 15px;
+  transition: all 0.5s ease;
+}
+
+.amp-grow-animation {
+  animation: ampGrowThrough 0.8s forwards cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+/* Close button */
+.close-video {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 100;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s zoomOut;
+}
+
+.close-video.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.close-video .close-icon {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.close-video .close-icon::before,
+.close-video .close-icon::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 6px;
+  background-color: white;
+  top: 50%;
+  left: 0;
+  transition: background-color 0.3s ease;
+}
+
+.close-video .close-icon::before {
+  transform: rotate(45deg);
+}
+
+.close-video .close-icon::after {
+  transform: rotate(-45deg);
+}
+
+.close-video:hover .close-icon::before,
+.close-video:hover .close-icon::after {
+  background-color: var(--main-red);
+}
+
+/* Bottom right social icons */
+.home-social-icons {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  display: flex;
+  gap: 15px;
+  z-index: 10;
+}
+
+.home-social-icons .social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  background-color: transparent;
+}
+
+.home-social-icons .social-icon:hover {
+  background-color: white;
+  color: black;
+  transform: scale(1.1);
+}
+
+/* Ampersand Animation */
+@keyframes ampGrowThrough {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(3);
+    opacity: 0.8;
+    filter: drop-shadow(0 0 30px rgba(192, 0, 1, 1));
+  }
+  100% {
+    transform: scale(5);
+    opacity: 0;
+  }
+}
+
+/* Media Queries */
+@media (max-width: 1024px) {
+  .tittle {
+    font-size: 48vh;
+  }
+  .tittleY {
+    font-size: 28vw;
+  }
+
+  .home-social-icons {
+    bottom: 30px;
+    right: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .desktop-title {
+    display: none;
+  }
+  .mobile-title {
+    display: block;
+    width: 100%;
+  }
+  .vertical-letter {
+    font-size: 25vw;
+  }
+  .vertical-amp {
+    font-size: 36vw;
+  }
+  .close-video {
+    width: 30px;
+    height: 30px;
+    top: 15px;
+    right: 15px;
+  }
+  .close-video .close-icon::before,
+  .close-video .close-icon::after {
+    height: 4px;
+  }
+
+  .home-social-icons {
+    bottom: 25px;
+    right: 25px;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .vertical-letter {
+    font-size: 10vw;
+  }
+  .vertical-letter2 {
+    font-size: 11vw;
+  }
+  .vertical-amp {
+    font-size: 14vw;
+  }
+  .close-video {
+    width: 25px;
+    height: 25px;
+    top: 10px;
+    right: 10px;
+  }
+  .close-video .close-icon::before,
+  .close-video .close-icon::after {
+    height: 3px;
+  }
+
+  .home-social-icons {
+    bottom: 20px;
+    right: 20px;
+    gap: 10px;
+  }
+
+  .home-social-icons .social-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+}

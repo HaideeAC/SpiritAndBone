@@ -1,0 +1,328 @@
+/* ===========================================
+   ------ SPIRIT & BONE - TEAM SECTION ------
+   =========================================== */
+
+.team-body {
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: overlay;
+}
+
+.team-main {
+  min-height: calc(100vh - 90px);
+  padding: 40px 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.team-container {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 90px);
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.team-member {
+  position: absolute;
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  z-index: 1;
+  perspective: 1000px; /* Create 3D space for flip effect */
+}
+
+.section:hover .team-member {
+  transform: translateY(0) scale(1);
+}
+
+.team-container:hover .team-member:not(:hover) {
+  opacity: 1;
+}
+
+/* Card flip container */
+.member-image-container {
+  width: 180px;
+  height: 180px;
+  position: relative;
+  z-index: 1;
+  animation: float 7s ease-in-out infinite;
+  transition: all 0.4s ease;
+  transform-style: preserve-3d;
+}
+
+/* Image side (front) */
+.member-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--main-red);
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.member-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  filter: grayscale(80%);
+  transition: filter 0.6s ease;
+}
+
+/* Info side (back) */
+.member-info {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--main-red);
+  border-radius: 50%;
+  color: white;
+  transform: rotateY(180deg);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  padding: 15px;
+  box-shadow: var(--shadow-red);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+.member-info h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: white;
+  margin-bottom: 8px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.member-info h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: normal;
+  color: #eeeeee;
+  text-align: center;
+}
+
+/* Team member positioning */
+#member1 {
+  top: 15%;
+  left: 23%;
+}
+#member2 {
+  top: 10%;
+  left: 45%;
+}
+#member3 {
+  top: 15%;
+  left: 67%;
+}
+#member4 {
+  top: 40%;
+  left: 5%;
+}
+#member5 {
+  top: 40%;
+  left: 35%;
+}
+#member6 {
+  top: 40%;
+  left: 55%;
+}
+#member7 {
+  top: 40%;
+  left: 83%;
+}
+#member8 {
+  top: 65%;
+  left: 20%;
+}
+#member9 {
+  top: 65%;
+  left: 70%;
+}
+
+/* Animation delays for floating effect */
+#member1 .member-image-container {
+  animation-delay: 0s;
+}
+#member2 .member-image-container {
+  animation-delay: -0.5s;
+}
+#member3 .member-image-container {
+  animation-delay: -1s;
+}
+#member4 .member-image-container {
+  animation-delay: -1.5s;
+}
+#member5 .member-image-container {
+  animation-delay: -2s;
+}
+#member6 .member-image-container {
+  animation-delay: -2.5s;
+}
+#member7 .member-image-container {
+  animation-delay: -3s;
+}
+#member8 .member-image-container {
+  animation-delay: -3.5s;
+}
+#member9 .member-image-container {
+  animation-delay: -4s;
+}
+
+/* Flip effect on hover */
+.team-member:hover .member-image-container {
+  animation-play-state: paused;
+  transform: scale(1.15); /* Slightly increased scale for better visibility */
+}
+
+/* Rotate front (image) to back */
+.team-member.flipped .member-image {
+  transform: rotateY(180deg);
+}
+
+/* Rotate back (info) to front */
+.team-member.flipped .member-info {
+  transform: rotateY(0);
+}
+
+/* Hover state images */
+.team-member:hover .member-image img {
+  filter: grayscale(0%);
+}
+
+/* Team section animation */
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(10px) rotate(-2deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+/* Team Section Media Queries */
+@media (max-width: 1024px) {
+  .member-info h3 {
+    font-size: 1.2rem;
+  }
+  .member-info h4 {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Team layout adjustments */
+  .team-main {
+    padding-bottom: 100px;
+  }
+  .team-container {
+    min-height: calc(100vh - 90px);
+  }
+
+  /* Reposition team members for smaller screens */
+  #member1 {
+    top: 5%;
+    left: 10%;
+  }
+  #member2 {
+    top: 5%;
+    left: 50%;
+  }
+  #member3 {
+    top: 25%;
+    left: 10%;
+  }
+  #member4 {
+    top: 25%;
+    left: 50%;
+  }
+  #member5 {
+    top: 45%;
+    left: 10%;
+  }
+  #member6 {
+    top: 45%;
+    left: 50%;
+  }
+  #member7 {
+    top: 65%;
+    left: 10%;
+  }
+  #member8 {
+    top: 65%;
+    left: 50%;
+  }
+  #member9 {
+    top: 85%;
+    left: 10%;
+  }
+
+  .member-image-container {
+    width: 140px;
+    height: 140px;
+  }
+
+  .member-info h3 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+
+  .member-info h4 {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .member-image-container {
+    width: 120px;
+    height: 120px;
+  }
+
+  .member-info h3 {
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+  }
+
+  .member-info h4 {
+    font-size: 0.65rem;
+  }
+
+  /* Further adjust positioning for mobile */
+  #member1,
+  #member3,
+  #member5,
+  #member7,
+  #member9 {
+    left: 5%;
+  }
+
+  #member2,
+  #member4,
+  #member6,
+  #member8 {
+    left: 55%;
+  }
+}

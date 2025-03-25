@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spirit&Bone</title>
+    <!-- Main CSS file with correct path -->
+    <link rel="stylesheet" href="/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&family=Ultra&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.cdnfonts.com/css/chiller" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vina+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik+Maps&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Climate+Crisis&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Scroll progress indicator -->
+    <div class="scroll-progress" id="scroll-progress"></div>
+
+    <!-- Fixed background for parallax effect (added) -->
+    <div class="fixed-background"></div>
+
+    <header class="header">
+      <nav>
+        <div class="menu-circle" id="menu-circle">
+          <div class="circle"></div>
+        </div>
+
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#home">HOME</a></li>
+          <li><a href="#project">PROJECT</a></li>
+          <li><a href="#team">MEET THE TEAM</a></li>
+          <li><a href="#contact">CONTACT US</a></li>
+
+          <!-- X close button inside the expanded menu -->
+          <div class="close-menu" id="close-menu">
+            <div class="close-icon"></div>
+          </div>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Section indicator dots -->
+    <div class="section-indicator">
+      <div class="indicator-dot active" data-section="home"></div>
+      <div class="indicator-dot" data-section="project"></div>
+      <div class="indicator-dot" data-section="team"></div>
+      <div class="indicator-dot" data-section="contact"></div>
+    </div>
+
+    <!-- HOME Section -->
+    <section id="home" class="section">
+      <div class="banner">
+        <!-- Video Background -->
+        <div class="video-container">
+          <video id="video-bg" autoplay loop muted>
+            <!-- Fixed path to video -->
+            <source src="/videos/placeholder.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+
+        <!-- Scroll down indicator -->
+        <div class="scroll-down">
+          <i class="fas fa-chevron-down"></i>
+        </div>
+
+        <!-- Bottom right social icons -->
+        <div class="home-social-icons">
+          <a
+            href="https://www.youtube.com/@pl4ystudio252"
+            target="_blank"
+            class="social-icon"
+            aria-label="YouTube"
+            ><i class="fab fa-youtube"></i
+          ></a>
+          <a
+            href="https://www.instagram.com/pl4ystudio/"
+            target="_blank"
+            class="social-icon"
+            aria-label="Instagram"
+            ><i class="fab fa-instagram"></i
+          ></a>
+          <a
+            href="https://www.facebook.com/pl4ystudio"
+            target="_blank"
+            class="social-icon"
+            aria-label="Facebook"
+            ><i class="fab fa-facebook-f"></i
+          ></a>
+          <a href="#" class="social-icon" aria-label="X"
+            ><i class="fab fa-x"></i
+          ></a>
+        </div>
+
+        <!-- SVG Mask for Desktop -->
+        <svg class="svg-mask desktop-title">
+          <defs>
+            <!-- Mask Definition -->
+            <mask id="text-mask">
+              <rect class="rect" width="100%" height="100%" fill="white" />
+              <text
+                class="tittle font-viva"
+                x="50%"
+                y="32%"
+                text-anchor="middle"
+                dominant-baseline="middle"
+              >
+                SPIRIT
+              </text>
+              <text
+                class="tittle font-viva"
+                x="50%"
+                y="70%"
+                text-anchor="middle"
+                dominant-baseline="middle"
+              >
+                BONE
+              </text>
+            </mask>
+
+            <!-- Background Image Pattern -->
+            <pattern
+              id="background-image"
+              patternUnits="userSpaceOnUse"
+              width="100%"
+              height="100%"
+            >
+              <!-- Fixed path to texture image -->
+              <image
+                href="/images/texture.jpg"
+                width="100%"
+                height="100%"
+                preserveAspectRatio="xMidYMid slice"
+                x="0"
+                y="0"
+              />
+            </pattern>
+          </defs>
+
+          <!-- Apply Image to Masked Text -->
+          <rect
+            width="100%"
+            height="100%"
+            fill="url(#background-image)"
+            mask="url(#text-mask)"
+          />
+
+          <!-- Separate '&' Symbol with Solid Color - Interactive -->
+          <text
+            class="tittleY font-chiller"
+            x="50%"
+            y="57%"
+            text-anchor="middle"
+            dominant-baseline="middle"
+            fill="#c00001"
+          >
+            &
+          </text>
+        </svg>
+
+        <!-- SVG Mask for Mobile (Vertical Layout) -->
+        <svg class="svg-mask mobile-title">
+          <defs>
+            <!-- Mask Definition for Mobile -->
+            <mask id="text-mask-mobile">
+              <rect class="rect" width="100%" height="100%" fill="white" />
+              <!-- SPIRIT on left side - adjusted positions -->
+              <text
+                class="vertical-letter font-vertical"
+                x="30%"
+                y="19%"
+                text-anchor="middle"
+              >
+                S
+              </text>
+              <text
+                class="vertical-letter font-vertical"
+                x="30%"
+                y="34%"
+                text-anchor="middle"
+              >
+                P
+              </text>
+              <text
+                class="vertical-letter font-vertical"
+                x="30%"
+                y="49%"
+                text-anchor="middle"
+              >
+                I
+              </text>
+              <text
+                class="vertical-letter font-vertical"
+                x="30%"
+                y="64%"
+                text-anchor="middle"
+              >
+                R
+              </text>
+              <text
+                class="vertical-letter font-vertical"
+                x="30%"
+                y="79%"
+                text-anchor="middle"
+              >
+                I
+              </text>
+              <text
+                class="vertical-letter font-vertical"
+                x="30%"
+                y="94%"
+                text-anchor="middle"
+              >
+                T
+              </text>
+
+              <!-- BONE on right side - adjusted positions -->
+              <text
+                class="vertical-letter2 font-vertical"
+                x="70%"
+                y="26%"
+                text-anchor="middle"
+              >
+                B
+              </text>
+              <text
+                class="vertical-letter2 font-vertical"
+                x="70%"
+                y="46%"
+                text-anchor="middle"
+              >
+                O
+              </text>
+              <text
+                class="vertical-letter2 font-vertical"
+                x="70%"
+                y="66%"
+                text-anchor="middle"
+              >
+                N
+              </text>
+              <text
+                class="vertical-letter2 font-vertical"
+                x="70%"
+                y="86%"
+                text-anchor="middle"
+              >
+                E
+              </text>
+            </mask>
+
+            <!-- Background Image Pattern - Ensure full coverage -->
+            <pattern
+              id="background-image-mobile"
+              patternUnits="userSpaceOnUse"
+              width="100%"
+              height="100%"
+            >
+              <!-- Fixed path to texture image -->
+              <image
+                href="/images/texture.jpg"
+                width="100%"
+                height="100%"
+                preserveAspectRatio="xMidYMid slice"
+                x="0"
+                y="0"
+              />
+            </pattern>
+          </defs>
+
+          <!-- Apply Image to Masked Text for Mobile -->
+          <rect
+            width="100%"
+            height="100%"
+            fill="url(#background-image-mobile)"
+            mask="url(#text-mask-mobile)"
+          />
+
+          <!--  '&' Symbol with its own color - centered perfectly -Interactive -->
+          <text
+            class="vertical-amp font-chiller"
+            x="50%"
+            y="50%"
+            text-anchor="middle"
+            dominant-baseline="middle"
+            fill="#c00001"
+          >
+            &
+          </text>
+        </svg>
+      </div>
+    </section>
+    <!-- Note: Keeping section-spacer but removing background image -->
+    <div class="section-spacerX"></div>
+
+    <!-- PROJECT Section -->
+    <section id="project" class="section">
+      <div class="project-container">
+        <!-- Tier 1: Three rows of content (100vh) -->
+        <div class="tier1">
+          <!-- First row: Three images in a row -->
+          <div class="project-images1">
+            <div class="project-image">
+              <img src="/images/project1.jpg" alt="Project image 1" />
+            </div>
+            <div class="project-image">
+              <img src="/images/project2.jpg" alt="Project image 2" />
+            </div>
+            <div class="project-image">
+              <img src="/images/project3.jpg" alt="Project image 3" />
+            </div>
+          </div>
+
+          <!-- Second row: Image, Text, Image -->
+          <div class="mid-row">
+            <div class="project-image">
+              <img src="/images/project4.jpg" alt="Project image 4" />
+            </div>
+            <div class="text1">
+              <h2>Logline</h2>
+              <p>
+                It's nighttime, it's raining. Riding his moped, José, the
+                delivery guy, contemplates how dangerous his working conditions
+                are... then the gig to Broadwater Towers comes through on the
+                mobile... and he contemplates how much more dangerous it's just
+                become...
+              </p>
+            </div>
+            <div class="project-image">
+              <img src="/images/project5.jpg" alt="Project image 5" />
+            </div>
+          </div>
+
+          <!-- Third row: Three images in a row -->
+          <div class="project-images2">
+            <div class="project-image">
+              <img src="/images/project6.jpg" alt="Project image 6" />
+            </div>
+            <div class="project-image">
+              <img src="/images/project7.jpg" alt="Project image 7" />
+            </div>
+            <div class="project-image">
+              <img src="/images/project8.jpg" alt="Project image 8" />
+            </div>
+          </div>
+          <!-- Scroll down indicator -->
+          <div class="scroll-down2">
+            <i class="fas fa-chevron-down"></i>
+          </div>
+        </div>
+
+        <!-- Tier 2: Poster image and text (100vh) -->
+        <div class="tier2">
+          <!-- Poster image on the left -->
+          <div class="project-image image-poster">
+            <img src="/images/poster.jpg" alt="Spirit&Bone poster" />
+          </div>
+
+          <!-- Description text on the right -->
+          <div class="text2">
+            <h2 class="font-viva">The world of Spirit and Bone.</h2>
+            <p>
+              A fusion of indie whimsy, with pop fantasy/comedy/action genre.
+            </p>
+            <p>
+              Big Trouble in Little China meets Frances Ha meets Lock Stock and
+              Two Smoking Barrels.
+            </p>
+            <p>
+              Jackie Chan inspired Chinese Opera martial arts movies with the
+              Brazilian martial art form of Capoeira instead of Kung Fu.
+            </p>
+            <h3 class="font2">Visual Tone:</h3>
+            <p>
+              The idea is for Spirit and Bone to have a strong visual style. The
+              center piece, the fight, is a tough and physically skillful
+              affair. Though inspired by Chinese operatic styles, it veers more
+              into the Hong Kong Jackie Chan era style from the 80's rather than
+              the Shaw brothers movies of the 70's.
+            </p>
+            <h3 class="font2">Character Tone:</h3>
+            <p>
+              'Action Heros' are often portrayed as stoic or one dimensional
+              characters in a film where the action takes the main stage. This
+              can be OK, but what about a well executed action film with a
+              different type of hero? Silly, playful... a hero with a
+              ridiculous, artistic and maybe very unrealistic dream like the
+              protagonist in France Ha?
+            </p>
+            <h3 class="font2">Comedic Tone:</h3>
+            <p>
+              Irreverent and silly at points but not too over the top. Should
+              complement in contrast some of the darker elements of the film.
+              This could be seen as the budding of a 'buddy cop' genre film,
+              though they're not cops.
+            </p>
+            <h3 class="font2">Poetic Tone:</h3>
+            <p>
+              "All art is poetry!" Someone probably quite famous probably said
+              once. Really exploring and playing with sound design, editing and
+              image to create an action comedy drama with some poetic resonance.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="section-spacer"></div>
+
+    <!-- TEAM Section -->
+    <section id="team" class="section">
+      <div class="team-container">
+        <!-- Team Member 1 -->
+        <div class="team-member" id="member1">
+          <div class="member-image-container">
+            <div class="member-image">
+              <img src="/images/ed.jpg" alt="" />
+            </div>
+          </div>
+          <div class="member-info">
+            <h3>Edward Mawhood</h3>
+            <h4>Producer</h4>
+          </div>
+        </div>
+
+        <!-- Team Member 2 -->
+        <div class="team-member" id="member2">
+          <div class="member-image-container">
+            <div class="member-image">
+              <!-- Fixed path to team member image -->
+              <img src="/images/elbaby.jpg" alt="" />
+            </div>
+          </div>
+          <div class="member-info">
+            <h3>Alex Lopera</h3>
+            <h4>Writer<br />Director</h4>
+          </div>
+        </div>
+
+        <!-- Team Member 3 -->
+        <div class="team-member" id="member3">
+          <div class="member-image-container">
+            <div class="member-image">
+              <img src="/images/dar.jpg" alt="" />
+            </div>
+          </div>
+          <div class="member-info">
+            <h3>Dar Abbi Williams</h3>
+            <h4>Producer</h4>
+          </div>
+        </div>
+
+        <!-- Team Member 4 -->
+        <div class="team-member" id="member4">
+          <div class="member-image-container">
+            <div class="member-image">
+              <img src="/images/ben.jpg" alt="" />
+            </div>
+          </div>
+          <div class="member-info">
+            <h3>Behnam Salavati</h3>
+            <h4>Camera Assist</h4>
+          </div>
+        </div>
+
+        <!-- Team Member 5 -->
+        <div class="team-member" id="member5">
+          <div class="member-image-container">
+            <div class="member-image">
+              <img src="/images/mandem.jpg" alt="" />
+            </div>
+          </div>
+          <div class="member-info">
+            <h3>Mandem</h3>
+            <h4>As Bastian</h4>
+          </div>
+        </div>
+
+        <!-- Team Member 6 -->
+        <div class="team-member" id="member6">
+          <div class="member-image-container">
+            <div class="member-image">
+              <!-- Fixed path to team member image -->
+              <img src="/images/mestre.jpg" alt="" />
+            </div>
+          </div>
+          <div class="member-info">
+            <h3>Ponciano Almeida</h3>
+            <h4>
+              As José <br />
+              Capoeira Mestre
+            </h4>
+          </div>
+        </div>
+
+        <!-- Team Member 7 -->
+        <div class="team-member" id="member7">
+          <div class="member-image-container">
+            <div class="member-image">
+              <img src="/images/susy.jpg" alt="" />
+            </div>
+          </div>
+          <div class="member-info">
+            <h3>Susanne Salavati</h3>
+            <h4>Director of Photography</h4>
+          </div>
+        </div>
+
+        <!-- Team Member 8 -->
+        <div class="team-member" id="member8">
+          <div class="member-image-container">
+            <div class="member-image">
+              <img src="/images/yune.jpg" alt="" />
+            </div>
+          </div>
+          <div class="member-info">
+            <h3>Yunes Barhoun</h3>
+            <h4>Fight Choreographer</h4>
+          </div>
+        </div>
+
+        <!-- Team Member 9 -->
+        <div class="team-member" id="member9">
+          <div class="member-image-container">
+            <div class="member-image">
+              <img src="/images/haidee.jpg" alt="" />
+            </div>
+          </div>
+          <div class="member-info">
+            <h3>Haidée Álvarez</h3>
+            <h4>Web developer</h4>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="section-spacer"></div>
+
+    <!-- CONTACT Section -->
+    <section id="contact" class="section">
+      <div class="contact-hero">
+        <h1 class="contact-title">CONTACT</h1>
+
+        <div class="contact-wrapper">
+          <div class="contact-info">
+            <div class="association-section">
+              <h2>
+                <a href="/AL-index.html" target="_blank">PL4YSTUDIO</a>
+              </h2>
+            </div>
+            <div class="social-icons">
+              <a
+                href="https://www.youtube.com/@pl4ystudio252"
+                target="_blank"
+                class="social-icon"
+                aria-label="YouTube"
+                ><i class="fab fa-youtube"></i
+              ></a>
+              <a
+                href="https://www.instagram.com/pl4ystudio/"
+                target="_blank"
+                class="social-icon"
+                aria-label="Instagram"
+                ><i class="fab fa-instagram"></i
+              ></a>
+              <a
+                href="https://www.facebook.com/pl4ystudio"
+                target="_blank"
+                class="social-icon"
+                aria-label="Facebook"
+                ><i class="fab fa-facebook-f"></i
+              ></a>
+              <a href="#" target="_blank" class="social-icon" aria-label="X"
+                ><i class="fab fa-x"></i
+              ></a>
+            </div>
+          </div>
+
+          <div class="contact-form-container">
+            <form
+              id="contact-form"
+              action="https://formsubmit.co/alexanderopera@gmail.com"
+              method="POST"
+            >
+              <!-- FormSubmit.co configuration -->
+              <input
+                type="hidden"
+                name="_subject"
+                value="Spirit&Bone Website Contact Form"
+              />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_captcha" value="false" />
+              <input
+                type="hidden"
+                name="_next"
+                value="https://yourdomain.com/thank-you.html"
+              />
+
+              <div class="form-group">
+                <label for="name">NAME</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="Your name"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="email">EMAIL</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Your email address"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="message">MESSAGE</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  placeholder="Write your message here..."
+                  rows="4"
+                  required
+                ></textarea>
+              </div>
+
+              <button type="submit" class="send-button">SEND</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <footer>
+        <p>&copy; 2025 Spirit&Bone. All rights reserved.</p>
+      </footer>
+    </section>
+
+    <!-- Fixed JavaScript path -->
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

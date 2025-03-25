@@ -1,0 +1,15 @@
+/* ===========================================
+   ------ SPIRIT & BONE - MAIN STYLES ------
+   =========================================== */
+
+/* Import base styles and variables */
+@import '/base.css';
+
+/* Import component styles */
+@import '/navigation.css';
+
+/* Import section-specific styles */
+@import '/home.css';
+@import '/project.css';
+@import '/team.css';
+@import '/contact.css';

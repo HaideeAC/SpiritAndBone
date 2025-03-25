@@ -1,0 +1,257 @@
+/* ===========================================
+   ------ SPIRIT & BONE - CONTACT SECTION ------
+   =========================================== */
+
+/* Clean, minimalist contact styling */
+#contact {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #000;
+  color: white;
+  position: relative;
+}
+
+.contact-hero {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 0;
+  flex: 1;
+}
+
+.contact-title {
+  font-size: 4rem;
+  font-family: "Ultra", serif;
+  margin-bottom: 60px;
+  color: white;
+  text-transform: uppercase;
+  text-align: center;
+  position: relative;
+}
+
+.contact-title::after {
+  content: "";
+  position: absolute;
+  width: 60px;
+  height: 3px;
+  background-color: var(--main-red);
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.contact-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+  width: 90%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Left side with logo and social icons */
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.association-section h2 {
+  margin: 0 0 30px 0;
+}
+
+.association-section a {
+  font-size: 2.5rem;
+  font-family: "Ultra", serif;
+  color: var(--main-red);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.association-section a:hover {
+  color: white;
+  transform: scale(1.05);
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+  margin: 40px 0;
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  background-color: var(--main-red);
+  color: white;
+  transform: scale(1.1);
+  border-color: transparent;
+}
+
+/* Right side with contact form */
+.contact-form-container {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+}
+
+.contact-form-container.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.form-group {
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 0;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-bottom-color: var(--main-red);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.send-button {
+  background-color: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 30px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.send-button:hover {
+  background-color: var(--main-red);
+  border-color: var(--main-red);
+}
+
+/* Footer styling */
+footer {
+  background-color: var(--main-red);
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  padding: 20px 0;
+  width: 100%;
+  position: relative;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+footer p {
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+/* Contact Section Media Queries */
+@media (max-width: 900px) {
+  .contact-wrapper {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+  
+  .contact-info {
+    align-items: center;
+    text-align: center;
+  }
+  
+  .contact-title {
+    font-size: 3.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-hero {
+    padding: 60px 20px;
+  }
+  
+  .contact-title {
+    font-size: 3rem;
+  }
+  
+  .association-section a {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-hero {
+    padding: 40px 20px;
+  }
+  
+  .contact-title {
+    font-size: 2.5rem;
+  }
+  
+  .contact-wrapper {
+    gap: 40px;
+  }
+  
+  .association-section a {
+    font-size: 1.8rem;
+  }
+  
+  .social-icons {
+    margin: 30px 0;
+  }
+  
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}
