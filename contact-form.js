@@ -42,7 +42,7 @@ function initContactForm() {
     formData.append("recipient", "alexanderopera@gmail.com");
 
     // Submit to server endpoint
-    fetch("your-server-endpoint", {
+    fetch("https://formsubmit.co/alexanderopera@gmail.com", {
       method: "POST",
       body: formData,
     })
