@@ -113,7 +113,7 @@
 /* Scroll down indicator */
 .scroll-down2 {
   position: absolute;
-  bottom: 40px; /* Position from bottom of tier1 */
+  bottom: 20px; /* Position from bottom of tier1 */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -126,6 +126,7 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   animation: fadeInUp 1s ease-out forwards;
+  cursor: pointer;
   z-index: 11;
 }
 

@@ -328,6 +328,7 @@ nav {
   text-transform: uppercase;
   animation: fadeInUp 1s ease-out forwards;
   z-index: 10;
+  cursor: pointer;
 }
 
 .scroll-down i {

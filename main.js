@@ -261,13 +261,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 200)
   );
 
-  // Handle scroll-down button click
-  const scrollDownBtn = document.querySelector(".scroll-down");
-  if (scrollDownBtn) {
-    scrollDownBtn.addEventListener("click", () => {
-      scrollToSection("project");
-    });
-  }
 });
 
 // Add loader styles

@@ -18,6 +18,9 @@ function initScrollEffects() {
   // If key elements don't exist, exit early
   if (!sections.length) return;
 
+  // Initialize scroll indicators
+  initScrollIndicators();
+
   // Ensure we're at the top of the page on init
   window.scrollTo(0, 0);
 
@@ -40,8 +43,6 @@ function initScrollEffects() {
               history.replaceState(null, null, window.location.pathname);
             }
           }
-
-          handleScrollDownIndicator(sectionId);
 
           if (sectionId === "project") {
             document
@@ -91,38 +92,94 @@ function initScrollEffects() {
     }, 10)
   );
 
-  // Handle scroll down indicator visibility
-  function handleScrollDownIndicator(sectionId) {
-    const scrollDown = document.querySelector(".scroll-down");
-    if (!scrollDown) return;
+  // Initialize scroll indicators
+  function initScrollIndicators() {
+    console.log("Initializing scroll indicators");
 
-    if (sectionId !== "home") {
-      scrollDown.style.opacity = "0";
-      setTimeout(() => {
-        scrollDown.style.display = "none";
-      }, 500);
-    } else {
-      scrollDown.style.display = "block";
-      setTimeout(() => {
-        scrollDown.style.opacity = "1";
-      }, 100);
+    // First scroll indicator (home to project)
+    const scrollDownBtn = document.querySelector(".scroll-down");
+    if (scrollDownBtn) {
+      console.log("First scroll indicator found");
+      scrollDownBtn.addEventListener("click", () => {
+        console.log("First scroll indicator clicked");
+        const projectSection = document.getElementById("project");
+        if (projectSection) {
+          projectSection.scrollIntoView({ behavior: "smooth" });
+          updateActiveIndicator("project");
+        }
+      });
     }
 
-    const scrollDown2 = document.querySelector(".scroll-down2");
-    if (!scrollDown2) return;
+    // Second scroll indicator (tier1 to tier2)
+    const scrollDown2Btn = document.querySelector(".scroll-down2");
+    if (scrollDown2Btn) {
+      console.log("Second scroll indicator found");
+      scrollDown2Btn.style.display = "block"; // Ensure it's visible initially
+      scrollDown2Btn.style.opacity = "1";
 
-    if (sectionId !== "project") {
-      // Changed from "home" to "project"
-      scrollDown2.style.opacity = "0";
-      setTimeout(() => {
-        scrollDown2.style.display = "none";
-      }, 500);
-    } else {
-      scrollDown2.style.display = "block";
-      setTimeout(() => {
-        scrollDown2.style.opacity = "1";
-      }, 100);
+      scrollDown2Btn.addEventListener("click", () => {
+        console.log("Second scroll indicator clicked");
+        const tier2 = document.querySelector(".tier2");
+        if (tier2) {
+          console.log("Scrolling to tier2");
+          tier2.scrollIntoView({ behavior: "smooth" });
+        }
+      });
     }
+
+    // Handle visibility based on scroll position
+    window.addEventListener(
+      "scroll",
+      debounce(() => {
+        const scrollPosition = window.scrollY;
+        const windowHeight = window.innerHeight;
+
+        // Handle first scroll indicator
+        const homeSection = document.getElementById("home");
+        if (homeSection && scrollDownBtn) {
+          const homeBottom = homeSection.offsetTop + homeSection.offsetHeight;
+          if (scrollPosition > windowHeight / 2) {
+            scrollDownBtn.style.opacity = "0";
+            setTimeout(() => {
+              scrollDownBtn.style.display = "none";
+            }, 500);
+          } else {
+            scrollDownBtn.style.display = "block";
+            setTimeout(() => {
+              scrollDownBtn.style.opacity = "1";
+            }, 100);
+          }
+        }
+
+        // Handle second scroll indicator
+        const projectSection = document.getElementById("project");
+        if (projectSection && scrollDown2Btn) {
+          const projectTop = projectSection.offsetTop;
+          const tier1 = document.querySelector(".tier1");
+
+          if (tier1) {
+            const tier1Height = tier1.offsetHeight;
+            const tier1Bottom = projectTop + tier1Height;
+
+            // Show when in tier1, hide when scrolled to tier2
+            if (
+              scrollPosition >= projectTop &&
+              scrollPosition < tier1Bottom - windowHeight / 2
+            ) {
+              scrollDown2Btn.style.display = "block";
+              setTimeout(() => {
+                scrollDown2Btn.style.opacity = "1";
+              }, 100);
+            } else {
+              scrollDown2Btn.style.opacity = "0";
+              setTimeout(() => {
+                scrollDown2Btn.style.display = "none";
+              }, 500);
+            }
+          }
+        }
+      }, 100)
+    );
   }
 
   // Show footer and ensure correct positioning
