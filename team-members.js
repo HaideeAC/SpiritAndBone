@@ -25,37 +25,99 @@ function initTeamSection() {
   if (pandeiroMember) {
     pandeiroMember.isPlaying = false;
 
-    pandeiroMember.addEventListener("click", function () {
-      // Toggle audio playback
-      if (this.isPlaying) {
-        pandeiro.pause();
-        pandeiro.currentTime = 0; // Reset playback position
-        this.isPlaying = false;
+    // Function to handle starting the audio and animation
+    function startAudio() {
+      pandeiro.play().catch((e) => console.error("Error playing audio:", e));
+      pandeiroMember.isPlaying = true;
 
-        // Stop any animation related to audio playback
-        const memberImageContainer = this.querySelector(
-          ".member-image-container1"
-        );
-        if (memberImageContainer) {
-          memberImageContainer.classList.remove("audio-playing");
-        }
-      } else {
-        pandeiro.play();
-        this.isPlaying = true;
+      const memberImageContainer = pandeiroMember.querySelector(
+        ".member-image-container1"
+      );
+      if (memberImageContainer) {
+        memberImageContainer.classList.add("audio-playing");
+      }
+    }
 
-        // Add animation class to indicate audio is playing
-        const memberImageContainer = this.querySelector(
-          ".member-image-container1"
-        );
-        if (memberImageContainer) {
-          memberImageContainer.classList.add("audio-playing");
-        }
+    // Function to handle stopping the audio and animation
+    function stopAudio() {
+      pandeiro.pause();
+      pandeiro.currentTime = 0; // Reset playback position
+      pandeiroMember.isPlaying = false;
+
+      const memberImageContainer = pandeiroMember.querySelector(
+        ".member-image-container1"
+      );
+      if (memberImageContainer) {
+        memberImageContainer.classList.remove("audio-playing");
+      }
+    }
+
+    // Add an event listener for when the audio finishes playing
+    pandeiro.addEventListener("ended", function () {
+      pandeiroMember.isPlaying = false;
+
+      // Remove the animation class when audio ends naturally
+      const memberImageContainer = pandeiroMember.querySelector(
+        ".member-image-container1"
+      );
+      if (memberImageContainer) {
+        memberImageContainer.classList.remove("audio-playing");
       }
     });
+
+    // Mouse click handler
+    pandeiroMember.addEventListener("click", function (e) {
+      // Toggle audio playback
+      if (this.isPlaying) {
+        stopAudio();
+      } else {
+        startAudio();
+      }
+
+      // Prevent event from propagating to other handlers
+      e.stopPropagation();
+    });
+
+    // Touch handlers for better mobile/tablet experience
+    pandeiroMember.addEventListener(
+      "touchstart",
+      function (e) {
+        // Prevent default touch behavior like scrolling
+        e.preventDefault();
+
+        // We'll handle the audio toggle in touchend for better UX
+        // This prevents accidental triggers during scroll attempts
+      },
+      { passive: false }
+    );
+
+    pandeiroMember.addEventListener(
+      "touchend",
+      function (e) {
+        // Toggle audio playback
+        if (this.isPlaying) {
+          stopAudio();
+        } else {
+          startAudio();
+        }
+
+        // Prevent default behavior and stop propagation
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Prevent the regular flip effect that other team members have
+        const member = e.currentTarget;
+        member.classList.remove("flipped");
+      },
+      { passive: false }
+    );
   }
 
   // Set up interactions for each team member
   teamMembers.forEach((member) => {
+    // Skip special handling for the pandeiro member
+    if (member.id === "member10") return;
+
     const memberImageContainer = member.querySelector(
       ".member-image-container, .member-image-container1"
     );
@@ -105,6 +167,9 @@ function initTeamSection() {
     const touchedMember = e.target.closest(".team-member");
     if (!touchedMember) {
       teamMembers.forEach((member) => {
+        // Skip the pandeiro member to not interfere with its audio state
+        if (member.id === "member10") return;
+
         member.classList.remove("flipped");
         const container = member.querySelector(
           ".member-image-container, .member-image-container1"
@@ -136,6 +201,7 @@ function adjustTeamLayout() {
     resetTeamPositions();
   }
 }
+
 function adjustTeamLayout1() {
   const teamContainer = document.querySelector(".team-container");
   if (!teamContainer) return;
