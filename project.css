@@ -2,14 +2,36 @@
    ------ SPIRIT & BONE - PROJECT SECTION ------
    =========================================== */
 
+/* Add tier2 visibility transition */
+.tier2 {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  min-height: 100vh;
+  padding: 20px 30px;
+  background:  linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(192, 0, 1, 0.1) 10%,
+    rgba(192, 0, 1, 0.1) 90%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tier2-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Project section base */
 #project {
   position: relative;
-  background-color: #000000d6;
+  background-color: rgba(0, 0, 0, 0.85);
   color: white;
-  min-height: 200vh;
   width: 100%;
-  display: block;
   overflow: hidden;
   padding: 0;
   box-sizing: border-box;
@@ -21,124 +43,421 @@
   max-width: 100%;
   margin: 0 auto;
   position: relative;
-  box-sizing: border-box;
-  padding: 0 5%;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
+}
+
+.project-container.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Tier containers */
-.tier1,
-.tier2 {
+.project-tier {
   width: 100%;
-  height: 100vh;
   display: block;
   box-sizing: border-box;
-  padding-top: 70px;
-  overflow: hidden;
   position: relative;
 }
 
-/* Spacing between tiers */
+/* First tier with organic layout - fixed height */
 .tier1 {
-  margin-bottom: 5vh;
-}
-
-/* Image rows in tier 1 */
-.project-images1,
-.project-images2,
-.mid-row {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  height: 27vh;
-  gap: 20px;
-  box-sizing: border-box;
-  margin-bottom: 3vh;
-}
-
-.mid-row {
-  margin: 3vh 0;
-}
-
-/* Project images - simplified for parallax */
-.project-image {
+  height: 100vh;
+  padding: 60px 20px 40px;
   position: relative;
   overflow: hidden;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  flex: 1;
-  margin: 0;
-  box-sizing: border-box;
 }
 
-.project-image img {
+/* Introduction section with title and first paragraphs */
+.project-intro {
   width: 100%;
-  height: 130%;
-  object-fit: cover;
-  object-position: center;
-  will-change: transform;
+  margin: 0 0 40px 0;
+  position: relative;
+  padding-bottom: 20px;
+  padding-top: 0;
 }
 
-/* Hover effect remains */
-.project-image:hover {
-  box-shadow: 0 12px 25px rgba(192, 0, 1, 0.5);
+.project-intro::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 100px;
+  height: 2px;
+  background: rgba(192, 0, 1, 0.5);
 }
-/* Text content for tier 1 */
-.text1 {
-  flex: 1;
-  background-color: rgb(20, 20, 20);
-  border-left: 3px solid var(--main-red);
-  padding: 20px;
-  box-sizing: border-box;
+
+.project-intro h2 {
+  font-size: 3rem;
+  color: var(--main-red);
+  text-shadow: 0 0 10px rgba(192, 0, 1, 0.3);
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+}
+
+.project-intro p {
+  font-size: 1.2rem;
+  line-height: 1;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Content grid for poster and tone descriptions */
+.project-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 40px;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Left column for Visual and Character tones */
+.project-left-col {
+  grid-column: 1;
+  padding-right: 15px;
+}
+
+/* Center column for poster */
+.project-poster {
+  grid-column: 2;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.project-poster img {
+  max-width: 100%;
+  max-height: 60vh;
+  box-shadow: var(--shadow-lg);
+  border-radius: 5px;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.project-poster:hover img {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-red);
+}
+
+/* Right column for Comedic and Poetic tones */
+.project-right-col {
+  grid-column: 3;
+  padding-left: 15px;
+}
+
+/* Tone section titles */
+.tone-section h3 {
+  font-size: 1.8rem;
+  margin: 0 0 15px 0;
+  color: rgb(247, 164, 164);
+  position: relative;
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.tone-section h3::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: rgb(247, 164, 164);
+}
+
+/* Shared tone section styles */
+.tone-section {
+  margin-bottom: 20px;
+}
+
+.tone-section p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 10px 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Free positioning for project items */
+.project-container .tier1 {
+  position: relative;
+}
+
+/* Parallax image boxes with absolute positioning for complete freedom */
+.parallax-box {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  width: 25%;
+  height: 28vh;
+  z-index: 1;
+}
+
+/* Individual positioning for each project image */
+#project-img1 {
+  top: 8%;
+  left: 2%;
+  height: 35vh;
+  width: 35%;
+  z-index: 1;
+}
+
+#project-img2 {
+  top: 12%;
+  left: 40%;
+  height: 30vh;
+  width: 20%;
+  transform: rotate(-22deg);
+}
+
+#project-img3 {
+  top: 4%;
+  left: 60%;
+  height: 28vh;
+  width: 32%;
+}
+
+#project-img4 {
+  top: 30%;
+  left: 6%;
+  height: 60vh;
+  width: 25%;
+  filter: blur(3px);
+  z-index: 0;
+}
+
+#project-text {
+  top: 45%;
+  left: 35%;
+  height: auto;
+  width: 25%;
+}
+
+#project-img5 {
+  top: 10%;
+  left: 65%;
+  height: 80vh;
+  width: 32%;
+  z-index: 0;
+  filter: blur(3px);
+}
+
+#project-img6 {
+  top: 70%;
+  left: 10%;
+  height: 30vh;
+  width: 18%;
+  filter: blur(0.5px);
+  z-index: 1;
+  transform: rotate(-8deg);
+}
+
+#project-img7 {
+  top: 80%;
+  left: 58%;
+  opacity: 0.4;
+  filter: blur(2px);
+  height: 18vh;
+  width: 41%;
+  z-index: 0;
+  transform: rotate(12deg);
+}
+
+#project-img8 {
+  top: 74%;
+  left: 0%;
+  opacity: 0.4;
+  height: 23vh;
+  width: 7%;
+  filter: blur(2px);
+  z-index: 0;
+}
+
+/* Enhanced hover effects */
+.parallax-box:hover {
+  transform: translateY(-7px);
+  box-shadow: var(--shadow-lg);
+  z-index: 5;
+}
+
+/* Allow background images to keep their blur */
+#project-img6:hover {
+  scale: 1.1;
+}
+#project-img8:hover,
+#project-img7:hover {
+  filter: blur(0);
+}
+.parallax-image {
+  height: 100%;
+  width: 100%;
+  transition: transform 0.5s ease;
+  overflow: hidden;
+}
+
+.parallax-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+/* Different movement directions on hover */
+.parallax-box:hover .parallax-image[data-direction="up"] img {
+  transform: scale(1.1) translateY(-5px);
+}
+
+.parallax-box:hover .parallax-image[data-direction="down"] img {
+  transform: scale(1.1) translateY(5px);
+}
+
+/* Project text box */
+.project-text {
+  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-radius: 8px;
-  margin: 0;
-  transition: box-shadow 0.3s ease;
+  padding: 40px 25px 40px 25px;
+  background-color: rgba(192, 0, 1, 0.2);
+  border-radius: 5px;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  z-index: 2;
 }
 
-.text1:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+/* Project text box styling */
+.project-text::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("/images/texture1.jpg");
+  opacity: 0.1;
+  z-index: -1;
 }
 
-.text1 h2 {
+.project-text h2 {
+  font-size: 3rem;
   color: var(--main-red);
-  font-family: "Ultra", serif;
-  font-size: 2rem;
-  margin-top: 0;
-  margin-bottom: 15px;
-}
-
-.text1 p {
-  font-size: 1rem;
-  line-height: 1.6;
+  text-shadow: 0 0 10px rgba(192, 0, 1, 0.3);
   margin: 0;
+  position: relative;
+  display: inline-block;
 }
 
-/* Scroll down indicator */
+.project-text h2::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: var(--main-red);
+  transition: width 0.5s ease;
+}
+
+.project-text:hover h2::after {
+  width: 100%;
+}
+
+.project-text p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Scroll down indicator for tier 1 */
 .scroll-down2 {
   position: absolute;
-  bottom: 20px;
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
+  color: #f7a4a4;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  color: white;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  animation: fadeInUp 1s ease-out forwards;
   cursor: pointer;
-  z-index: 11;
+  opacity: 0;
+  animation: fadeIn 1s ease 1s forwards;
+  z-index: 5;
+}
+
+.scroll-down2-text {
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
 }
 
 .scroll-down2 i {
   font-size: 24px;
   animation: bounceArrow 2s infinite;
+}
+
+/* Animation for image revealing */
+@keyframes revealFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply reveal animation to parallax boxes with delays */
+.parallax-box {
+  opacity: 0;
+  animation: revealFromBottom 0.8s ease forwards;
+}
+
+.project-row:first-child .parallax-box:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.project-row:first-child .parallax-box:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.project-row:first-child .parallax-box:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.project-row:nth-child(2) .parallax-box:nth-child(1) {
+  animation-delay: 0.4s;
+}
+.project-text {
+  animation-delay: 0.5s;
+  opacity: 0;
+  animation: revealFromBottom 0.8s ease 0.5s forwards;
+}
+.project-row:nth-child(2) .parallax-box:nth-child(2) {
+  animation-delay: 0.6s;
+}
+.project-row:nth-child(3) .parallax-box:nth-child(1) {
+  animation-delay: 0.7s;
+}
+.project-row:nth-child(3) .parallax-box:nth-child(2) {
+  animation-delay: 0.8s;
+}
+.project-row:nth-child(3) .parallax-box:nth-child(3) {
+  animation-delay: 0.9s;
+}
+
+/* Animation for scroll down indicator */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 @keyframes bounceArrow {
@@ -157,227 +476,215 @@
   }
 }
 
-/* Tier 2 layout */
-.tier2 {
-  display: grid;
-  grid-template-columns: 0.5fr 1.5fr;
-  width: 100%;
-  gap: 22px;
-  align-items: center;
-  box-sizing: border-box;
-  height: 92vh;
-}
-
-/* Poster image in tier 2 - no parallax */
-.image-poster {
-  width: 100%;
-  height: auto;
-  margin: 0 auto;
-  z-index: 5;
-  box-shadow: 0 0 25px rgba(192, 0, 1, 0.6);
-  grid-column: 1;
-  justify-self: center;
-  box-sizing: border-box;
-  transition: box-shadow 0.3s ease;
-}
-
-.image-poster:hover {
-  box-shadow: 0 0 35px rgba(192, 0, 1, 0.8);
-}
-
-.image-poster img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  max-width: 100%;
-}
-
-/* Text content for tier 2 */
-.text2 {
-  width: 100%;
-  height: 80vh;
-  padding: 20px;
-  box-sizing: border-box;
-  overflow-y: auto;
-  grid-column: 2;
-  scrollbar-width: thin;
-  scrollbar-color: var(--main-red) rgba(20, 20, 20, 0.5);
-  background-color: rgb(20, 20, 20);
-  border-left: 3px solid var(--main-red);
-  border-right: 3px solid var(--main-red);
-  border-radius: 8px;
-  margin: 0;
-  transition: box-shadow 0.3s ease;
-}
-
-.text2:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-.text2::-webkit-scrollbar {
-  width: 8px;
-}
-
-.text2::-webkit-scrollbar-track {
-  background: rgba(20, 20, 20, 0.5);
-  border-radius: 10px;
-}
-
-.text2::-webkit-scrollbar-thumb {
-  background-color: var(--main-red);
-  border-radius: 10px;
-}
-
-.text2 h2 {
-  color: var(--main-red);
-  font-family: "Ultra", serif;
-  font-size: 2rem;
-  margin-top: 0;
-  margin-bottom: 15px;
-}
-
-.text2 h3 {
-  color: #f5a5a4;
-  font-family: "Ultra", serif;
-  font-size: 1.5rem;
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
-.text2 p {
-  font-size: 1rem;
-  line-height: 1.5;
-  margin-bottom: 15px;
-}
-
-/* Clear fix for any potential floats */
-.project-container::after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-/* Media Queries */
-@media (max-width: 1200px) {
-  .text1 h2 {
-    font-size: 1.8rem;
-  }
-  .text1 p,
-  .text2 p {
-    font-size: 0.9rem;
-  }
-  .text2 h2 {
-    font-size: 1.8rem;
-  }
-  .text2 h3 {
-    font-size: 1.3rem;
-  }
-}
-
-@media (max-width: 992px) {
-  .tier1,
-  .tier2 {
-    height: auto;
-    min-height: 100vh;
+/* Media Queries for Responsive Design */
+@media (max-width: 1024px) {
+  .tier1 {
+    padding: 50px 15px 40px;
   }
 
-  .tier2 {
-    grid-template-columns: 1fr;
+  /* Adjust positions for tablet */
+  #project-img1 {
+    top: 12%;
+    left: 8%;
+    width: 24%;
+  }
+  #project-img2 {
+    top: 15%;
+    left: 38%;
+    width: 24%;
+  }
+  #project-img3 {
+    top: 12%;
+    left: 68%;
+    width: 24%;
+  }
+  #project-img4 {
+    top: 50%;
+    left: 5%;
+    width: 24%;
+  }
+  #project-text {
+    top: 50%;
+    left: 34%;
+    width: 32%;
+  }
+  #project-img5 {
+    top: 50%;
+    left: 70%;
+    width: 24%;
+  }
+
+  /* Hide background images on tablets */
+  #project-img6,
+  #project-img7,
+  #project-img8 {
+    display: none;
+  }
+
+  /* Tier 2 tablet adjustments */
+  .project-content-grid {
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
-    gap: 20px;
   }
 
-  .image-poster {
-    grid-column: 1;
+  .project-poster {
+    grid-column: 1 / 3;
     grid-row: 1;
-    height: 60vh;
-    width: 70%;
-    margin: 0 auto;
+    margin-bottom: 30px;
   }
 
-  .text2 {
+  .project-left-col {
     grid-column: 1;
     grid-row: 2;
-    height: auto;
-    max-height: 60vh;
+  }
+
+  .project-right-col {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .project-intro h2 {
+    font-size: 3rem;
+  }
+
+  .project-intro p {
+    font-size: 1.1rem;
+  }
+
+  .tone-section h3 {
+    font-size: 1.6rem;
   }
 }
 
 @media (max-width: 768px) {
-  #project {
-    min-height: auto;
-    padding: 40px 0;
-  }
-
-  .tier1,
-  .tier2 {
+  .tier1 {
+    padding: 0;
     height: auto;
-    padding: 30px 0;
-  }
-
-  .project-images1,
-  .project-images2,
-  .mid-row {
+    min-height: 100vh;
+    /* Switch to flexbox for mobile */
+    display: flex;
     flex-direction: column;
-    height: auto;
-    gap: 15px;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 80px 20px 40px;
   }
 
-  .project-image {
-    height: 40vh;
-    margin-bottom: 15px;
+  /* Reset all absolute positioning for mobile */
+  .parallax-box {
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    height: 200px;
+    margin: 10px 0;
+    top: auto;
+    left: auto;
+    transform: none !important; /* Prevent JS transforms on mobile */
+    opacity: 1 !important;
+    filter: none !important;
   }
 
-  .text1 {
-    margin: 15px 0;
-    padding: 15px;
+  /* Restore visibility to all images */
+  #project-img6,
+  #project-img7,
+  #project-img8 {
+    display: block;
+    transform: rotate(0) !important;
   }
 
-  .image-poster {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 2/3;
+  /* Ensure text is properly positioned */
+  #project-text {
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    margin: 20px 0;
+    padding: 20px;
   }
 
-  .text2 {
-    padding: 15px;
-    max-height: none;
+  .project-text h2 {
+    font-size: 1.6rem;
   }
 
-  .text1 h2,
-  .text2 h2 {
-    font-size: 1.5rem;
+  .project-text p {
+    font-size: 1rem;
   }
 
-  .text2 h3 {
-    font-size: 1.2rem;
+  /* Tier 2 mobile adjustments */
+  .project-intro {
+    width: 95%;
+  }
+
+  .project-content-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .project-poster {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .project-left-col {
+    grid-column: 1;
+    grid-row: 2;
+    padding-right: 0;
+  }
+
+  .project-right-col {
+    grid-column: 1;
+    grid-row: 3;
+    padding-left: 0;
+  }
+
+  .project-intro h2 {
+    font-size: 2.5rem;
+  }
+  .project-intro p {
+    font-size: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .project-image {
-    height: 30vh;
+  .tier1 {
+    padding: 70px 10px 30px;
   }
 
-  .text1 h2,
-  .text2 h2 {
-    font-size: 1.3rem;
+  .parallax-box {
+    height: 180px;
   }
 
-  .text1 p,
-  .text2 p {
-    font-size: 0.85rem;
+  .project-text {
+    padding: 15px;
   }
 
-  .text2 h3 {
-    font-size: 1.1rem;
+  .project-text h2 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
   }
-}
 
-/* Reduced motion preference support */
-@media (prefers-reduced-motion: reduce) {
-  .project-image img {
-    transform: none !important;
-    transition: none !important;
+  .project-text p {
+    font-size: 0.9rem;
+  }
+
+  .scroll-down2 {
+    bottom: 15px;
+  }
+
+  .scroll-down2-text {
+    font-size: 0.8rem;
+  }
+
+  /* Tier 2 smaller mobile adjustments */
+  .project-intro h2 {
+    font-size: 2rem;
+  }
+
+  .tone-section h3 {
+    font-size: 1.6rem;
+  }
+  .project-intro p {
+    font-size: 0.95rem;
+  }
+  .project-intro::after {
+    width: 70px;
   }
 }

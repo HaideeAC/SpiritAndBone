@@ -1,284 +1,293 @@
 /**
- * Spirit&Bone - Project Section
- * Simplified implementation with cleaner parallax effect
+ * Spirit&Bone - Project Section Interactions
  */
 
-import { debounce } from "./utils.js";
-
 function initProjectParallax() {
-  console.log(
-    "Initializing simplified project section with clean parallax effect"
-  );
-
-  // Key elements
-  const projectSection = document.getElementById("project");
-  const projectImages = document.querySelectorAll(
-    ".project-image:not(.image-poster) img"
-  );
+  // Get references to main elements
   const projectContainer = document.querySelector(".project-container");
-  const scrollDownBtn = document.querySelector(".scroll-down2");
+  const parallaxBoxes = document.querySelectorAll(".parallax-box");
+  const parallaxImages = document.querySelectorAll(".parallax-image");
+  const scrollDown2 = document.getElementById("scroll-down2");
+  const tier2 = document.querySelector(".tier2");
 
-  // Early exit if project section doesn't exist
-  if (!projectSection) return;
+  // Exit if no project container
+  if (!projectContainer) return;
 
-  // Make all elements visible by default without resetting image transforms
-  document
-    .querySelectorAll(".text1, .text2, .image-poster")
-    .forEach((element) => {
-      element.style.opacity = "1";
-      element.style.transform = "translateY(0)";
-      element.classList.add("appear");
-    });
+  // Make the container visible with a subtle animation
+  setTimeout(() => {
+    projectContainer.classList.add("visible");
+  }, 300);
 
-  // Set only opacity for project images (don't reset transform)
-  document
-    .querySelectorAll(".project-image:not(.image-poster)")
-    .forEach((element) => {
-      element.style.opacity = "1";
-      element.classList.add("appear");
-    });
-
-  // Get responsive settings based on screen size
-  function getParallaxSettings() {
-    // Base settings
-    const settings = {
-      intensity: 2.0, // Base intensity
-      initialOffset: -80, // Starting position percentage
-      rangeOfMotion: 65, // Total range the image can move
-      viewportThreshold: 1.5, // How far beyond viewport to calculate effect
-    };
-
-    // Get viewport dimensions
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const aspectRatio = width / height;
-
-    // Extra small/thin devices
-    if (width <= 360 || aspectRatio <= 0.5) {
-      return {
-        ...settings,
-        intensity: 2.0, // Lower intensity for very small screens
-        initialOffset: -101, // Starting position percentage
-        rangeOfMotion: 40, // Reduced range for small screens
-        viewportThreshold: 1.0, // Minimal threshold for performance
-      };
-    }
-    // Small mobile devices
-    else if (width <= 480) {
-      return {
-        ...settings,
-        intensity: 2.3, // Base intensity
-        initialOffset: -102, // Starting position percentage
-        rangeOfMotion: 43, // Total range the image can move
-        viewportThreshold: 1.05, // Reduced threshold for performance
-      };
-    }
-    // Medium/tablets portrait
-    else if (width <= 768) {
-      return {
-        ...settings,
-        intensity: 2.5, // Base intensity
-        initialOffset: -103, // Starting position percentage
-        rangeOfMotion: 38, // Total range the image can move
-        viewportThreshold: 1.1,
-      };
-    }
-    // Tablets landscape
-    else if (width <= 1024) {
-      return {
-        ...settings,
-        intensity: 2.8, // Base intensity
-        initialOffset: -102, // Starting position percentage
-        rangeOfMotion: 37, // Total range the image can move
-      };
-    }
-    // Standard desktops
-    else if (width <= 1440) {
-      return {
-        ...settings,
-        intensity: 3.0, // Standard intensity
-        initialOffset: -100, // Standard positioning
-        rangeOfMotion: 35, // Standard range
-      };
-    }
-    // Extra wide screens
-    else if (width > 1440 || aspectRatio >= 2.0) {
-      return {
-        ...settings,
-        intensity: 3.5, // Enhanced intensity for large screens
-        initialOffset: -100, // Standard positioning
-        rangeOfMotion: 40, // Larger range for wide screens
-        viewportThreshold: 1.3, // Extended threshold for wide screens
-      };
-    }
-
-    // Default fallback
-    return settings;
-  }
-
-  // Simple parallax effect for project images
-  function updateParallax() {
-    // Log to confirm function is running
-    console.log("Updating parallax effect");
-
-    // Get current settings based on screen size
-    const settings = getParallaxSettings();
-
-    projectImages.forEach((img, index) => {
-      // Get image container
-      const imgContainer = img.closest(".project-image");
-      if (!imgContainer) return;
-
-      // Get section position relative to viewport
-      const rect = imgContainer.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-
-      // Only process when image is visible (using dynamic threshold)
-      if (
-        rect.bottom < 0 ||
-        rect.top > viewportHeight * settings.viewportThreshold
-      )
-        return;
-
-      // Calculate how far into the viewport the image has scrolled (0 to 1)
-      const visibleRatio = Math.min(
-        Math.max(
-          0,
-          (viewportHeight - rect.top) / (viewportHeight + rect.height)
-        ),
-        1
-      );
-
-      // Calculate direction based on image position (alternate)
-      const direction = index % 2 === 0 ? 1 : -1;
-
-      // Then calculate movement based on scroll position
-      const moveAmount = settings.rangeOfMotion * direction;
-      const dynamicOffset =
-        settings.initialOffset +
-        (visibleRatio * moveAmount * settings.intensity) / 3;
-
-      // Apply transform directly to image element with !important
-      img.style.transform = `translateY(${dynamicOffset}px)`;
-    });
-  }
-
-  // Performance optimization - debounce function for resize event
-  let resizeTimeout;
-  function handleResize() {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(updateParallax, 100);
-  }
-
-  // Performance optimization for scroll events
-  let ticking = false;
-  function handleScroll() {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        updateParallax();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }
-
-  // Check if reduced motion is preferred by the user
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
-
-  if (!prefersReducedMotion) {
-    // Add event listeners only if reduced motion is not preferred
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleResize, { passive: true });
-
-    // Run immediately to set initial positions
-    setTimeout(updateParallax, 100);
-
-    // Also run when images load
-    window.addEventListener("load", () => {
-      setTimeout(updateParallax, 500);
-    });
-  }
-
-  // Setup scroll-down button in tier1 (keep this functionality)
-  function setupScrollDownButton() {
-    if (!scrollDownBtn) return;
-
-    // Ensure it's visible initially
-    scrollDownBtn.style.display = "block";
-    scrollDownBtn.style.opacity = "1";
-
-    // Handle click to scroll to tier2
-    scrollDownBtn.addEventListener("click", () => {
-      const tier2 = document.querySelector(".tier2");
+  // Handle scroll down button
+  if (scrollDown2) {
+    scrollDown2.addEventListener("click", () => {
       if (tier2) {
         tier2.scrollIntoView({ behavior: "smooth" });
       }
     });
-
-    // Handle visibility based on scroll position
-    window.addEventListener(
-      "scroll",
-      debounce(() => {
-        const scrollPosition = window.scrollY;
-        const windowHeight = window.innerHeight;
-        const projectTop = projectSection.offsetTop;
-        const tier1 = document.querySelector(".tier1");
-
-        if (tier1) {
-          const tier1Height = tier1.offsetHeight;
-          const tier1Bottom = projectTop + tier1Height;
-
-          // Show when in tier1, hide when scrolled to tier2
-          if (
-            scrollPosition >= projectTop &&
-            scrollPosition < tier1Bottom - windowHeight / 2
-          ) {
-            scrollDownBtn.style.display = "block";
-            setTimeout(() => {
-              scrollDownBtn.style.opacity = "1";
-            }, 100);
-          } else {
-            scrollDownBtn.style.opacity = "0";
-            setTimeout(() => {
-              scrollDownBtn.style.display = "none";
-            }, 500);
-          }
-        }
-      }, 100)
-    );
   }
 
-  // Initialize
-  function init() {
-    // Make sure the project container is visible
-    if (projectContainer) {
-      projectContainer.classList.add("visible");
-    }
+  // Set up mouse movement parallax effect
+  parallaxBoxes.forEach((box) => {
+    box.addEventListener("mousemove", (e) => {
+      const image = box.querySelector(".parallax-image");
+      if (!image) return;
 
-    // Initialize scroll button
-    setupScrollDownButton();
+      // Calculate mouse position relative to the box
+      const rect = box.getBoundingClientRect();
+      const x = e.clientX - rect.left; // x position within the box
+      const y = e.clientY - rect.top; // y position within the box
 
-    // Set image styles for parallax
-    projectImages.forEach((img) => {
-      img.style.transition = "transform 0.2s ease-out";
-      img.style.willChange = "transform";
+      // Calculate movement based on mouse position
+      // Move opposite to mouse direction for parallax effect
+      const xMove = (rect.width / 2 - x) / 20;
+      const yMove = (rect.height / 2 - y) / 20;
+
+      // Apply transform
+      image.style.transform = `translate(${xMove}px, ${yMove}px)`;
     });
 
-    // Force an initial parallax calculation
-    updateParallax();
+    // Reset transform when mouse leaves
+    box.addEventListener("mouseleave", () => {
+      const image = box.querySelector(".parallax-image");
+      if (image) {
+        image.style.transform = "translate(0, 0)";
+      }
+    });
+  });
+
+  // Set up on-scroll parallax effect
+  window.addEventListener("scroll", () => {
+    const scrollY = window.scrollY;
+    const projectSection = document.getElementById("project");
+
+    if (!projectSection) return;
+
+    const projectTop = projectSection.offsetTop;
+    const projectHeight = projectSection.offsetHeight;
+
+    // Only apply effects when project section is in view
+    if (
+      scrollY >= projectTop - window.innerHeight &&
+      scrollY <= projectTop + projectHeight
+    ) {
+      // Calculate how far we've scrolled into the section
+      const scrollPosition = scrollY - projectTop;
+
+      // Apply staggered movement to parallax boxes
+      parallaxBoxes.forEach((box, index) => {
+        const direction = index % 2 === 0 ? 1 : -1;
+        const speed = 0.05 + index * 0.01;
+        const yValue = scrollPosition * speed * direction;
+
+        // Apply subtle movement based on scroll
+        box.style.transform = `translateY(${yValue}px)`;
+      });
+    }
+  });
+
+  // Smooth transition for project details in tier 2
+  if (tier2) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("tier2-visible");
+
+            // Add staggered animations to project details
+            const projectDetails = tier2.querySelector(".project-details");
+            if (projectDetails) {
+              const headings = projectDetails.querySelectorAll("h2, h3");
+              const paragraphs = projectDetails.querySelectorAll("p");
+
+              // Animate headings
+              headings.forEach((heading, index) => {
+                heading.style.opacity = "0";
+                heading.style.transform = "translateY(20px)";
+                heading.style.transition = `all 0.5s ease ${
+                  0.2 + index * 0.1
+                }s`;
+
+                setTimeout(() => {
+                  heading.style.opacity = "1";
+                  heading.style.transform = "translateY(0)";
+                }, 100);
+              });
+
+              // Animate paragraphs
+              paragraphs.forEach((paragraph, index) => {
+                paragraph.style.opacity = "0";
+                paragraph.style.transform = "translateY(20px)";
+                paragraph.style.transition = `all 0.5s ease ${
+                  0.4 + index * 0.1
+                }s`;
+
+                setTimeout(() => {
+                  paragraph.style.opacity = "1";
+                  paragraph.style.transform = "translateY(0)";
+                }, 200);
+              });
+            }
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(tier2);
   }
 
-  // Initialize when DOM is ready
-  if (document.readyState === "complete") {
-    init();
-  } else {
-    window.addEventListener("load", init);
-  }
+  // Initialize enhanced hover effects for project images
+  setupImageHoverEffects();
 
-  // Force update after a slight delay to ensure everything is loaded
-  setTimeout(updateParallax, 1000);
+  // Initialize poster image animation
+  setupPosterAnimation();
+
+  // Initialize text reveal animation
+  setupTextReveal();
 }
 
+// Setup enhanced hover effects for project images
+function setupImageHoverEffects() {
+  const images = document.querySelectorAll(".parallax-box img");
+
+  images.forEach((img) => {
+    // Add tilt effect on hover
+    img.addEventListener("mousemove", (e) => {
+      const box = img.closest(".parallax-box");
+      const rect = box.getBoundingClientRect();
+
+      // Calculate mouse position as percentage
+      const xPos = (e.clientX - rect.left) / rect.width;
+      const yPos = (e.clientY - rect.top) / rect.height;
+
+      // Calculate tilt angle (max 10 degrees)
+      const tiltX = (0.5 - yPos) * 10;
+      const tiltY = (xPos - 0.5) * 10;
+
+      // Apply transform
+      img.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.05)`;
+    });
+
+    // Reset on mouse leave
+    img.addEventListener("mouseleave", () => {
+      img.style.transform =
+        "perspective(1000px) rotateX(0) rotateY(0) scale(1)";
+      img.style.transition = "transform 0.5s ease";
+    });
+  });
+}
+
+// Setup special animation for poster
+function setupPosterAnimation() {
+  const poster = document.querySelector(".project-poster img");
+
+  if (!poster) return;
+
+  // Create a subtle floating animation for the poster
+  let floatDirection = 1;
+  let floatPosition = 0;
+  const floatSpeed = 0.05;
+  const floatLimit = 10;
+
+  function animatePoster() {
+    floatPosition += floatSpeed * floatDirection;
+
+    // Reverse direction when limits reached
+    if (floatPosition >= floatLimit || floatPosition <= -floatLimit) {
+      floatDirection *= -1;
+    }
+
+    // Apply subtle floating effect
+    poster.style.transform = `translateY(${floatPosition}px)`;
+
+    // Continue animation
+    requestAnimationFrame(animatePoster);
+  }
+
+  // Start animation
+  animatePoster();
+
+  // Add special shine effect on hover
+  poster.addEventListener("mousemove", (e) => {
+    const rect = poster.getBoundingClientRect();
+
+    // Calculate mouse position as percentage
+    const xPos = (e.clientX - rect.left) / rect.width;
+    const yPos = (e.clientY - rect.top) / rect.height;
+
+    // Create gradient position based on mouse
+    poster.style.boxShadow = `
+      0 15px 35px rgba(0, 0, 0, 0.25),
+      inset 0 0 100px rgba(255, 255, 255, ${
+        0.2 - (xPos - 0.5) * 0.1 - (yPos - 0.5) * 0.1
+      })
+    `;
+  });
+
+  // Reset on mouse leave
+  poster.addEventListener("mouseleave", () => {
+    poster.style.boxShadow = "var(--shadow-lg)";
+  });
+}
+
+// Setup text reveal animation for project-text
+function setupTextReveal() {
+  const projectText = document.querySelector(".project-text");
+
+  if (!projectText) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // Create letter-by-letter animation for heading
+          const heading = projectText.querySelector("h2");
+          if (heading) {
+            const text = heading.textContent;
+            heading.textContent = "";
+
+            // Create span for each letter
+            for (let i = 0; i < text.length; i++) {
+              const span = document.createElement("span");
+              span.textContent = text[i];
+              span.style.opacity = "0";
+              span.style.transform = "translateY(20px)";
+              span.style.display = "inline-block";
+              span.style.transition = `all 0.3s ease ${0.1 + i * 0.03}s`;
+              heading.appendChild(span);
+
+              // Reveal letter with delay
+              setTimeout(() => {
+                span.style.opacity = "1";
+                span.style.transform = "translateY(0)";
+              }, 100);
+            }
+          }
+
+          // Fade in paragraph
+          const paragraph = projectText.querySelector("p");
+          if (paragraph) {
+            paragraph.style.opacity = "0";
+            paragraph.style.transform = "translateY(20px)";
+            paragraph.style.transition = "all 0.5s ease 0.5s";
+
+            setTimeout(() => {
+              paragraph.style.opacity = "1";
+              paragraph.style.transform = "translateY(0)";
+            }, 200);
+          }
+
+          // Only need to observe once
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  observer.observe(projectText);
+}
+
+// Export the initialization function
 export { initProjectParallax };
