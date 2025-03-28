@@ -5,12 +5,18 @@
 #contact {
   margin: 0;
   padding: 0;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: #000;
   color: white;
   position: relative;
+}
+/* Ensure no extra space below contact section */
+#contact + .section-spacer {
+  display: none;
 }
 
 .contact-hero {
@@ -181,15 +187,23 @@
 
 /* Footer styling */
 footer {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  margin-bottom: 0 !important;
   background-color: var(--main-red);
   color: rgba(255, 255, 255, 0.6);
   text-align: center;
   padding: 20px 0;
   width: 100%;
   position: relative;
+  z-index: 2;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
-
+footer.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 footer p {
   margin: 0;
   padding: 0;
@@ -224,6 +238,9 @@ footer p {
 
   .association-section a {
     font-size: 2rem;
+  }
+  footer {
+    padding: 15px 0;
   }
 }
 

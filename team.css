@@ -2,19 +2,7 @@
    ------ SPIRIT & BONE - TEAM SECTION ------
    =========================================== */
 
-.team-body {
-  background-size: cover;
-  background-position: center;
-  background-blend-mode: overlay;
-}
-
-.team-main {
-  min-height: calc(100vh - 90px);
-  padding: 40px 0;
-  overflow: hidden;
-  position: relative;
-}
-
+/* Base styling */
 .team-container {
   position: relative;
   width: 100%;
@@ -23,31 +11,18 @@
   overflow: visible;
 }
 
+/* Team member card */
 .team-member {
   position: absolute;
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
   z-index: 1;
   perspective: 1000px; /* Create 3D space for flip effect */
+  touch-action: none; /* Prevents browser handling of touch gestures */
+  -webkit-tap-highlight-color: transparent; /* Removes tap highlight on mobile */
 }
 
-.section:hover .team-member {
-  transform: translateY(0) scale(1);
-}
-
-.team-container:hover .team-member:not(:hover) {
-  opacity: 1;
-}
-
-/* Card flip container */
-.member-image-container {
-  width: 180px;
-  height: 180px;
-  position: relative;
-  z-index: 1;
-  animation: float 7s ease-in-out infinite;
-  transition: all 0.4s ease;
-  transform-style: preserve-3d;
-}
+/* Card containers */
+.member-image-container,
 .member-image-container1 {
   width: 180px;
   height: 180px;
@@ -56,24 +31,12 @@
   animation: float 7s ease-in-out infinite;
   transition: all 0.4s ease;
   transform-style: preserve-3d;
+  will-change: transform; /* Hints browser to optimize animations */
+  transform: translateZ(0); /* Force GPU acceleration */
 }
 
 /* Image side (front) */
-.member-image {
-  width: 100%;
-  height: 100%;
-  background-color: var(--main-red);
-  border-radius: 50%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  overflow: hidden;
-  transform-style: preserve-3d;
-  box-shadow: 0 0 40px rgba(255, 255, 255, 0.551);
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
+.member-image,
 .member-image1 {
   width: 100%;
   height: 100%;
@@ -81,13 +44,19 @@
   position: absolute;
   top: 0;
   left: 0;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   overflow: hidden;
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Apply background color only to team member images */
+.member-image {
+  background-color: var(--main-red);
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.551);
+}
+
+/* Images styling */
 .member-image img {
   width: 100%;
   height: 100%;
@@ -97,17 +66,20 @@
   filter: grayscale(80%);
   transition: filter 0.6s ease;
 }
+
 .member-image1 img {
-  filter: drop-shadow(0 0 10px #c00001);
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
   border-radius: 50%;
-  transition: filter 0.6s ease;
+  filter: drop-shadow(0 0 10px #c00001);
+  transition: filter 0.6s ease, transform 0.3s ease;
 }
+
+/* Audio playing animation for pandeiro */
 .member-image-container1.audio-playing {
-  animation: pumpum 1s ease-in-out 0.3s forwards infinite !important;
+  animation: pumpum 1.3s ease-in-out infinite !important;
 }
 
 /* Info side (back) */
@@ -125,19 +97,19 @@
   border-radius: 50%;
   color: white;
   transform: rotateY(180deg);
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   padding: 15px;
   box-shadow: var(--shadow-red);
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   box-sizing: border-box;
+  will-change: transform;
 }
 
+/* Text styling */
 .member-info h3 {
-  margin: 0;
+  margin: 0 0 8px 0;
   font-size: 1.3rem;
   color: white;
-  margin-bottom: 8px;
   font-weight: 600;
   text-align: center;
 }
@@ -150,46 +122,76 @@
   text-align: center;
 }
 
-/* Team member positioning */
-#member1 {
-  top: 15%;
-  left: 23%;
+/* Hover/active state effects */
+.team-member:hover .member-image-container,
+.team-member:active .member-image-container,
+.team-member:hover .member-image-container1,
+.team-member:active .member-image-container1 {
+  animation-play-state: paused;
+  transform: scale(1.15);
 }
-#member2 {
-  top: 10%;
-  left: 45%;
+
+.team-member:hover .member-image img {
+  filter: grayscale(0%);
 }
-#member3 {
-  top: 15%;
-  left: 67%;
+
+/* Flip effect */
+.team-member.flipped .member-image {
+  transform: rotateY(180deg);
 }
-#member4 {
-  top: 40%;
-  left: 5%;
+
+.team-member.flipped .member-info {
+  transform: rotateY(0);
 }
-#member5 {
-  top: 40%;
-  left: 35%;
+
+/* Pandeiro specific styling */
+#member10 .member-image-container1:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 15px rgba(192, 0, 1, 0.8));
 }
-#member6 {
-  top: 40%;
-  left: 55%;
+
+/* Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(10px) rotate(-2deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
 }
-#member7 {
-  top: 40%;
-  left: 83%;
-}
-#member8 {
-  top: 65%;
-  left: 20%;
-}
-#member9 {
-  top: 65%;
-  left: 70%;
-}
-#member10 {
-  top: 70%;
-  left: 45%;
+
+@keyframes pumpum {
+  20%,
+  40% {
+    transform: rotateZ(3deg);
+  }
+  30%,
+  50% {
+    transform: rotateZ(-3deg);
+  }
+  10%,
+  60%,
+  70%,
+  90% {
+    transform: scale(1.08);
+  }
+  0%,
+  15%,
+  65%,
+  75%,
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Animation delays for floating effect */
@@ -220,64 +222,11 @@
 #member9 .member-image-container {
   animation-delay: -4s;
 }
-#member10 .member-image-container {
+#member10 .member-image-container1 {
   animation-delay: -4.5s;
 }
 
-/* Flip effect on hover */
-.team-member:hover .member-image-container {
-  animation-play-state: paused;
-  transform: scale(1.15);
-}
-
-/* Rotate front (image) to back */
-.team-member.flipped .member-image {
-  transform: rotateY(180deg);
-}
-
-/* Rotate back (info) to front */
-.team-member.flipped .member-info {
-  transform: rotateY(0);
-}
-
-/* Hover state images */
-.team-member:hover .member-image img {
-  filter: grayscale(0%);
-}
-.team-member:hover .member-image1 img {
-  cursor: pointer;
-}
-
-/* Team section animation */
-@keyframes float {
-  0% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-10px) rotate(2deg);
-  }
-  50% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  75% {
-    transform: translateY(10px) rotate(-2deg);
-  }
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-}
-
-@keyframes pumpum {
-  70%,
-  85% {
-    transform: scale(1.05);
-  }
-  80% {
-    transform: scale(1);
-  }
-}
-
-/* Team Section Media Queries */
+/* Media Queries */
 @media (max-width: 1024px) {
   .member-info h3 {
     font-size: 1.2rem;
@@ -288,65 +237,19 @@
 }
 
 @media (max-width: 768px) {
-  /* Team layout adjustments */
-  .team-main {
-    padding-bottom: 100px;
-  }
+  /* Container adjustments */
   .team-container {
     min-height: calc(100vh - 90px);
   }
 
-  /* Reposition team members for smaller screens */
-  #member1 {
-    top: 5%;
-    left: 10%;
-  }
-  #member2 {
-    top: 10%;
-    left: 50%;
-  }
-  #member3 {
-    top: 25%;
-    left: 10%;
-  }
-  #member4 {
-    top: 30%;
-    left: 50%;
-  }
-  #member5 {
-    top: 45%;
-    left: 10%;
-  }
-  #member6 {
-    top: 50%;
-    left: 50%;
-  }
-  #member7 {
-    top: 65%;
-    left: 10%;
-  }
-  #member8 {
-    top: 70%;
-    left: 50%;
-  }
-  #member9 {
-    top: 85%;
-    left: 10%;
-  }
-  #member9 {
-    top: 90%;
-    left: 50%;
-  }
-
-  .member-image-container {
-    width: 140px;
-    height: 140px;
-  }
+  /* Sizing adjustments */
+  .member-image-container,
   .member-image-container1 {
     width: 140px;
     height: 140px;
   }
 
+  /* Text adjustments */
   .member-info h3 {
     font-size: 1rem;
     margin-bottom: 4px;
@@ -355,18 +258,23 @@
   .member-info h4 {
     font-size: 0.7rem;
   }
+
+  /* Make sound icon slightly smaller */
+  #member10 .member-image-container1::after {
+    width: 25px;
+    height: 25px;
+  }
 }
 
 @media (max-width: 480px) {
-  .member-image-container {
-    width: 120px;
-    height: 120px;
-  }
+  /* Further size reduction for mobile */
+  .member-image-container,
   .member-image-container1 {
     width: 120px;
     height: 120px;
   }
 
+  /* Smaller text for mobile */
   .member-info h3 {
     font-size: 0.9rem;
     margin-bottom: 2px;
@@ -376,20 +284,10 @@
     font-size: 0.65rem;
   }
 
-  /* Further adjust positioning for mobile */
-  #member1,
-  #member3,
-  #member5,
-  #member7,
-  #member9 {
-    left: 5%;
-  }
-
-  #member2,
-  #member4,
-  #member6,
-  #member8,
-  #member10 {
-    left: 55%;
+  /* Smaller sound icon */
+  #member10 .member-image-container1::after {
+    width: 22px;
+    height: 22px;
+    font-size: 0.8rem;
   }
 }

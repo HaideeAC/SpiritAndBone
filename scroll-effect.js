@@ -9,7 +9,6 @@ import { updateActiveIndicator } from "./main.js";
 function initScrollEffects() {
   // Core elements
   const sections = document.querySelectorAll(".section");
-  const footer = document.querySelector("footer");
   const menuCircle = document.getElementById("menu-circle");
   const progressBar = document.getElementById("scroll-progress");
 
@@ -42,13 +41,17 @@ function initScrollEffects() {
             }
           }
 
-          // Section-specific actions
+          // Section-specific actions (footer visibility now handled by contact-form.js)
           if (sectionId === "contact") {
             const contactForm = document.querySelector(
               ".contact-form-container"
             );
             if (contactForm) contactForm.classList.add("visible");
-            showFooter();
+
+            // Use the global showFooter method if available (defined in contact-form.js)
+            if (typeof window.showFooter === "function") {
+              window.showFooter();
+            }
           }
         }
       });
@@ -102,77 +105,61 @@ function initScrollEffects() {
     const windowHeight = window.innerHeight;
     const fullHeight = document.body.scrollHeight - windowHeight;
 
-    // Show footer when near bottom
-    if (fullHeight - scrollTop < 50 || scrollTop >= fullHeight) {
-      showFooter();
+    // Check bottom of page for footer visibility (using global method)
+    if (
+      (fullHeight - scrollTop < 50 || scrollTop >= fullHeight) &&
+      typeof window.showFooter === "function"
+    ) {
+      window.showFooter();
     }
 
-    // Apply video container parallax
-    applyVideoParallax(scrollTop);
-
-    // Apply team members parallax
-    applyTeamParallax(scrollTop, windowHeight);
-
-    // Apply contact info parallax
-    applyContactParallax(scrollTop, windowHeight);
+    // Apply parallax effects to all relevant elements
+    applyParallaxEffects(scrollTop, windowHeight);
   }
 
-  // Video container parallax effect
-  function applyVideoParallax(scrolled) {
+  // Consolidated parallax effects function
+  function applyParallaxEffects(scrolled, windowHeight) {
+    // Video container parallax
     const videoContainer = document.querySelector(".video-container");
-    if (!videoContainer) return;
+    if (videoContainer) {
+      const movement = scrolled * 0.15;
+      const scale = 1 + scrolled * 0.0002;
+      videoContainer.style.transform = `translateY(${movement}px) translateZ(-1px) scale(${scale})`;
+    }
 
-    const movement = scrolled * 0.15;
-    const scale = 1 + scrolled * 0.0002;
-    videoContainer.style.transform = `translateY(${movement}px) translateZ(-1px) scale(${scale})`;
-  }
-
-  // Team section parallax effect
-  function applyTeamParallax(scrolled, windowHeight) {
+    // Team section parallax
     const teamMembers = document.querySelectorAll(".team-member");
     const teamSection = document.getElementById("team");
-    if (!teamMembers.length || !teamSection) return;
 
-    const teamOffset = scrolled - teamSection.offsetTop;
+    if (teamMembers.length && teamSection) {
+      const teamOffset = scrolled - teamSection.offsetTop;
 
-    if (teamOffset > -windowHeight && teamOffset < windowHeight) {
-      teamMembers.forEach((member, index) => {
-        const depth = 0.05 + (index % 3) * 0.02;
-        const xDirection = index % 2 === 0 ? 1 : -1;
-        const yMovement = teamOffset * depth * 0.5;
-        const xMovement = teamOffset * depth * 0.2 * xDirection;
+      if (teamOffset > -windowHeight && teamOffset < windowHeight) {
+        teamMembers.forEach((member, index) => {
+          const depth = 0.05 + (index % 3) * 0.02;
+          const xDirection = index % 2 === 0 ? 1 : -1;
+          const yMovement = teamOffset * depth * 0.5;
+          const xMovement = teamOffset * depth * 0.2 * xDirection;
 
-        member.style.transform = `translate(${xMovement}px, ${yMovement}px)`;
-      });
+          member.style.transform = `translate(${xMovement}px, ${yMovement}px)`;
+        });
+      }
     }
-  }
 
-  // Contact section parallax effect
-  function applyContactParallax(scrolled, windowHeight) {
+    // Contact section parallax
     const contactInfoElements = document.querySelectorAll(".contact-info > *");
     const contactSection = document.getElementById("contact");
-    if (!contactInfoElements.length || !contactSection) return;
 
-    const contactOffset = scrolled - contactSection.offsetTop;
+    if (contactInfoElements.length && contactSection) {
+      const contactOffset = scrolled - contactSection.offsetTop;
 
-    if (contactOffset > -windowHeight && contactOffset < windowHeight) {
-      contactInfoElements.forEach((element, index) => {
-        const movement = contactOffset * 0.05 * (index % 2 === 0 ? 1 : -1);
-        element.style.transform = `translateY(${movement}px)`;
-      });
+      if (contactOffset > -windowHeight && contactOffset < windowHeight) {
+        contactInfoElements.forEach((element, index) => {
+          const movement = contactOffset * 0.05 * (index % 2 === 0 ? 1 : -1);
+          element.style.transform = `translateY(${movement}px)`;
+        });
+      }
     }
-  }
-
-  // Show footer with proper positioning
-  function showFooter() {
-    if (!footer) return;
-
-    footer.style.opacity = "1";
-    footer.style.transform = "translateY(0)";
-    footer.style.position = "relative";
-    footer.style.bottom = "0";
-    footer.style.marginBottom = "0";
-    footer.classList.add("visible");
   }
 
   // Initialize smooth scrolling behavior
@@ -266,14 +253,14 @@ function initScrollEffects() {
         const windowHeight = window.innerHeight;
 
         // Handle home scroll indicator
-        if (homeSection && scrollDownBtn) {
+        if (scrollDownBtn) {
           const homeSection = document.getElementById("home");
-          if (scrollPosition > windowHeight / 2) {
+          if (homeSection && scrollPosition > windowHeight / 2) {
             scrollDownBtn.style.opacity = "0";
             setTimeout(() => {
               scrollDownBtn.style.display = "none";
             }, 500);
-          } else {
+          } else if (homeSection) {
             scrollDownBtn.style.display = "block";
             setTimeout(() => {
               scrollDownBtn.style.opacity = "1";
@@ -283,62 +270,7 @@ function initScrollEffects() {
       }, 100)
     );
   }
-
-  // Mobile optimizations
-  adjustForMobile();
-  fixFooterPosition();
-
-  // Handle window resize
-  window.addEventListener(
-    "resize",
-    debounce(() => {
-      adjustForMobile();
-      fixFooterPosition();
-    }, 200)
-  );
 }
 
-// Mobile optimization for team section
-function adjustForMobile() {
-  const teamSection = document.getElementById("team");
-  if (!teamSection) return;
-
-  const width = window.innerWidth;
-  if (width <= 768) {
-    teamSection.style.height = "auto";
-    teamSection.style.minHeight = "200vh";
-  } else {
-    teamSection.style.height = "100vh";
-  }
-}
-
-// Fix footer positioning
-function fixFooterPosition() {
-  const contactSection = document.getElementById("contact");
-  const footer = document.querySelector("footer");
-
-  if (!contactSection || !footer) return;
-
-  // Ensure proper contact section spacing
-  contactSection.style.marginBottom = "0";
-  contactSection.style.paddingBottom = "0";
-
-  // Ensure footer visibility
-  footer.style.opacity = "1";
-  footer.style.transform = "translateY(0)";
-  footer.style.position = "relative";
-  footer.style.bottom = "0";
-  footer.style.marginBottom = "0";
-
-  // Fix body margins if footer is outside contact section
-  if (
-    footer.parentNode !== contactSection &&
-    contactSection.nextElementSibling === footer
-  ) {
-    document.body.style.marginBottom = "0";
-    document.body.style.paddingBottom = "0";
-  }
-}
-
-// Export functions
-export { initScrollEffects, adjustForMobile, fixFooterPosition };
+// Export functions (removed fixFooterPosition as it's now handled by contact-form.js)
+export { initScrollEffects };

@@ -1,140 +1,120 @@
 /**
- * Spirit&Bone - Team Members Module
+ * Spirit&Bone - Team Members Module (Optimized)
  */
-
-// Create audio element for pandeiro sound
-let pandeiro = null;
 
 // Initialize team section
 function initTeamSection() {
   // Get references to all team members
   const teamMembers = document.querySelectorAll(".team-member");
+  const teamContainer = document.querySelector(".team-container");
 
-  // If no team members are found, exit early
-  if (!teamMembers.length) {
-    console.warn("No team members found in the document.");
+  // If no team members or container are found, exit early
+  if (!teamMembers.length || !teamContainer) {
+    console.warn("Team section elements not found in the document.");
     return;
   }
 
-  // Initialize the audio element for the pandeiro
-  pandeiro = new Audio("audio/pandeiro.mp3");
+  // Set up the pandeiro audio interaction
+  initPandeiroAudio();
+
+  // Set up interactions for regular team members
+  initTeamMemberInteractions(teamMembers);
+
+  // Initialize responsive layout and add resize listener
+  adjustTeamLayout();
+  window.addEventListener("resize", adjustTeamLayout);
+
+  // Add document-level touch handler for closing flipped cards
+  addDocumentTouchHandler(teamMembers);
+}
+
+/**
+ * Initialize pandeiro audio element and interactions
+ */
+function initPandeiroAudio() {
+  const pandeiroMember = document.getElementById("member10");
+  if (!pandeiroMember) return;
+
+  // Create and configure audio element
+  const pandeiro = new Audio("audio/pandeiro.mp3");
   pandeiro.preload = "auto";
 
-  // Set up audio toggle for member10 (pandeiro)
-  const pandeiroMember = document.getElementById("member10");
-  if (pandeiroMember) {
-    pandeiroMember.isPlaying = false;
+  // Track playing state to avoid multiple plays
+  let isPlaying = false;
 
-    // Function to handle starting the audio and animation
-    function startAudio() {
-      pandeiro.play().catch((e) => console.error("Error playing audio:", e));
-      pandeiroMember.isPlaying = true;
+  // Toggle function for audio play/pause
+  function togglePandeiro(e) {
+    // Prevent default behavior for touch events
+    if (e.type === "touchend") e.preventDefault();
 
-      const memberImageContainer = pandeiroMember.querySelector(
-        ".member-image-container1"
-      );
-      if (memberImageContainer) {
-        memberImageContainer.classList.add("audio-playing");
-      }
-    }
-
-    // Function to handle stopping the audio and animation
-    function stopAudio() {
+    if (isPlaying) {
+      // Stop audio
       pandeiro.pause();
-      pandeiro.currentTime = 0; // Reset playback position
-      pandeiroMember.isPlaying = false;
-
-      const memberImageContainer = pandeiroMember.querySelector(
-        ".member-image-container1"
-      );
-      if (memberImageContainer) {
-        memberImageContainer.classList.remove("audio-playing");
-      }
+      pandeiro.currentTime = 0;
+      isPlaying = false;
+      pandeiroMember
+        .querySelector(".member-image-container1")
+        ?.classList.remove("audio-playing");
+    } else {
+      // Start audio
+      pandeiro
+        .play()
+        .catch((err) => console.error("Error playing audio:", err));
+      isPlaying = true;
+      pandeiroMember
+        .querySelector(".member-image-container1")
+        ?.classList.add("audio-playing");
     }
 
-    // Add an event listener for when the audio finishes playing
-    pandeiro.addEventListener("ended", function () {
-      pandeiroMember.isPlaying = false;
+    // Prevent propagation to avoid unwanted effects
+    e.stopPropagation();
 
-      // Remove the animation class when audio ends naturally
-      const memberImageContainer = pandeiroMember.querySelector(
-        ".member-image-container1"
-      );
-      if (memberImageContainer) {
-        memberImageContainer.classList.remove("audio-playing");
-      }
-    });
-
-    // Mouse click handler
-    pandeiroMember.addEventListener("click", function (e) {
-      // Toggle audio playback
-      if (this.isPlaying) {
-        stopAudio();
-      } else {
-        startAudio();
-      }
-
-      // Prevent event from propagating to other handlers
-      e.stopPropagation();
-    });
-
-    // Touch handlers for better mobile/tablet experience
-    pandeiroMember.addEventListener(
-      "touchstart",
-      function (e) {
-        // Prevent default touch behavior like scrolling
-        e.preventDefault();
-
-        // We'll handle the audio toggle in touchend for better UX
-        // This prevents accidental triggers during scroll attempts
-      },
-      { passive: false }
-    );
-
-    pandeiroMember.addEventListener(
-      "touchend",
-      function (e) {
-        // Toggle audio playback
-        if (this.isPlaying) {
-          stopAudio();
-        } else {
-          startAudio();
-        }
-
-        // Prevent default behavior and stop propagation
-        e.preventDefault();
-        e.stopPropagation();
-
-        // Prevent the regular flip effect that other team members have
-        const member = e.currentTarget;
-        member.classList.remove("flipped");
-      },
-      { passive: false }
-    );
+    // Make sure the element doesn't flip like regular team members
+    pandeiroMember.classList.remove("flipped");
   }
 
-  // Set up interactions for each team member
+  // Add event listeners
+  pandeiroMember.addEventListener("click", togglePandeiro);
+
+  // Touch event handlers with proper event prevention for mobile
+  pandeiroMember.addEventListener("touchstart", (e) => e.preventDefault(), {
+    passive: false,
+  });
+  pandeiroMember.addEventListener("touchend", togglePandeiro, {
+    passive: false,
+  });
+
+  // Reset when audio finishes playing
+  pandeiro.addEventListener("ended", () => {
+    isPlaying = false;
+    pandeiroMember
+      .querySelector(".member-image-container1")
+      ?.classList.remove("audio-playing");
+  });
+}
+
+/**
+ * Set up flip interactions for team members
+ * @param {NodeList} teamMembers - Collection of team member elements
+ */
+function initTeamMemberInteractions(teamMembers) {
   teamMembers.forEach((member) => {
-    // Skip special handling for the pandeiro member
+    // Skip the pandeiro member as it has special handling
     if (member.id === "member10") return;
 
     const memberImageContainer = member.querySelector(
-      ".member-image-container, .member-image-container1"
+      ".member-image-container"
     );
     if (!memberImageContainer) return;
 
     // Handle mouse interactions (desktop)
     member.addEventListener("mouseenter", () => {
-      // Pause the floating animation
       memberImageContainer.style.animationPlayState = "paused";
-      // Add flipped class to trigger the CSS transition
       member.classList.add("flipped");
     });
 
     member.addEventListener("mouseleave", () => {
-      // Resume the floating animation
       memberImageContainer.style.animationPlayState = "running";
-      // Remove flipped class to revert the flip
       member.classList.remove("flipped");
     });
 
@@ -142,11 +122,11 @@ function initTeamSection() {
     member.addEventListener(
       "touchstart",
       (e) => {
-        // Prevent default touch behavior
+        // Necessary to prevent scrolling when tapping on cards
         e.preventDefault();
-        // Toggle the flipped state
+
+        // Toggle flipped state and animation
         member.classList.toggle("flipped");
-        // Toggle animation play state
         const currentState = memberImageContainer.style.animationPlayState;
         memberImageContainer.style.animationPlayState =
           currentState === "paused" ? "running" : "paused";
@@ -154,26 +134,23 @@ function initTeamSection() {
       { passive: false }
     );
   });
+}
 
-  // Make sure team layout is appropriate for screen size
-  adjustTeamLayout();
-  window.addEventListener("resize", adjustTeamLayout);
-  adjustTeamLayout1();
-  window.addEventListener("resize", adjustTeamLayout1);
-
-  // Add touchend listener for better mobile experience
+/**
+ * Add document-level touch handler to reset cards
+ * @param {NodeList} teamMembers - Collection of team member elements
+ */
+function addDocumentTouchHandler(teamMembers) {
   document.addEventListener("touchend", (e) => {
-    // If the touch ends outside any team member, reset all flipped states
+    // If touch ends outside any team member, reset all flipped states
     const touchedMember = e.target.closest(".team-member");
     if (!touchedMember) {
       teamMembers.forEach((member) => {
-        // Skip the pandeiro member to not interfere with its audio state
+        // Skip the pandeiro member
         if (member.id === "member10") return;
 
         member.classList.remove("flipped");
-        const container = member.querySelector(
-          ".member-image-container, .member-image-container1"
-        );
+        const container = member.querySelector(".member-image-container");
         if (container) {
           container.style.animationPlayState = "running";
         }
@@ -182,86 +159,23 @@ function initTeamSection() {
   });
 }
 
-// Adjust team layout based on screen size
+/**
+ * Adjust team layout based on screen size
+ */
 function adjustTeamLayout() {
-  const teamContainer = document.querySelector(".team-container");
-  if (!teamContainer) return;
-
-  // Get current viewport width
   const viewportWidth = window.innerWidth;
 
   if (viewportWidth <= 480) {
-    // Mobile layout
-    mobileLayout();
+    applyLayout(mobilePositions);
   } else if (viewportWidth <= 768) {
-    // Tablet layout
-    tabletLayout();
+    applyLayout(tabletPositions);
   } else {
-    // Desktop layout
-    resetTeamPositions();
+    applyLayout(desktopPositions);
   }
 }
 
-function adjustTeamLayout1() {
-  const teamContainer = document.querySelector(".team-container");
-  if (!teamContainer) return;
 
-  // Get current viewport width
-  const viewportWidth = window.innerWidth;
-
-  if (viewportWidth <= 480) {
-    // Mobile layout
-    mobileLayout();
-  } else if (viewportWidth <= 768) {
-    // Tablet layout
-    tabletLayout();
-  } else {
-    // Desktop layout
-    resetTeamPositions();
-  }
-}
-
-// Layout for mobile devices
-function mobileLayout() {
-  const teamMembers = document.querySelectorAll(".team-member");
-  teamMembers.forEach((member, index) => {
-    const row = Math.floor(index / 2);
-    const col = index % 2;
-
-    // Set positions with percentage units for better responsiveness
-    member.style.top = `${5 + row * 20}%`;
-    member.style.left = col === 0 ? "5%" : "55%";
-  });
-}
-
-// Layout for tablet devices
-function tabletLayout() {
-  const teamMembers = document.querySelectorAll(".team-member");
-  teamMembers.forEach((member, index) => {
-    const row = Math.floor(index / 2);
-    const col = index % 2;
-
-    // Set positions with percentage units for better responsiveness
-    member.style.top = `${5 + row * 20}%`;
-    member.style.left = col === 0 ? "10%" : "50%";
-  });
-}
-
-// Reset team member positions to original layout
-function resetTeamPositions() {
-  const positions = [
-    { id: "member1", top: "15%", left: "23%" },
-    { id: "member2", top: "10%", left: "45%" },
-    { id: "member3", top: "15%", left: "67%" },
-    { id: "member4", top: "40%", left: "5%" },
-    { id: "member5", top: "40%", left: "35%" },
-    { id: "member6", top: "40%", left: "55%" },
-    { id: "member7", top: "40%", left: "83%" },
-    { id: "member8", top: "65%", left: "20%" },
-    { id: "member9", top: "65%", left: "70%" },
-    { id: "member10", top: "70%", left: "45%" },
-  ];
-
+function applyLayout(positions) {
   positions.forEach((pos) => {
     const member = document.getElementById(pos.id);
     if (member) {
@@ -270,6 +184,46 @@ function resetTeamPositions() {
     }
   });
 }
+
+// Predefined layouts to avoid repetitive calculations
+const desktopPositions = [
+  { id: "member1", top: "15%", left: "23%" },
+  { id: "member2", top: "10%", left: "45%" },
+  { id: "member3", top: "15%", left: "67%" },
+  { id: "member4", top: "40%", left: "5%" },
+  { id: "member5", top: "40%", left: "35%" },
+  { id: "member6", top: "40%", left: "55%" },
+  { id: "member7", top: "40%", left: "83%" },
+  { id: "member8", top: "65%", left: "20%" },
+  { id: "member9", top: "65%", left: "70%" },
+  { id: "member10", top: "70%", left: "45%" },
+];
+
+const tabletPositions = [
+  { id: "member1", top: "5%", left: "10%" },
+  { id: "member2", top: "5%", left: "50%" },
+  { id: "member3", top: "25%", left: "10%" },
+  { id: "member4", top: "25%", left: "50%" },
+  { id: "member5", top: "45%", left: "10%" },
+  { id: "member6", top: "45%", left: "50%" },
+  { id: "member7", top: "65%", left: "10%" },
+  { id: "member8", top: "65%", left: "50%" },
+  { id: "member9", top: "85%", left: "10%" },
+  { id: "member10", top: "85%", left: "50%" },
+];
+
+const mobilePositions = [
+  { id: "member1", top: "5%", left: "5%" },
+  { id: "member2", top: "5%", left: "55%" },
+  { id: "member3", top: "25%", left: "5%" },
+  { id: "member4", top: "25%", left: "55%" },
+  { id: "member5", top: "45%", left: "5%" },
+  { id: "member6", top: "45%", left: "55%" },
+  { id: "member7", top: "65%", left: "5%" },
+  { id: "member8", top: "65%", left: "55%" },
+  { id: "member9", top: "85%", left: "5%" },
+  { id: "member10", top: "85%", left: "55%" },
+];
 
 // Export initialization function
 export { initTeamSection };

@@ -1,5 +1,6 @@
 /**
  * Spirit&Bone - Contact Form Module
+ * Primary controller for contact form and footer behaviors
  */
 
 // Initialize contact form
@@ -47,7 +48,7 @@ function initContactForm() {
       body: formData,
     })
       .then((response) => {
-        if (response.ok) return response; // Just check if response is ok
+        if (response.ok) return response;
         throw new Error("Network response was not ok.");
       })
       .then(() => {
@@ -66,20 +67,31 @@ function initContactForm() {
         submitButton.disabled = false;
         submitButton.textContent = originalText;
 
-        // Show footer
-        const footer = document.querySelector("footer");
-        if (footer) footer.classList.add("visible");
-
-        // Ensure no extra space below footer
-        fixFooterSpace();
+        // Show footer - now the primary controller of footer visibility
+        showFooter();
       });
   });
 
   // Set up visibility observer
   setupVisibilityObserver(contactFormContainer);
 
-  // Fix for extra space below footer
-  fixFooterSpace();
+  // Show footer when reaching the contact section
+  showFooterOnScroll();
+
+  // Handle window resize for footer position
+  window.addEventListener("resize", fixFooterSpace);
+
+  // Initialize footer visibility
+  const footer = document.querySelector("footer");
+  if (footer) {
+    // Register footer visibility method for external use
+    window.showFooter = showFooter;
+
+    // Show footer if already at the bottom of the page
+    if (isNearPageBottom()) {
+      showFooter();
+    }
+  }
 }
 
 // Validate form inputs
@@ -142,6 +154,44 @@ function setupVisibilityObserver(container) {
   }
 }
 
+// Show footer based on scroll position
+function showFooterOnScroll() {
+  const contactSection = document.getElementById("contact");
+  if (!contactSection) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting || isNearPageBottom()) {
+        showFooter();
+      }
+    },
+    { threshold: 0.8 }
+  );
+
+  observer.observe(contactSection);
+}
+
+// Check if user is near the bottom of the page
+function isNearPageBottom() {
+  const scrollTop = window.scrollY || document.documentElement.scrollTop;
+  const windowHeight = window.innerHeight;
+  const docHeight = Math.max(
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight
+  );
+
+  return docHeight - (scrollTop + windowHeight) < 100;
+}
+
+// Primary footer visibility controller
+function showFooter() {
+  const footer = document.querySelector("footer");
+  if (!footer) return;
+
+  footer.classList.add("visible");
+  fixFooterSpace();
+}
+
 // Fix any extra space below the footer
 function fixFooterSpace() {
   // Hide any spacer after the contact section
@@ -161,7 +211,6 @@ function fixFooterSpace() {
   const footer = document.querySelector("footer");
   if (footer) {
     footer.style.marginBottom = "0";
-    footer.classList.add("visible");
   }
 
   // Global fix for any extra space
@@ -171,5 +220,5 @@ function fixFooterSpace() {
   document.documentElement.style.paddingBottom = "0";
 }
 
-// Export the initialization function
-export { initContactForm };
+// Export the initialization function and footer controller
+export { initContactForm, showFooter };

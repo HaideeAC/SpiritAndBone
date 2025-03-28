@@ -1,113 +1,85 @@
 /**
- * Spirit&Bone - Utility Functions
+ * Spirit&Bone - Optimized Utility Functions
  */
 
-// Debounce function to limit how often a function can run
-function debounce(func, wait = 20, immediate = true) {
+/**
+ * Debounce function to limit how often a function can run
+ * @param {Function} func - Function to debounce
+ * @param {number} wait - Milliseconds to wait
+ * @param {boolean} immediate - Whether to run immediately
+ * @returns {Function} Debounced function
+ */
+function debounce(func, wait = 20, immediate = false) {
   let timeout;
+
   return function () {
     const context = this;
     const args = arguments;
+
     const later = function () {
       timeout = null;
       if (!immediate) func.apply(context, args);
     };
+
     const callNow = immediate && !timeout;
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
+
     if (callNow) func.apply(context, args);
   };
 }
 
-// Throttle function to limit execution rate
+/**
+ * Throttle function to limit execution rate
+ * @param {Function} func - Function to throttle
+ * @param {number} limit - Milliseconds between allowed executions
+ * @returns {Function} Throttled function
+ */
 function throttle(func, limit = 300) {
-  let lastFunc;
-  let lastRan;
+  let lastRan = 0;
+  let timeout;
+
   return function () {
     const context = this;
     const args = arguments;
-    if (!lastRan) {
+    const now = Date.now();
+
+    if (now - lastRan >= limit) {
+      // If enough time has passed, run the function immediately
       func.apply(context, args);
-      lastRan = Date.now();
+      lastRan = now;
     } else {
-      clearTimeout(lastFunc);
-      lastFunc = setTimeout(function () {
-        if (Date.now() - lastRan >= limit) {
-          func.apply(context, args);
-          lastRan = Date.now();
-        }
-      }, limit - (Date.now() - lastRan));
+      // Otherwise, schedule to run once enough time has passed
+      clearTimeout(timeout);
+      timeout = setTimeout(function () {
+        lastRan = Date.now();
+        func.apply(context, args);
+      }, limit - (now - lastRan));
     }
   };
 }
 
-// Get viewport dimensions
-function getViewport() {
-  return {
-    width: Math.max(
-      document.documentElement.clientWidth || 0,
-      window.innerWidth || 0
-    ),
-    height: Math.max(
-      document.documentElement.clientHeight || 0,
-      window.innerHeight || 0
-    ),
-  };
-}
-
-// Check if element is in viewport
-function isElementInViewport(el) {
+/**
+ * Check if element is in viewport
+ * @param {HTMLElement} el - Element to check
+ * @param {number} offset - Optional offset to consider element in view before it actually is
+ * @returns {boolean} Whether element is in viewport
+ */
+function isElementInViewport(el, offset = 0) {
   if (!el) return false;
 
   const rect = el.getBoundingClientRect();
+  const windowHeight =
+    window.innerHeight || document.documentElement.clientHeight;
+  const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+
   return (
-    rect.top >= 0 &&
-    rect.left >= 0 &&
-    rect.bottom <=
-      (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    rect.top - offset <= windowHeight &&
+    rect.left - offset <= windowWidth &&
+    rect.bottom + offset >= 0 &&
+    rect.right + offset >= 0
   );
 }
 
-// Generate random number between min and max
-function randomRange(min, max) {
-  return Math.random() * (max - min) + min;
-}
-
-// Smooth scroll to element
-function smoothScrollTo(element, duration = 1000) {
-  if (!element) return;
-
-  const targetPosition =
-    element.getBoundingClientRect().top + window.pageYOffset;
-  const startPosition = window.pageYOffset;
-  const distance = targetPosition - startPosition;
-  let startTime = null;
-
-  function animation(currentTime) {
-    if (startTime === null) startTime = currentTime;
-    const timeElapsed = currentTime - startTime;
-    const run = ease(timeElapsed, startPosition, distance, duration);
-    window.scrollTo(0, run);
-    if (timeElapsed < duration) requestAnimationFrame(animation);
-  }
-
-  function ease(t, b, c, d) {
-    t /= d / 2;
-    if (t < 1) return (c / 2) * t * t + b;
-    t--;
-    return (-c / 2) * (t * (t - 2) - 1) + b;
-  }
-
-  requestAnimationFrame(animation);
-}
-
-// Export all utility functions
-export {
-  debounce,
-  throttle,
-  getViewport,
-  isElementInViewport,
-  randomRange,
-  smoothScrollTo,
-};
+// Export only the functions that are actually used
+export { debounce, throttle, isElementInViewport };

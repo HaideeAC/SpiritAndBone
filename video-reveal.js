@@ -1,89 +1,121 @@
 /**
  * Spirit&Bone - Video Reveal Module
+ * Optimized version with direct element references and improved transitions
  */
 
 // Initialize video reveal functionality
 function initVideoReveal() {
-  // Get references to elements
-  const ampSymbol = document.querySelector(".tittleY");
-  const mobileAmpSymbol = document.querySelector(".vertical-amp");
+  // Get direct references to essential elements
+  const desktopAmp = document.querySelector(".tittleY");
+  const mobileAmp = document.querySelector(".vertical-amp");
   const desktopTitle = document.querySelector(".desktop-title");
   const mobileTitle = document.querySelector(".mobile-title");
   const videoContainer = document.querySelector(".video-container");
   const homeBanner = document.querySelector(".banner");
 
-  // If key elements don't exist, exit early
-  if (!videoContainer || !homeBanner) return;
-
-  // Create close button element (will be hidden initially)
-  const closeVideoBtn = document.createElement("div");
-  closeVideoBtn.className = "close-video";
-  closeVideoBtn.innerHTML = '<div class="close-icon"></div>';
-  closeVideoBtn.style.display = "none";
-  homeBanner.appendChild(closeVideoBtn);
-
-  // Function to get the target ampersand based on screen size
-  function getTargetAmp() {
-    return window.innerWidth > 768 ? ampSymbol : mobileAmpSymbol;
+  // Exit early if essential elements don't exist
+  if (!videoContainer || !homeBanner) {
+    console.warn("Video reveal elements not found in the document.");
+    return;
   }
 
-  // Function to reveal video
+  // Create close button element and append to banner
+  const closeVideoBtn = createCloseButton(homeBanner);
+
+  // Function to reveal video when ampersand is clicked
   function revealVideo() {
-    // Add classes to transform the masks
-    if (desktopTitle) desktopTitle.classList.add("video-reveal-active");
-    if (mobileTitle) mobileTitle.classList.add("video-reveal-active");
+    // Apply transformations to reveal video
+    desktopTitle?.classList.add("video-reveal-active");
+    mobileTitle?.classList.add("video-reveal-active");
     videoContainer.classList.add("video-revealed");
 
-    // Get the correct ampersand and animate it
-    const targetAmp = getTargetAmp();
+    // Apply animation to the ampersand that was clicked
+    // Using responsive layout detection directly in the event
+    const isDesktop = window.innerWidth > 768;
+    const targetAmp = isDesktop ? desktopAmp : mobileAmp;
+
     if (targetAmp) {
-      // Add the animation class
       targetAmp.classList.add("amp-grow-animation");
     }
 
-    // Show the close button after a short delay
+    // Show close button with short delay for better UX
     setTimeout(() => {
       closeVideoBtn.style.display = "block";
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         closeVideoBtn.classList.add("active");
-      }, 50);
-    }, 700);
+      });
+    }, 400);
   }
 
   // Function to hide video and return to title
   function hideVideo() {
-    // Remove transform classes
-    if (desktopTitle) desktopTitle.classList.remove("video-reveal-active");
-    if (mobileTitle) mobileTitle.classList.remove("video-reveal-active");
+    // Remove transformations
+    desktopTitle?.classList.remove("video-reveal-active");
+    mobileTitle?.classList.remove("video-reveal-active");
     videoContainer.classList.remove("video-revealed");
 
-    // Get the correct ampersand
-    const targetAmp = getTargetAmp();
-    if (targetAmp) {
-      // Reset CSS animation class
-      targetAmp.classList.remove("amp-grow-animation");
-    }
+    // Reset animations on both ampersands to ensure proper state
+    desktopAmp?.classList.remove("amp-grow-animation");
+    mobileAmp?.classList.remove("amp-grow-animation");
 
-    // Hide the close button
+    // Hide close button with transition
     closeVideoBtn.classList.remove("active");
     setTimeout(() => {
       closeVideoBtn.style.display = "none";
-    }, 500);
+    }, 300);
   }
 
-  // Add click events to both ampersand symbols
-  if (ampSymbol) {
-    ampSymbol.style.cursor = "pointer";
-    ampSymbol.addEventListener("click", revealVideo);
+  // Set up event listeners
+  if (desktopAmp) {
+    desktopAmp.style.cursor = "pointer";
+    desktopAmp.setAttribute("aria-label", "Reveal video");
+    desktopAmp.addEventListener("click", revealVideo);
   }
 
-  if (mobileAmpSymbol) {
-    mobileAmpSymbol.style.cursor = "pointer";
-    mobileAmpSymbol.addEventListener("click", revealVideo);
+  if (mobileAmp) {
+    mobileAmp.style.cursor = "pointer";
+    mobileAmp.setAttribute("aria-label", "Reveal video");
+    mobileAmp.addEventListener("click", revealVideo);
   }
 
   // Add click event to close button
   closeVideoBtn.addEventListener("click", hideVideo);
+
+  // Add keyboard support for accessibility
+  document.addEventListener("keydown", (e) => {
+    if (
+      e.key === "Escape" &&
+      videoContainer.classList.contains("video-revealed")
+    ) {
+      hideVideo();
+    }
+  });
+}
+
+/**
+ * Creates the close button element
+ * @param {HTMLElement} parent - Parent element to append button to
+ * @returns {HTMLElement} The created close button
+ */
+function createCloseButton(parent) {
+  const btn = document.createElement("div");
+  btn.className = "close-video";
+  btn.innerHTML = '<div class="close-icon"></div>';
+  btn.style.display = "none";
+  btn.setAttribute("aria-label", "Close video");
+  btn.setAttribute("role", "button");
+  btn.setAttribute("tabindex", "0");
+  parent.appendChild(btn);
+
+  // Add keyboard support
+  btn.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      btn.click();
+    }
+  });
+
+  return btn;
 }
 
 // Export the initialization function
