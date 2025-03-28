@@ -30,7 +30,6 @@
   overflow: hidden;
   z-index: 1;
   transition: all 0.7s cubic-bezier(0.33, 1, 0.68, 1);
-  opacity: 0.4;
   transform: scale(0.98);
 }
 
@@ -126,13 +125,8 @@ svg {
 /* Video reveal effects */
 .svg-mask.video-reveal-active {
   transform: scale(0.85);
-  opacity: 0.2;
 }
 
-.svg-mask.video-reveal-active text {
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
 
 .svg-mask.video-reveal-active #text-mask rect,
 .svg-mask.video-reveal-active #text-mask-mobile rect {
