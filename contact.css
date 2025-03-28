@@ -2,6 +2,8 @@
    ------ SPIRIT & BONE - CONTACT SECTION ------
    =========================================== */
 
+
+
 #contact {
   margin: 0;
   padding: 0;
@@ -186,6 +188,13 @@
 }
 
 /* Footer styling */
+
+footer {
+  margin-bottom: 0 !important;
+  position: relative !important;
+  bottom: 0 !important;
+}
+
 footer {
   opacity: 0;
   transform: translateY(20px);

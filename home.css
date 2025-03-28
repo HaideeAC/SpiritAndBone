@@ -1,15 +1,45 @@
 /* ===========================================
    ------ SPIRIT & BONE - HOME SECTION ------
    =========================================== */
+#home,
+.section:first-of-type {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  margin: 0;
+  margin-bottom: 0 !important;
+}
 
+#home {
+  height: 100vh;
+  position: relative;
+  z-index: 2;
+  background-color: #000;
+}
+
+@supports (-webkit-touch-callout: none) {
+  #home {
+    height: 100vh;
+    height: -webkit-fill-available;
+  }
+}
+
+body.home-page {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+/* Banner styling */
 .banner {
   height: 100vh;
+  min-height: 100%;
   width: 100%;
   overflow: hidden;
   position: relative;
   margin: 0;
   padding: 0;
 }
+
 
 .banner::after {
   content: "";
@@ -126,7 +156,6 @@ svg {
 .svg-mask.video-reveal-active {
   transform: scale(0.85);
 }
-
 
 .svg-mask.video-reveal-active #text-mask rect,
 .svg-mask.video-reveal-active #text-mask-mobile rect {
