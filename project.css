@@ -2,23 +2,48 @@
    ------ SPIRIT & BONE - PROJECT SECTION ------
    =========================================== */
 
+/* Base styling for project section */
 #project {
-  padding: 120px 0 80px;
-  background-color: rgba(255, 3, 3, 0.3);
-  margin: 0;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-/* Base styling for tier containers */
-.project-tier {
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
   width: 100%;
-  display: block;
-  box-sizing: border-box;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
   position: relative;
 }
 
-/* Tier2 styling and visibility transition */
+/* Project container */
+.project-container {
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.project-container.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- TIER CONTAINERS ---- */
+.project-tier {
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Tier 1 (Gallery Layout) */
+.tier1 {
+  height: 100vh;
+  padding: 60px 20px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Tier 2 (Information Layout) */
 .tier2 {
   opacity: 0;
   transform: translateY(30px);
@@ -42,214 +67,20 @@
   transform: translateY(0);
 }
 
-/* Project section base */
-#project {
-  position: relative;
-  background-color: rgba(0, 0, 0, 0.85);
-  color: white;
-  width: 100%;
-  overflow: hidden;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Project container */
-.project-container {
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-  position: relative;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.8s ease;
-}
-
-.project-container.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* First tier with organic layout - fixed height */
-.tier1 {
-  height: 100vh;
-  padding: 60px 20px 40px;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Introduction section with title and first paragraphs */
-.project-intro {
-  width: 100%;
-  margin: 0 0 40px 0;
-  position: relative;
-  padding-bottom: 20px;
-  padding-top: 0;
-}
-
-.project-intro p::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  width: 100px;
-  left: 0;
-  height: 2px;
-  background: var(--main-red);
-}
-
-.project-intro h2 {
-  font-size: 3rem;
-  color: rgb(247, 164, 164);
-  text-shadow: 0 0 10px rgba(192, 0, 1, 0.3);
-  margin-bottom: 30px;
-  letter-spacing: 1px;
-}
-
-.project-intro p {
-  font-size: 1.2rem;
-  line-height: 1.4;
-  margin-bottom: 12px;
-  color: rgba(255, 255, 255, 0.9);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Content grid for poster and tone descriptions */
-.project-content-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 40px;
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* Left column for Visual and Character tones */
-.project-left-col {
-  grid-column: 1;
-  padding-right: 15px;
-}
-
-/* Center column for poster */
-.project-poster {
-  grid-column: 2;
-  width: 100%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.project-poster img {
-  max-width: 100%;
-  max-height: 60vh;
-  box-shadow: var(--shadow-lg);
-  border-radius: 5px;
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
-  animation: subtle-float 6s ease-in-out infinite;
-}
-
-/* Add subtle float animation for the poster */
-@keyframes subtle-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-.project-poster img.hover,
-.project-poster:hover img {
-  transform: scale(1.02);
-  box-shadow: var(--shadow-red);
-  animation: none;
-}
-
-/* Right column for Comedic and Poetic tones */
-.project-right-col {
-  grid-column: 3;
-  padding-left: 15px;
-}
-
-/* Tone section titles */
-.tone-section h3 {
-  font-size: 1.8rem;
-  margin: 0 0 15px 0;
-  color: rgb(247, 164, 164);
-  position: relative;
-  padding-bottom: 8px;
-  display: inline-block;
-}
-
-.tone-section h3::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 60px;
-  height: 2px;
-  background: var(--main-red);
-  transition: width 0.5s ease;
-}
-
-.tone-section:hover h3::after {
-  width: 100%;
-}
-
-/* Shared tone section styles */
-.tone-section {
-  margin-bottom: 20px;
-}
-
-.tone-section p {
-  font-size: 1rem;
-  line-height: 1.6;
-  margin: 0 0 10px 0;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-/* Parallax image boxes with absolute positioning */
+/* ---- PARALLAX IMAGE BOXES ---- */
 .parallax-box {
   position: absolute;
   overflow: hidden;
   border-radius: 5px;
   box-shadow: var(--shadow-md);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
-  width: 25%;
-  height: 28vh;
   z-index: 1;
+  opacity: 0;
+  animation: revealFromBottom 0.8s ease forwards;
 }
 
-/* CSS-based parallax based on data-parallax-index */
-.parallax-box[data-parallax-index="0"] {
-  transition: transform 0.4s ease;
-}
-
-.parallax-box[data-parallax-index="1"] {
-  transition: transform 0.5s ease;
-}
-
-.parallax-box[data-parallax-index="2"] {
-  transition: transform 0.6s ease;
-}
-
-/* CSS transforms for scroll effects */
-@media (min-width: 769px) {
-  .tier1.visible .parallax-box[data-parallax-index="0"] {
-    transform: translateY(-5px);
-  }
-
-  .tier1.visible .parallax-box[data-parallax-index="1"] {
-    transform: translateY(5px);
-  }
-
-  .tier1.visible .parallax-box[data-parallax-index="2"] {
-    transform: translateY(-8px);
-  }
-}
-
-/* Individual positioning for each project image */
-#project-img1 {
+/* Parallax box positioning */
+.parallax-box#project-img1 {
   top: 8%;
   left: 2%;
   height: 35vh;
@@ -257,7 +88,7 @@
   z-index: 1;
 }
 
-#project-img2 {
+.parallax-box#project-img2 {
   top: 12%;
   left: 40%;
   height: 30vh;
@@ -265,14 +96,14 @@
   transform: rotate(-22deg);
 }
 
-#project-img3 {
+.parallax-box#project-img3 {
   top: 4%;
   left: 60%;
   height: 28vh;
   width: 32%;
 }
 
-#project-img4 {
+.parallax-box#project-img4 {
   top: 30%;
   left: 6%;
   height: 60vh;
@@ -281,14 +112,7 @@
   z-index: 0;
 }
 
-#project-text {
-  top: 45%;
-  left: 35%;
-  height: auto;
-  width: 25%;
-}
-
-#project-img5 {
+.parallax-box#project-img5 {
   top: 10%;
   left: 65%;
   height: 80vh;
@@ -297,7 +121,7 @@
   filter: blur(3px);
 }
 
-#project-img6 {
+.parallax-box#project-img6 {
   top: 70%;
   left: 10%;
   height: 30vh;
@@ -307,7 +131,7 @@
   transform: rotate(-8deg);
 }
 
-#project-img7 {
+.parallax-box#project-img7 {
   top: 80%;
   left: 58%;
   opacity: 0.4;
@@ -317,8 +141,12 @@
   z-index: 0;
   transform: rotate(12deg);
 }
+.parallax-box#project-img7 .parallax-image img {
+  object-fit: cover;
+  object-position: 50% 35%; /* This makes the image start from the top */
+}
 
-#project-img8 {
+.parallax-box#project-img8 {
   top: 74%;
   left: 0%;
   opacity: 0.4;
@@ -328,27 +156,38 @@
   z-index: 0;
 }
 
-/* Enhanced hover effects */
-.parallax-box.hover,
-.parallax-box:hover {
+/* Parallax behavior */
+.parallax-box[data-parallax-index="0"] {
+  transition: transform 0.4s ease;
+}
+.parallax-box[data-parallax-index="1"] {
+  transition: transform 0.5s ease;
+}
+.parallax-box[data-parallax-index="2"] {
+  transition: transform 0.6s ease;
+}
+
+/* Hover effects */
+.parallax-box:hover,
+.parallax-box.hover {
   transform: translateY(-7px);
   box-shadow: var(--shadow-lg);
   z-index: 5;
 }
 
-/* Allow background images to keep their blur */
 #project-img6:hover,
 #project-img6.hover {
-  scale: 1.1;
+  transform: scale(1.1);
 }
 
-#project-img8:hover,
-#project-img8.hover,
 #project-img7:hover,
-#project-img7.hover {
+#project-img7.hover,
+#project-img8:hover,
+#project-img8.hover {
   filter: blur(0);
 }
 
+/* Image container inside parallax box */
 .parallax-image {
   height: 100%;
   width: 100%;
@@ -356,6 +195,7 @@
   overflow: hidden;
 }
 
+/* Images inside parallax boxes */
 .parallax-image img {
   width: 100%;
   height: 100%;
@@ -363,24 +203,22 @@
   transition: transform 0.5s ease;
 }
 
-/* Different movement directions on hover - optimized */
-.parallax-box.hover .parallax-image[data-direction="up"] img,
-.parallax-box:hover .parallax-image[data-direction="up"] img {
-  transform: scale(1.05);
-}
-
-.parallax-box.hover .parallax-image[data-direction="down"] img,
+/* Image hover effects */
+.parallax-box:hover .parallax-image[data-direction="up"] img,
 .parallax-box:hover .parallax-image[data-direction="down"] img {
   transform: scale(1.05);
 }
 
-/* Project text box */
+/* ---- PROJECT TEXT ---- */
 .project-text {
   position: absolute;
+  top: 45%;
+  left: 35%;
+  width: 25%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 40px 25px 40px 25px;
+  padding: 40px 25px;
   background-color: rgba(192, 0, 1, 0.2);
   border-radius: 5px;
   box-shadow: var(--shadow-md);
@@ -389,7 +227,6 @@
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
-/* Project text box styling */
 .project-text::before {
   content: "";
   position: absolute;
@@ -449,7 +286,121 @@
   transform: translateY(0);
 }
 
-/* Scroll down indicator for tier 1 */
+/* ---- TIER 2 CONTENT ---- */
+.project-intro {
+  width: 100%;
+  margin: 0 0 40px 0;
+  position: relative;
+  padding-bottom: 20px;
+  padding-top: 0;
+}
+
+.project-intro h2 {
+  font-size: 3rem;
+  color: rgb(247, 164, 164);
+  text-shadow: 0 0 10px rgba(192, 0, 1, 0.3);
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+}
+
+.project-intro p {
+  font-size: 1.2rem;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.project-intro p::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 100px;
+  left: 0;
+  height: 2px;
+  background: var(--main-red);
+}
+
+/* Content grid for poster and descriptions */
+.project-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.project-left-col {
+  grid-column: 1;
+  padding-right: 15px;
+}
+
+.project-poster {
+  grid-column: 2;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.project-poster img {
+  max-width: 100%;
+  max-height: 60vh;
+  box-shadow: var(--shadow-lg);
+  border-radius: 5px;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  animation: subtle-float 6s ease-in-out infinite;
+}
+
+.project-poster img:hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-red);
+  animation: none;
+}
+
+.project-right-col {
+  grid-column: 3;
+  padding-left: 15px;
+}
+
+.tone-section {
+  margin-bottom: 20px;
+}
+
+.tone-section h3 {
+  font-size: 1.8rem;
+  margin: 0 0 15px 0;
+  color: rgb(247, 164, 164);
+  position: relative;
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.tone-section h3::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: var(--main-red);
+  transition: width 0.5s ease;
+}
+
+.tone-section:hover h3::after {
+  width: 100%;
+}
+
+.tone-section p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 10px 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ---- SCROLL DOWN INDICATOR ---- */
 .scroll-down2 {
   position: absolute;
   bottom: 30px;
@@ -477,7 +428,7 @@
   animation: bounceArrow 2s infinite;
 }
 
-/* Simplified animation for image revealing */
+/* ---- ANIMATIONS ---- */
 @keyframes revealFromBottom {
   from {
     opacity: 0;
@@ -489,13 +440,6 @@
   }
 }
 
-/* Apply reveal animation to parallax boxes */
-.parallax-box {
-  opacity: 0;
-  animation: revealFromBottom 0.8s ease forwards;
-}
-
-/* Animation for scroll down indicator */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -523,151 +467,79 @@
   }
 }
 
-/* Media Queries for Responsive Design */
-@media (max-width: 1024px) {
-  .tier1 {
-    padding: 50px 15px 40px;
+@keyframes subtle-float {
+  0%,
+  100% {
+    transform: translateY(0);
   }
-
-  /* Adjust positions for tablet */
-  #project-img1 {
-    top: 12%;
-    left: 8%;
-    width: 24%;
-  }
-  #project-img2 {
-    top: 15%;
-    left: 38%;
-    width: 24%;
-  }
-  #project-img3 {
-    top: 12%;
-    left: 68%;
-    width: 24%;
-  }
-  #project-img4 {
-    top: 50%;
-    left: 5%;
-    width: 24%;
-  }
-  #project-text {
-    top: 50%;
-    left: 34%;
-    width: 32%;
-  }
-  #project-img5 {
-    top: 50%;
-    left: 70%;
-    width: 24%;
-  }
-
-  /* Hide background images on tablets */
-  #project-img6,
-  #project-img7,
-  #project-img8 {
-    display: none;
-  }
-
-  /* Tier 2 tablet adjustments */
-  .project-content-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-  }
-
-  .project-poster {
-    grid-column: 1 / 3;
-    grid-row: 1;
-    margin-bottom: 30px;
-  }
-
-  .project-left-col {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  .project-right-col {
-    grid-column: 2;
-    grid-row: 2;
-  }
-
-  .project-intro h2 {
-    font-size: 3rem;
-  }
-
-  .project-intro p {
-    font-size: 1.1rem;
-  }
-
-  .tone-section h3 {
-    font-size: 1.6rem;
+  50% {
+    transform: translateY(-8px);
   }
 }
 
-@media (max-width: 768px) {
+/* ---- RESPONSIVE DESIGN ---- */
+
+/* Small phones (320px) */
+@media (min-width: 320px) {
   .tier1 {
-    padding: 0;
     height: auto;
     min-height: 100vh;
-    /* Switch to flexbox for mobile */
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
-    padding: 80px 20px 40px;
+    padding: 70px 15px 30px;
   }
 
-  /* Reset all absolute positioning for mobile */
+  /* Hide all parallax boxes except project1 */
   .parallax-box {
+    display: none;
+  }
+
+  /* Only show project1 as requested */
+  .parallax-box#project-img1 {
+    display: block;
     position: relative;
-    width: 90%;
-    max-width: 400px;
-    height: 200px;
-    margin: 10px 0;
     top: auto;
     left: auto;
-    transform: none !important; /* Prevent JS transforms on mobile */
-    opacity: 1 !important;
-    filter: none !important;
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    aspect-ratio: 16/9;
+    margin: 0 0 20px 0;
   }
 
-  /* Restore visibility to all images */
-  #project-img6,
-  #project-img7,
-  #project-img8 {
-    display: block;
-    transform: rotate(0) !important;
-  }
-
-  /* Ensure text is properly positioned */
-  #project-text {
+  /* Center text container */
+  .project-text {
     position: relative;
-    width: 90%;
-    max-width: 400px;
+    top: auto;
+    left: auto;
+    width: 100%;
+    max-width: 280px;
     margin: 20px 0;
-    padding: 20px;
   }
 
   .project-text h2 {
-    font-size: 1.6rem;
+    font-size: 2rem;
   }
 
   .project-text p {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
-  /* Tier 2 mobile adjustments */
-  .project-intro {
-    width: 95%;
+  /* Tier 2 adjustments */
+  .tier2 {
+    padding: 20px 15px;
   }
 
   .project-content-grid {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
+    gap: 20px;
   }
 
   .project-poster {
     grid-column: 1;
     grid-row: 1;
+    margin-bottom: 20px;
   }
 
   .project-left-col {
@@ -683,55 +555,263 @@
   }
 
   .project-intro h2 {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
   }
+
   .project-intro p {
-    font-size: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .tone-section h3 {
+    font-size: 1.4rem;
   }
 }
 
-@media (max-width: 480px) {
-  .tier1 {
-    padding: 70px 10px 30px;
-  }
-
-  .parallax-box {
-    height: 180px;
+/* Larger phones (480px) */
+@media (min-width: 480px) {
+  /* Keep the simplified layout but adjust sizes */
+  .parallax-box#project-img1 {
+    max-width: 350px;
   }
 
   .project-text {
-    padding: 15px;
+    max-width: 350px;
   }
 
   .project-text h2 {
-    font-size: 1.4rem;
-    margin-bottom: 10px;
+    font-size: 2.2rem;
   }
 
   .project-text p {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
-  .scroll-down2 {
-    bottom: 15px;
-  }
-
-  .scroll-down2-text {
-    font-size: 0.8rem;
-  }
-
-  /* Tier 2 smaller mobile adjustments */
   .project-intro h2 {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
 
   .tone-section h3 {
     font-size: 1.6rem;
   }
-  .project-intro p {
-    font-size: 0.95rem;
+}
+
+/* Tablets (768px) */
+@media (min-width: 768px) {
+  /* Show only few images for tablet layout */
+  .parallax-box {
+    display: block;
+    position: absolute;
   }
-  .project-intro::after {
-    width: 70px;
+
+  .parallax-box#project-img1 {
+    top: 12%;
+    left: 8%;
+    width: 24%;
+    height: 25vh;
+    max-width: none;
+    aspect-ratio: auto;
+    margin: 0;
+  }
+
+  .parallax-box#project-img2 {
+    top: 15%;
+    left: 38%;
+    width: 24%;
+    height: 25vh;
+  }
+
+  .parallax-box#project-img3 {
+    top: 12%;
+    left: 68%;
+    width: 24%;
+    height: 25vh;
+  }
+
+  .project-text {
+    top: 50%;
+    left: 34%;
+    width: 32%;
+    position: absolute;
+    max-width: none;
+    margin: 0;
+  }
+
+  /* Show just one image in the bottom row */
+  .parallax-box#project-img4 {
+    display: block;
+    top: 50%;
+    left: 5%;
+    width: 24%;
+    height: 25vh;
+  }
+
+  .parallax-box#project-img5 {
+    display: block;
+    top: 50%;
+    left: 70%;
+    width: 24%;
+    height: 25vh;
+  }
+
+  /* Keep atmospheric/background images hidden */
+  .parallax-box#project-img6,
+  .parallax-box#project-img7,
+  .parallax-box#project-img8 {
+    display: none;
+  }
+
+  /* Tier 2 tablet adjustments */
+  .project-content-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 30px;
+  }
+
+  .project-poster {
+    grid-column: 1 / 3;
+    grid-row: 1;
+    margin-bottom: 30px;
+  }
+
+  .project-left-col {
+    grid-column: 1;
+    grid-row: 2;
+    padding-right: 10px;
+  }
+
+  .project-right-col {
+    grid-column: 2;
+    grid-row: 2;
+    padding-left: 10px;
+  }
+
+  .project-intro h2 {
+    font-size: 2.5rem;
+  }
+
+  .project-intro p {
+    font-size: 1.1rem;
+  }
+
+  .tier1 {
+    height: 100vh;
+    display: block;
+    padding: 60px 20px 40px;
+  }
+}
+
+/* Small desktops and laptops (940px) */
+@media (min-width: 940px) {
+  /* Restore full gallery layout */
+  .tier1 {
+    height: 100vh;
+    padding: 60px 20px 40px;
+  }
+
+  /* Show all parallax boxes */
+  .parallax-box {
+    display: block;
+  }
+
+  /* Reset original positions */
+  .parallax-box#project-img1 {
+    top: 2%;
+    left: 2%;
+    height: 35vh;
+    width: 35%;
+  }
+
+  .parallax-box#project-img2 {
+    top: 12%;
+    left: 40%;
+    height: 30vh;
+    width: 20%;
+    transform: rotate(-22deg);
+  }
+
+  .parallax-box#project-img3 {
+    top: 4%;
+    left: 60%;
+    height: 28vh;
+    width: 32%;
+  }
+
+  .parallax-box#project-img4 {
+    top: 30%;
+    left: 6%;
+    height: 60vh;
+    width: 25%;
+  }
+
+  .project-text {
+    top: 45%;
+    left: 35%;
+    width: 25%;
+  }
+
+  .parallax-box#project-img5 {
+    top: 10%;
+    left: 65%;
+    height: 80vh;
+    width: 32%;
+  }
+
+  /* Show background/atmospheric images */
+  .parallax-box#project-img6,
+  .parallax-box#project-img7,
+  .parallax-box#project-img8 {
+    display: block;
+  }
+
+  /* Three-column grid for tier2 */
+  .project-content-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+  }
+
+  .project-poster {
+    grid-column: 2;
+    grid-row: 1;
+    margin-bottom: 0;
+  }
+
+  .project-left-col {
+    grid-column: 1;
+    grid-row: 1;
+    padding-right: 15px;
+  }
+
+  .project-right-col {
+    grid-column: 3;
+    grid-row: 1;
+    padding-left: 15px;
+  }
+
+  .project-intro h2 {
+    font-size: 2.8rem;
+  }
+
+  .tone-section h3 {
+    font-size: 1.7rem;
+  }
+}
+
+/* Extra large screens (1400px) */
+@media (min-width: 1400px) {
+  .project-content-grid {
+    max-width: 1200px;
+    gap: 50px;
+  }
+
+  .project-intro h2 {
+    font-size: 3rem;
+  }
+
+  .tone-section h3 {
+    font-size: 1.8rem;
+  }
+
+  .project-poster img {
+    max-height: 65vh;
   }
 }

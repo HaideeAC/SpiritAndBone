@@ -1,45 +1,53 @@
 /* ===========================================
    ------ SPIRIT & BONE - HOME SECTION ------
    =========================================== */
-#home,
-.section:first-of-type {
-  margin-top: 0 !important;
-  padding-top: 0 !important;
-  margin: 0;
-  margin-bottom: 0 !important;
-}
 
+/* Base home section styling */
 #home {
   height: 100vh;
   position: relative;
   z-index: 2;
   background-color: #000;
+  margin: 0;
+  padding: 0;
 }
 
+/* Support for iOS Safari */
 @supports (-webkit-touch-callout: none) {
   #home {
-    height: 100vh;
     height: -webkit-fill-available;
   }
 }
 
+/* Home page body styling */
 body.home-page {
-  overflow-y: auto;
   overflow-x: hidden;
 }
-
+/* Gradient overlay for the home section */
+.home-gradient-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30vh; /* Adjust height as needed */
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  z-index: 3; /* Above video but below text/content */
+  pointer-events: none;
+}
 
 /* Banner styling */
 .banner {
   height: 100vh;
-  min-height: 100%;
   width: 100%;
   overflow: hidden;
   position: relative;
   margin: 0;
   padding: 0;
 }
-
 
 .banner::after {
   content: "";
@@ -286,53 +294,8 @@ svg {
 }
 
 /* Media Queries */
-@media (max-width: 1024px) {
-  .tittle {
-    font-size: 48vh;
-  }
-  .tittleY {
-    font-size: 28vw;
-  }
-
-  .home-social-icons {
-    bottom: 30px;
-    right: 30px;
-  }
-}
-
-@media (max-width: 768px) {
-  .desktop-title {
-    display: none;
-  }
-  .mobile-title {
-    display: block;
-    width: 100%;
-  }
-  .vertical-letter {
-    font-size: 25vw;
-  }
-  .vertical-amp {
-    font-size: 36vw;
-  }
-  .close-video {
-    width: 30px;
-    height: 30px;
-    top: 15px;
-    right: 15px;
-  }
-  .close-video .close-icon::before,
-  .close-video .close-icon::after {
-    height: 4px;
-  }
-
-  .home-social-icons {
-    bottom: 25px;
-    right: 25px;
-    gap: 12px;
-  }
-}
-
-@media (max-width: 480px) {
+/* Small phones */
+@media (min-width: 320px) {
   .vertical-letter {
     font-size: 10vw;
   }
@@ -342,26 +305,135 @@ svg {
   .vertical-amp {
     font-size: 14vw;
   }
+  
   .close-video {
     width: 25px;
     height: 25px;
     top: 10px;
     right: 10px;
   }
+  
   .close-video .close-icon::before,
   .close-video .close-icon::after {
     height: 3px;
   }
-
+  
   .home-social-icons {
     bottom: 20px;
     right: 20px;
     gap: 10px;
   }
-
+  
   .home-social-icons .social-icon {
     width: 35px;
     height: 35px;
     font-size: 1rem;
+  }
+  
+  .desktop-title {
+    display: none;
+  }
+  
+  .mobile-title {
+    display: block;
+    width: 100%;
+  }
+}
+
+/* Larger phones */
+@media (min-width: 480px) {
+  .vertical-letter {
+    font-size: 25vw;
+  }
+  .vertical-amp {
+    font-size: 36vw;
+  }
+  
+  .home-social-icons {
+    bottom: 25px;
+    right: 25px;
+    gap: 12px;
+  }
+  
+  .close-video {
+    width: 30px;
+    height: 30px;
+    top: 15px;
+    right: 15px;
+  }
+  
+  .close-video .close-icon::before,
+  .close-video .close-icon::after {
+    height: 4px;
+  }
+}
+
+/* Tablets */
+@media (min-width: 768px) {
+  .tittle {
+    font-size: 48vh;
+  }
+  
+  .tittleY {
+    font-size: 28vw;
+  }
+  
+  .home-social-icons {
+    bottom: 30px;
+    right: 30px;
+  }
+  
+  .mobile-title {
+    display: none;
+  }
+  
+  .desktop-title {
+    display: block;
+  }
+}
+
+/* Small desktops and laptops */
+@media (min-width: 940px) {
+  .tittle {
+    font-size: 48vh;
+  }
+  
+  .tittleY {
+    font-size: 28vw;
+  }
+}
+
+/* Extra large screens */
+@media (min-width: 1400px) {
+  .tittle {
+    font-size: 30rem;
+  }
+  
+  .tittleY {
+    font-size: 20rem;
+  }
+  
+  .home-social-icons {
+    bottom: 40px;
+    right: 40px;
+    gap: 15px;
+  }
+  
+  .close-video {
+    width: 40px;
+    height: 40px;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .close-video .close-icon::before,
+  .close-video .close-icon::after {
+    height: 6px;
+  }
+  
+  .home-social-icons .social-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
   }
 }

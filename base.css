@@ -58,6 +58,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  -ms-overflow-style: none; /* IE and Edge */
+  overflow-y: scroll; /* Ensure content is still scrollable */
 }
 
 /* Fix for iOS Safari and Chrome mobile */
@@ -67,6 +69,13 @@ body {
   #home {
     height: -webkit-fill-available;
   }
+}
+html {
+  scrollbar-width: none; /* Firefox */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 
 body.is-transitioning {

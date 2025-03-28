@@ -46,6 +46,7 @@ nav {
 .circle.pulse {
   animation: menu-pulse 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
+
 /* Navigation links */
 .nav-links {
   list-style: none;
@@ -87,6 +88,7 @@ nav {
   transform: translateY(0);
 }
 
+/* Sequential animation delays for menu items */
 .nav-links.active li:nth-child(1) {
   transition-delay: 0.1s;
 }
@@ -184,62 +186,13 @@ nav {
   background-color: var(--main-red);
 }
 
-/* Menu Icon */
-.menu-icon {
-  position: relative;
-  width: 20px;
-  height: 20px;
-  transition: all var(--transition-fast);
-}
-
-.menu-icon span {
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  background-color: white;
-  border-radius: 2px;
-  transition: all var(--transition-fast);
-  top: 9px;
-}
-
-.menu-icon span:nth-child(1) {
-  transform: rotate(0);
-}
-
-.menu-icon span:nth-child(2) {
-  transform: rotate(90deg);
-}
-
-.nav-links.active + .menu-circle .menu-icon span:nth-child(1) {
-  transform: rotate(45deg);
-}
-
-.nav-links.active + .menu-circle .menu-icon span:nth-child(2) {
-  transform: rotate(135deg);
-}
-
-/* Navigation link animation classes */
-.nav-selected {
-  animation: brighten-and-fade 1s forwards;
-  z-index: 10;
-  position: relative;
-}
-
-.nav-fading {
-  animation: fade-out 0.5s forwards;
-}
-
-.nav-background-fade {
-  animation: background-fade 1s forwards;
-}
-
 /* Body state during transitions */
 body.is-transitioning {
   overflow: hidden;
   pointer-events: none;
 }
 
-/* Page Transition */
+/* Global Page Transition - moved from duplicate definitions */
 .page-transition {
   position: fixed;
   top: 0;
@@ -260,18 +213,6 @@ body.is-transitioning {
 .page-transition.fade-out {
   transform: translateY(100%);
 }
-
-/* Section transition states */
-.section {
-  transition: opacity 0.5s ease;
-}
-
-.section.transition-in {
-  opacity: 1;
-  animation: sectionFadeIn 0.8s ease forwards;
-}
-
-/* UI Components */
 
 /* Section indicator dots */
 .section-indicator {
@@ -338,8 +279,8 @@ body.is-transitioning {
   transition: width 0.2s ease;
 }
 
-/* Scroll down indicator */
-.scroll-down {
+/* Navigation-specific scroll down indicator - different from home.css */
+.nav-scroll-down {
   position: absolute;
   bottom: 40px;
   left: 50%;
@@ -358,40 +299,27 @@ body.is-transitioning {
   cursor: pointer;
 }
 
-.scroll-down i {
+.nav-scroll-down i {
   font-size: 24px;
   animation: bounceArrow 2s infinite;
 }
 
-/* Animations */
-
-@keyframes bounce {
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateY(0) translateX(-50%);
-  }
-  40% {
-    transform: translateY(-20px) translateX(-50%);
-  }
-  60% {
-    transform: translateY(-10px) translateX(-50%);
-  }
+/* Navigation link animation classes */
+.nav-selected {
+  animation: brighten-and-fade 1s forwards;
+  z-index: 10;
+  position: relative;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translate(-50%, 20px);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
+.nav-fading {
+  animation: fade-out 0.5s forwards;
 }
 
+.nav-background-fade {
+  animation: background-fade 1s forwards;
+}
+
+/* Animation keyframes */
 @keyframes menu-pulse {
   0% {
     transform: scale(1);
@@ -406,6 +334,7 @@ body.is-transitioning {
     box-shadow: 0 0 0 0 rgba(192, 0, 1, 0);
   }
 }
+
 @keyframes glitch {
   0%,
   20%,
@@ -462,6 +391,17 @@ body.is-transitioning {
   }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
 @keyframes bounceArrow {
   0%,
   20%,
@@ -500,64 +440,160 @@ body.is-transitioning {
   }
 }
 
-@keyframes sectionFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* Media Queries - Properly organized by screen size */
 
-/* Media Queries */
-@media (max-width: 1024px) {
+/* Small phones */
+@media (min-width: 320px) {
+  .close-menu {
+    width: 40px;
+    height: 40px;
+    top: 20px;
+    right: 20px;
+    transform: none;
+  }
+
   .close-icon::before,
   .close-icon::after {
-    height: 17px;
+    height: 3px;
   }
-}
 
-@media (max-width: 768px) {
-  .close-menu {
-    top: 20px;
-    transform: none;
-    width: 50px;
-    height: 50px;
+  .section-indicator {
+    right: 8px;
+    gap: 15px;
+  }
+
+  .indicator-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .nav-links li a {
+    font-size: 10vh;
   }
 
   .nav-links.active .close-menu {
     animation: rotateInMobile 0.5s ease forwards;
   }
+}
 
-  .close-menu:hover {
-    transform: scale(1.1);
+/* Larger phones */
+@media (min-width: 480px) {
+  .close-menu {
+    width: 40px;
+    height: 40px;
+    top: 20px;
+    right: 20px;
   }
 
   .close-icon::before,
   .close-icon::after {
-    height: 14px;
+    height: 4px;
   }
 
   .section-indicator {
     right: 10px;
+    gap: 15px;
+  }
+
+  .indicator-dot {
+    width: 9px;
+    height: 9px;
+  }
+
+  .nav-links li a {
+    font-size: 12vh;
+  }
+}
+
+/* Tablets */
+@media (min-width: 768px) {
+  .close-menu {
+    width: 50px;
+    height: 50px;
+    top: 20px;
+    right: 30px;
+  }
+
+  .close-icon::before,
+  .close-icon::after {
+    height: 5px;
+  }
+
+  .section-indicator {
+    right: 15px;
+    gap: 18px;
   }
 
   .indicator-dot {
     width: 10px;
     height: 10px;
   }
+
+  .nav-links li a {
+    font-size: 13vh;
+  }
 }
 
-@media (max-width: 480px) {
+/* Small desktops and laptops */
+@media (min-width: 940px) {
   .close-menu {
-    width: 40px;
-    height: 40px;
+    top: 10%;
+    right: 10%;
+    width: 4vw;
+    height: 4vw;
+    transform: translateY(-50%);
   }
 
   .close-icon::before,
   .close-icon::after {
-    height: 6px;
+    height: 10px;
+  }
+
+  .section-indicator {
+    right: 20px;
+  }
+
+  .indicator-dot {
+    width: 11px;
+    height: 11px;
+  }
+
+  .nav-links li a {
+    font-size: 14vh;
+  }
+
+  .nav-links.active .close-menu {
+    animation: rotateIn 0.5s ease forwards;
+  }
+
+  .close-menu:hover {
+    transform: translateY(-50%) scale(1.1);
+  }
+}
+
+/* Extra large screens */
+@media (min-width: 1400px) {
+  .close-menu {
+    width: 6vw;
+    height: 6vw;
+  }
+
+  .close-icon::before,
+  .close-icon::after {
+    height: 24px;
+  }
+
+  .section-indicator {
+    right: 25px;
+    gap: 20px;
+  }
+
+  .indicator-dot {
+    width: 12px;
+    height: 12px;
+  }
+
+  .nav-links li a {
+    font-size: 15vh;
   }
 }
