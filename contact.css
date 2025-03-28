@@ -2,13 +2,9 @@
    ------ SPIRIT & BONE - CONTACT SECTION ------
    =========================================== */
 
-
-
 #contact {
   margin: 0;
   padding: 0;
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -16,7 +12,8 @@
   color: white;
   position: relative;
 }
-/* Ensure no extra space below contact section */
+
+/* Hide extra space below contact section */
 #contact + .section-spacer {
   display: none;
 }
@@ -188,31 +185,25 @@
 }
 
 /* Footer styling */
-
 footer {
-  margin-bottom: 0 !important;
-  position: relative !important;
-  bottom: 0 !important;
-}
-
-footer {
+  position: relative;
+  z-index: 2;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s ease, transform 0.5s ease;
-  margin-bottom: 0 !important;
   background-color: var(--main-red);
   color: rgba(255, 255, 255, 0.6);
   text-align: center;
   padding: 20px 0;
   width: 100%;
-  position: relative;
-  z-index: 2;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
+
 footer.visible {
   opacity: 1;
   transform: translateY(0);
 }
+
 footer p {
   margin: 0;
   padding: 0;
@@ -220,50 +211,25 @@ footer p {
 }
 
 /* Media Queries */
-@media (max-width: 900px) {
-  .contact-wrapper {
-    grid-template-columns: 1fr;
-    gap: 50px;
-  }
-
-  .contact-info {
-    align-items: center;
-    text-align: center;
-  }
-
-  .contact-title {
-    font-size: 3.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .contact-hero {
-    padding: 60px 20px;
-  }
-
-  .contact-title {
-    font-size: 3rem;
-  }
-
-  .association-section a {
-    font-size: 2rem;
-  }
-  footer {
-    padding: 15px 0;
-  }
-}
-
-@media (max-width: 480px) {
+/* Small phones */
+@media (min-width: 320px) {
   .contact-hero {
     padding: 40px 20px;
   }
 
   .contact-title {
     font-size: 2.5rem;
+    margin-bottom: 40px;
   }
 
   .contact-wrapper {
+    grid-template-columns: 1fr;
     gap: 40px;
+  }
+
+  .contact-info {
+    align-items: center;
+    text-align: center;
   }
 
   .association-section a {
@@ -278,5 +244,96 @@ footer p {
     width: 40px;
     height: 40px;
     font-size: 1rem;
+  }
+
+  footer {
+    padding: 15px 0;
+  }
+}
+
+/* Larger phones */
+@media (min-width: 480px) {
+  .contact-hero {
+    padding: 50px 20px;
+  }
+
+  .contact-title {
+    font-size: 2.8rem;
+    margin-bottom: 50px;
+  }
+
+  .association-section a {
+    font-size: 2rem;
+  }
+}
+
+/* Tablets */
+@media (min-width: 768px) {
+  .contact-hero {
+    padding: 60px 20px;
+  }
+
+  .contact-title {
+    font-size: 3rem;
+    margin-bottom: 60px;
+  }
+
+  .contact-wrapper {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .association-section a {
+    font-size: 2rem;
+  }
+}
+
+/* Small desktops and laptops */
+@media (min-width: 940px) {
+  .contact-hero {
+    padding: 70px 0;
+  }
+
+  .contact-title {
+    font-size: 3.5rem;
+  }
+
+  .contact-wrapper {
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+  }
+
+  .contact-info {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .association-section a {
+    font-size: 2.2rem;
+  }
+
+  .social-icons {
+    margin: 40px 0;
+  }
+
+  .social-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Extra large screens */
+@media (min-width: 1400px) {
+  .contact-hero {
+    padding: 80px 0;
+  }
+
+  .contact-title {
+    font-size: 4rem;
+  }
+
+  .association-section a {
+    font-size: 2.5rem;
   }
 }
