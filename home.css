@@ -176,6 +176,7 @@ svg {
   animation: ampGrowThrough 1s forwards cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+
 /* Close button */
 .close-video {
   position: absolute;
@@ -269,7 +270,6 @@ svg {
   transform: scale(1.1);
 }
 
-
 /* Media Queries */
 /* Small phones */
 @media (min-width: 320px) {
@@ -282,35 +282,35 @@ svg {
   .vertical-amp {
     font-size: 14vw;
   }
-  
+
   .close-video {
     width: 25px;
     height: 25px;
     top: 10px;
     right: 10px;
   }
-  
+
   .close-video .close-icon::before,
   .close-video .close-icon::after {
     height: 3px;
   }
-  
+
   .home-social-icons {
     bottom: 20px;
     right: 20px;
     gap: 10px;
   }
-  
+
   .home-social-icons .social-icon {
     width: 35px;
     height: 35px;
     font-size: 1rem;
   }
-  
+
   .desktop-title {
     display: none;
   }
-  
+
   .mobile-title {
     display: block;
     width: 100%;
@@ -325,20 +325,20 @@ svg {
   .vertical-amp {
     font-size: 36vw;
   }
-  
+
   .home-social-icons {
     bottom: 25px;
     right: 25px;
     gap: 12px;
   }
-  
+
   .close-video {
     width: 30px;
     height: 30px;
     top: 15px;
     right: 15px;
   }
-  
+
   .close-video .close-icon::before,
   .close-video .close-icon::after {
     height: 4px;
@@ -350,20 +350,20 @@ svg {
   .tittle {
     font-size: 48vh;
   }
-  
+
   .tittleY {
     font-size: 28vw;
   }
-  
+
   .home-social-icons {
     bottom: 30px;
     right: 30px;
   }
-  
+
   .mobile-title {
     display: none;
   }
-  
+
   .desktop-title {
     display: block;
   }
@@ -374,7 +374,7 @@ svg {
   .tittle {
     font-size: 48vh;
   }
-  
+
   .tittleY {
     font-size: 28vw;
   }
@@ -385,29 +385,29 @@ svg {
   .tittle {
     font-size: 30rem;
   }
-  
+
   .tittleY {
     font-size: 20rem;
   }
-  
+
   .home-social-icons {
     bottom: 40px;
     right: 40px;
     gap: 15px;
   }
-  
+
   .close-video {
     width: 40px;
     height: 40px;
     top: 20px;
     right: 20px;
   }
-  
+
   .close-video .close-icon::before,
   .close-video .close-icon::after {
     height: 6px;
   }
-  
+
   .home-social-icons .social-icon {
     width: 40px;
     height: 40px;

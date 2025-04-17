@@ -124,7 +124,7 @@ main {
 
 /* Section base styles */
 .section {
-  opacity: 0;
+  opacity: 1; 
   margin: 0;
   padding: 0;
   position: relative;
@@ -152,10 +152,7 @@ main {
   height: 50vh;
 }
 
-.section.fade-in {
-  opacity: 1;
-  transform: translateY(0);
-}
+
 
 /* ---- LOADER AND TRANSITIONS ---- */
 

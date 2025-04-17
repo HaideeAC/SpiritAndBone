@@ -7,9 +7,11 @@ function initTeamSection() {
   // Get references to all team members
   const teamMembers = document.querySelectorAll(".team-member");
   const teamContainer = document.querySelector(".team-container");
+  const teamSection = document.getElementById("team");
+  const pandeiro = document.getElementById("member10");
 
   // If no team members or container are found, exit early
-  if (!teamMembers.length || !teamContainer) {
+  if (!teamMembers.length || !teamContainer || !teamSection || !pandeiro) {
     console.warn("Team section elements not found in the document.");
     return;
   }
@@ -26,6 +28,204 @@ function initTeamSection() {
 
   // Add document-level touch handler for closing flipped cards
   addDocumentTouchHandler(teamMembers);
+
+  // Initialize the scroll effects for the team members
+  initScrollEffect(teamMembers, pandeiro, teamSection);
+}
+
+/**
+ * Initialize scroll effect for team members emerging/hiding from pandeiro
+ * @param {NodeList} teamMembers - Collection of team member elements
+ * @param {HTMLElement} pandeiro - The pandeiro element
+ * @param {HTMLElement} teamSection - The team section element
+ */
+function initScrollEffect(teamMembers, pandeiro, teamSection) {
+  // Set initial state - all team members behind pandeiro
+  const pandeiroPos = getPandeiroPosition(pandeiro, teamSection);
+
+  teamMembers.forEach((member) => {
+    if (member.id === "member10") return; // Skip pandeiro
+
+    // Initially hide all team members behind pandeiro
+    member.style.top = `${pandeiroPos.top}px`;
+    member.style.left = `${pandeiroPos.left}px`;
+    member.style.opacity = "0";
+    member.style.transform = "scale(0.5)";
+    member.style.zIndex = "1";
+  });
+
+  // Create Intersection Observer to detect when section is in viewport
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        // Calculate how much of the section is visible (0 to 1)
+        let ratio = entry.intersectionRatio;
+
+        // If section is entering viewport
+        if (entry.isIntersecting) {
+          animateTeamMembers(teamMembers, pandeiro, teamSection, ratio);
+        } else {
+          // If section is completely out of view, reset positions
+          if (ratio === 0) {
+            resetTeamMembers(teamMembers, pandeiro, teamSection);
+          }
+        }
+      });
+    },
+    {
+      root: null, // Use viewport as root
+      rootMargin: "0px",
+      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    }
+  );
+
+  // Start observing team section
+  observer.observe(teamSection);
+
+  // Also handle scroll events for smoother animation between thresholds
+  window.addEventListener("scroll", () => {
+    // Check if team section is in viewport
+    const rect = teamSection.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    if (rect.top < windowHeight && rect.bottom > 0) {
+      // Calculate visibility ratio
+      const visibleHeight =
+        Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
+      const ratio = Math.min(Math.max(visibleHeight / rect.height, 0), 1);
+
+      // Apply animation based on visibility ratio
+      animateTeamMembers(teamMembers, pandeiro, teamSection, ratio);
+    }
+  });
+}
+
+/**
+ * Animate team members based on section visibility ratio
+ * @param {NodeList} teamMembers - Collection of team member elements
+ * @param {HTMLElement} pandeiro - The pandeiro element
+ * @param {HTMLElement} teamSection - The team section element
+ * @param {number} ratio - Visibility ratio (0-1)
+ */
+function animateTeamMembers(teamMembers, pandeiro, teamSection, ratio) {
+  const pandeiroPos = getPandeiroPosition(pandeiro, teamSection);
+
+  // Ensure pandeiro is on top
+  pandeiro.style.zIndex = "10";
+
+  teamMembers.forEach((member) => {
+    if (member.id === "member10") return; // Skip pandeiro
+
+    // Get the final position for this member
+    const finalPos = getFinalPosition(member.id, teamSection);
+
+    // Calculate current position based on ratio
+    let currentTop = pandeiroPos.top + (finalPos.top - pandeiroPos.top) * ratio;
+    let currentLeft =
+      pandeiroPos.left + (finalPos.left - pandeiroPos.left) * ratio;
+
+    // Calculate opacity and scale based on ratio
+    // Start much smaller (0.1) to create the "inside pandeiro" effect
+    let opacity = Math.min(ratio * 2, 1);
+    let scale = 0.1 + ratio * 0.9;
+
+    // Apply calculated styles
+    member.style.transition = "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)";
+    member.style.top = `${currentTop}px`;
+    member.style.left = `${currentLeft}px`;
+    member.style.opacity = opacity;
+
+    // Apply transformation including any needed translateX
+    const posData = getCurrentLayoutPositions().find(
+      (pos) => pos.id === member.id
+    );
+    if (posData && posData.transform) {
+      member.style.transform = `${posData.transform} scale(${scale})`;
+    } else {
+      member.style.transform = `scale(${scale})`;
+    }
+  });
+}
+
+/**
+ * Reset team members to initial position (behind pandeiro)
+ * @param {NodeList} teamMembers - Collection of team member elements
+ * @param {HTMLElement} pandeiro - The pandeiro element
+ * @param {HTMLElement} teamSection - The team section element
+ */
+function resetTeamMembers(teamMembers, pandeiro, teamSection) {
+  const pandeiroPos = getPandeiroPosition(pandeiro, teamSection);
+
+  teamMembers.forEach((member) => {
+    if (member.id === "member10") return; // Skip pandeiro
+
+    member.style.top = `${pandeiroPos.top}px`;
+    member.style.left = `${pandeiroPos.left}px`;
+    member.style.opacity = "0";
+    member.style.transform = "scale(0.1)"; // Much smaller scale for "inside" effect
+  });
+}
+
+/**
+ * Get pandeiro position relative to team section
+ * @param {HTMLElement} pandeiro - The pandeiro element
+ * @param {HTMLElement} teamSection - The team section element
+ * @returns {Object} Position with top and left in pixels
+ */
+function getPandeiroPosition(pandeiro, teamSection) {
+  const pandeiroRect = pandeiro.getBoundingClientRect();
+  const sectionRect = teamSection.getBoundingClientRect();
+
+  const centerX = pandeiroRect.left + pandeiroRect.width / 2 - sectionRect.left;
+  const centerY = pandeiroRect.top + pandeiroRect.height / 2 - sectionRect.top;
+
+  // Ensure we're always using the center of the pandeiro
+  return {
+    top: centerY,
+    left: centerX,
+  };
+}
+
+/**
+ * Get final position for a team member based on current layout
+ * @param {string} memberId - ID of the team member
+ * @param {HTMLElement} teamSection - The team section element
+ * @returns {Object} Position with top and left in pixels
+ */
+function getFinalPosition(memberId, teamSection) {
+  const sectionWidth = teamSection.offsetWidth;
+  const sectionHeight = teamSection.offsetHeight;
+
+  // Get position data based on screen size
+  const positionData = getCurrentLayoutPositions().find(
+    (pos) => pos.id === memberId
+  );
+
+  if (!positionData) {
+    return { top: 0, left: 0 };
+  }
+
+  // Convert percentage to pixels
+  const top = (parseFloat(positionData.top) / 100) * sectionHeight;
+  const left = (parseFloat(positionData.left) / 100) * sectionWidth;
+
+  return { top, left };
+}
+
+/**
+ * Get current layout positions based on screen width
+ * @returns {Array} Array of position objects
+ */
+function getCurrentLayoutPositions() {
+  const viewportWidth = window.innerWidth;
+
+  if (viewportWidth <= 480) {
+    return mobilePositions;
+  } else if (viewportWidth <= 768) {
+    return tabletPositions;
+  } else {
+    return desktopPositions;
+  }
 }
 
 /**
@@ -164,65 +364,131 @@ function addDocumentTouchHandler(teamMembers) {
  */
 function adjustTeamLayout() {
   const viewportWidth = window.innerWidth;
+  let positions;
 
   if (viewportWidth <= 480) {
-    applyLayout(mobilePositions);
+    positions = mobilePositions;
   } else if (viewportWidth <= 768) {
-    applyLayout(tabletPositions);
+    positions = tabletPositions;
   } else {
-    applyLayout(desktopPositions);
+    positions = desktopPositions;
+  }
+
+  // Apply layout for pandeiro - team members will be positioned by scroll effect
+  const pandeiro = document.getElementById("member10");
+  if (pandeiro) {
+    const pandeiroPosition = positions.find((pos) => pos.id === "member10");
+    if (pandeiroPosition) {
+      pandeiro.style.top = pandeiroPosition.top;
+      pandeiro.style.left = pandeiroPosition.left;
+
+      // Apply transform property if it exists
+      if (pandeiroPosition.transform) {
+        pandeiro.style.transform = pandeiroPosition.transform;
+      }
+    }
+  }
+
+  // Update positions of all members based on current scroll position
+  updateTeamMembersPositions();
+}
+
+/**
+ * Update team members positions based on current scroll position
+ */
+function updateTeamMembersPositions() {
+  const teamSection = document.getElementById("team");
+  const teamMembers = document.querySelectorAll(".team-member");
+  const pandeiro = document.getElementById("member10");
+
+  if (!teamSection || !teamMembers.length || !pandeiro) return;
+
+  // Check if team section is in viewport
+  const rect = teamSection.getBoundingClientRect();
+
+  if (rect.top < window.innerHeight && rect.bottom > 0) {
+    // Calculate visibility ratio
+    const visibleHeight =
+      Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+    const ratio = Math.min(Math.max(visibleHeight / rect.height, 0), 1);
+
+    // Skip animation and apply position immediately
+    const pandeiroPos = getPandeiroPosition(pandeiro, teamSection);
+
+    teamMembers.forEach((member) => {
+      if (member.id === "member10") return; // Skip pandeiro
+
+      // Get final position for this member
+      const finalPos = getFinalPosition(member.id, teamSection);
+
+      // Calculate current position
+      const top = pandeiroPos.top + (finalPos.top - pandeiroPos.top) * ratio;
+      const left =
+        pandeiroPos.left + (finalPos.left - pandeiroPos.left) * ratio;
+
+      // Apply styles without transition for immediate effect
+      member.style.transition = "none";
+      member.style.top = `${top}px`;
+      member.style.left = `${left}px`;
+      member.style.opacity = Math.min(ratio * 2, 1);
+
+      // Apply transformation including any needed translateX
+      const posData = getCurrentLayoutPositions().find(
+        (pos) => pos.id === member.id
+      );
+      if (posData && posData.transform) {
+        member.style.transform = `${posData.transform} scale(${
+          0.1 + ratio * 0.9
+        })`;
+      } else {
+        member.style.transform = `scale(${0.1 + ratio * 0.9})`;
+      }
+
+      // Re-enable transitions after a small delay
+      setTimeout(() => {
+        member.style.transition = "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)";
+      }, 5000);
+    });
   }
 }
 
-
-function applyLayout(positions) {
-  positions.forEach((pos) => {
-    const member = document.getElementById(pos.id);
-    if (member) {
-      member.style.top = pos.top;
-      member.style.left = pos.left;
-    }
-  });
-}
-
-// Predefined layouts to avoid repetitive calculations
 const desktopPositions = [
-  { id: "member1", top: "15%", left: "23%" },
-  { id: "member2", top: "10%", left: "45%" },
-  { id: "member3", top: "15%", left: "67%" },
-  { id: "member4", top: "40%", left: "5%" },
-  { id: "member5", top: "40%", left: "35%" },
-  { id: "member6", top: "40%", left: "55%" },
-  { id: "member7", top: "40%", left: "83%" },
-  { id: "member8", top: "65%", left: "20%" },
-  { id: "member9", top: "65%", left: "70%" },
-  { id: "member10", top: "70%", left: "45%" },
+  { id: "member1", top: "10%", left: "25%", transform: "translateX(-50%)" }, // Ed
+  { id: "member2", top: "5%", left: "50%", transform: "translateX(-50%)" }, // Alex
+  { id: "member3", top: "10%", left: "75%", transform: "translateX(-50%)" }, // Dar
+  { id: "member4", top: "35%", left: "10%", transform: "translateX(-50%)" }, // Ben
+  { id: "member5", top: "35%", left: "40%", transform: "translateX(-50%)" }, // Mandem
+  { id: "member6", top: "35%", left: "60%", transform: "translateX(-50%)" }, // Mestre
+  { id: "member7", top: "35%", left: "90%", transform: "translateX(-50%)" }, // Susy
+  { id: "member8", top: "60%", left: "25%", transform: "translateX(-50%)" }, // Yune
+  { id: "member9", top: "60%", left: "75%", transform: "translateX(-50%)" }, // Haidee
+  { id: "member10", top: "70%", left: "50%", transform: "translateX(-50%)" }, // Pandeiro
 ];
 
 const tabletPositions = [
-  { id: "member1", top: "5%", left: "10%" },
-  { id: "member2", top: "5%", left: "50%" },
-  { id: "member3", top: "25%", left: "10%" },
-  { id: "member4", top: "25%", left: "50%" },
-  { id: "member5", top: "45%", left: "10%" },
-  { id: "member6", top: "45%", left: "50%" },
-  { id: "member7", top: "65%", left: "10%" },
-  { id: "member8", top: "65%", left: "50%" },
-  { id: "member9", top: "85%", left: "10%" },
-  { id: "member10", top: "85%", left: "50%" },
+  { id: "member1", top: "13%", left: "30%", transform: "translateX(-50%)" }, // Ed
+  { id: "member2", top: "2%", left: "50%", transform: "translateX(-50%)" }, // Alex
+  { id: "member3", top: "13%", left: "70%", transform: "translateX(-50%)" }, // Dar
+  { id: "member4", top: "50%", left: "5%", transform: "translateX(-50%)" }, // Ben
+  { id: "member5", top: "31%", left: "40%", transform: "translateX(-50%)" }, // Mandem
+  { id: "member6", top: "31%", left: "60%", transform: "translateX(-50%)" }, // Mestre
+  { id: "member7", top: "50%", left: "75%", transform: "translateX(-50%)" }, // Susy
+  { id: "member8", top: "70%", left: "70%", transform: "translateX(-50%)" }, // Yune
+  { id: "member9", top: "70%", left: "30%", transform: "translateX(-50%)" }, // Haidee
+  { id: "member10", top: "65%", left: "50%", transform: "translateX(-50%)" }, // Pandeiro
 ];
 
 const mobilePositions = [
-  { id: "member1", top: "5%", left: "5%" },
-  { id: "member2", top: "5%", left: "55%" },
-  { id: "member3", top: "25%", left: "5%" },
-  { id: "member4", top: "25%", left: "55%" },
-  { id: "member5", top: "45%", left: "5%" },
-  { id: "member6", top: "45%", left: "55%" },
-  { id: "member7", top: "65%", left: "5%" },
-  { id: "member8", top: "65%", left: "55%" },
-  { id: "member9", top: "85%", left: "5%" },
-  { id: "member10", top: "85%", left: "55%" },
+  { id: "member1", top: "30%", left: "8%", transform: "translateX(-50%)" }, // Ed
+  { id: "member2", top: "15%", left: "50%", transform: "translateX(-50%)" }, // Alex
+  { id: "member3", top: "30%", left: "67%", transform: "translateX(-50%)" }, // Dar
+  { id: "member4", top: "60%", left: "67%", transform: "translateX(-50%)" }, // Ben
+  { id: "member5", top: "0%", left: "8%", transform: "translateX(-50%)" }, // Mandem
+  { id: "member6", top: "0%", left: "67%", transform: "translateX(-50%)" }, // Mestre
+  { id: "member7", top: "60%", left: "8%", transform: "translateX(-50%)" }, // Suzy
+  { id: "member8", top: "80%", left: "67%", transform: "translateX(-50%)" }, // Yune
+  { id: "member9", top: "80%", left: "8%", transform: "translateX(-50%)" }, // Haidee
+  { id: "member10", top: "55%", left: "50%", transform: "translateX(-50%)" }, // Pandeiro
 ];
 
 // Export initialization function

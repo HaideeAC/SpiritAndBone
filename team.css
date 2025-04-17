@@ -3,7 +3,7 @@
    =========================================== */
 
 #team {
-  padding: 100px 0 80px;
+  padding: 40px 0 80px; /* Reduced top padding to fix spacing issue */
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 1) 0%,
@@ -12,25 +12,39 @@
   );
   margin: 0;
   position: relative;
+  min-height: 100vh; /* Ensure section is tall enough for scroll effect */
+  display: flex;
+  align-items: center; /* Center content vertically */
+  justify-content: center;
 }
 
 /* Base container styling */
 .team-container {
   position: relative;
   width: 100%;
-  min-height: calc(100vh - 90px);
+  min-height: calc(100vh - 120px);
   margin: 0 auto;
   overflow: visible;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Team member card */
 .team-member {
   position: absolute;
-  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 1;
   perspective: 1000px;
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
+  will-change: transform, opacity, top, left;
+}
+
+/* Ensure pandeiro has highest z-index and correct positioning */
+#member10 {
+  z-index: 10;
+  /* No sticky position to ensure correct absolute positioning */
 }
 
 /* Card containers */
@@ -46,6 +60,7 @@
   will-change: transform;
   transform: translateZ(0); /* Force GPU acceleration */
 }
+
 
 /* Generate animation delays for all members */
 .member-image-container,
@@ -200,19 +215,17 @@
   filter: drop-shadow(0 0 15px rgba(192, 0, 1, 0.8));
 }
 
-
-
 /* Media Queries - Organized by screen size */
 /* Small phones */
 @media (min-width: 320px) {
   #team {
-    padding: 60px 0 40px;
+    padding: 30px 0 40px;
   }
 
   .member-image-container,
   .member-image-container1 {
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
   }
 
   .member-info h3 {
@@ -223,25 +236,18 @@
   .member-info h4 {
     font-size: 0.6rem;
   }
-
-  /* Smaller sound icon */
-  #member10 .member-image-container1::after {
-    width: 20px;
-    height: 20px;
-    font-size: 0.7rem;
-  }
 }
 
 /* Larger phones */
 @media (min-width: 480px) {
   #team {
-    padding: 70px 0 50px;
+    padding: 30px 0 50px;
   }
 
   .member-image-container,
   .member-image-container1 {
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
   }
 
   .member-info h3 {
@@ -252,19 +258,12 @@
   .member-info h4 {
     font-size: 0.65rem;
   }
-
-  /* Smaller sound icon */
-  #member10 .member-image-container1::after {
-    width: 22px;
-    height: 22px;
-    font-size: 0.8rem;
-  }
 }
 
 /* Tablets */
 @media (min-width: 768px) {
   #team {
-    padding: 80px 0 60px;
+    padding: 30px 0 60px;
   }
 
   .member-image-container,
@@ -281,18 +280,12 @@
   .member-info h4 {
     font-size: 0.7rem;
   }
-
-  /* Sound icon */
-  #member10 .member-image-container1::after {
-    width: 25px;
-    height: 25px;
-  }
 }
 
 /* Small desktops and laptops */
 @media (min-width: 940px) {
   #team {
-    padding: 90px 0 70px;
+    padding: 40px 0 70px;
   }
 
   .member-image-container,
@@ -314,7 +307,7 @@
 /* Extra large screens */
 @media (min-width: 1400px) {
   #team {
-    padding: 100px 0 80px;
+    padding: 40px 0 80px;
   }
 
   .member-image-container,

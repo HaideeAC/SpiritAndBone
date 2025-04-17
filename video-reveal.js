@@ -22,6 +22,9 @@ function initVideoReveal() {
   // Create close button element and append to banner
   const closeVideoBtn = createCloseButton(homeBanner);
 
+  // Add styles for the fade animation
+  addFadeAnimationStyles();
+
   // Function to reveal video when ampersand is clicked
   function revealVideo() {
     // Apply transformations to reveal video
@@ -49,9 +52,19 @@ function initVideoReveal() {
 
   // Function to hide video and return to title
   function hideVideo() {
-    // Remove transformations
-    desktopTitle?.classList.remove("video-reveal-active");
-    mobileTitle?.classList.remove("video-reveal-active");
+    // Add fade-in animation classes to the masks
+    if (desktopTitle) {
+      desktopTitle.classList.add("mask-fade-in");
+      desktopTitle.classList.remove("video-reveal-active");
+    }
+
+    if (mobileTitle) {
+      mobileTitle.classList.add("mask-fade-in");
+      mobileTitle.classList.remove("video-reveal-active");
+    }
+
+    // Start fading out the video
+    videoContainer.classList.add("video-fade-out");
     videoContainer.classList.remove("video-revealed");
 
     // Reset animations on both ampersands to ensure proper state
@@ -62,7 +75,12 @@ function initVideoReveal() {
     closeVideoBtn.classList.remove("active");
     setTimeout(() => {
       closeVideoBtn.style.display = "none";
-    }, 300);
+
+      // Clean up the animation classes after animation completes
+      desktopTitle?.classList.remove("mask-fade-in");
+      mobileTitle?.classList.remove("mask-fade-in");
+      videoContainer.classList.remove("video-fade-out");
+    }, 600); // Match this with the animation duration
   }
 
   // Set up event listeners
@@ -116,6 +134,41 @@ function createCloseButton(parent) {
   });
 
   return btn;
+}
+
+/**
+ * Adds required CSS for fade animations
+ */
+function addFadeAnimationStyles() {
+  // Create a style element if it doesn't exist
+  let styleElement = document.getElementById("video-reveal-styles");
+
+  if (!styleElement) {
+    styleElement = document.createElement("style");
+    styleElement.id = "video-reveal-styles";
+    document.head.appendChild(styleElement);
+  }
+
+  // Add the animation styles
+  styleElement.textContent = `
+    @keyframes fade-out {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+    
+    .mask-fade-in {
+      animation: fade-out 0.6s ease-out;
+      animation-direction: reverse;
+    }
+    
+    .video-fade-out {
+      animation: fade-out 0.6s ease-out forwards;
+    }
+  `;
 }
 
 // Export the initialization function
