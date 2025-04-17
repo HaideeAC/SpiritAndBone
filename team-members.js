@@ -120,14 +120,15 @@ function animateTeamMembers(teamMembers, pandeiro, teamSection, ratio) {
     const finalPos = getFinalPosition(member.id, teamSection);
 
     // Calculate current position based on ratio
-    let currentTop = pandeiroPos.top + (finalPos.top - pandeiroPos.top) * ratio;
+    const curvedRatio = Math.pow(ratio, 2.5);
+    let currentTop =
+      pandeiroPos.top + (finalPos.top - pandeiroPos.top) * curvedRatio;
     let currentLeft =
-      pandeiroPos.left + (finalPos.left - pandeiroPos.left) * ratio;
+      pandeiroPos.left + (finalPos.left - pandeiroPos.left) * curvedRatio;
 
     // Calculate opacity and scale based on ratio
-    // Start much smaller (0.1) to create the "inside pandeiro" effect
     let opacity = Math.min(ratio * 2, 1);
-    let scale = 0.1 + ratio * 0.9;
+    let scale = 0.01 + ratio * 0.99;
 
     // Apply calculated styles
     member.style.transition = "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)";
@@ -162,7 +163,8 @@ function resetTeamMembers(teamMembers, pandeiro, teamSection) {
     member.style.top = `${pandeiroPos.top}px`;
     member.style.left = `${pandeiroPos.left}px`;
     member.style.opacity = "0";
-    member.style.transform = "scale(0.1)"; // Much smaller scale for "inside" effect
+    member.style.transform = "translate(-50%, -50%) scale(0.01)"; // Center the member and make it tiny
+    member.style.transformOrigin = "center center"; // Ensure scaling from center
   });
 }
 
@@ -179,9 +181,9 @@ function getPandeiroPosition(pandeiro, teamSection) {
   const centerX = pandeiroRect.left + pandeiroRect.width / 2 - sectionRect.left;
   const centerY = pandeiroRect.top + pandeiroRect.height / 2 - sectionRect.top;
 
-  // Ensure we're always using the center of the pandeiro
+  // Return coordinates of the pandeiro
   return {
-    top: centerY,
+    top: centerY - 100,
     left: centerX,
   };
 }
@@ -438,10 +440,10 @@ function updateTeamMembersPositions() {
       );
       if (posData && posData.transform) {
         member.style.transform = `${posData.transform} scale(${
-          0.1 + ratio * 0.9
+          0.01 + ratio * 0.99
         })`;
       } else {
-        member.style.transform = `scale(${0.1 + ratio * 0.9})`;
+        member.style.transform = `scale(${0.01 + ratio * 0.99})`;
       }
 
       // Re-enable transitions after a small delay
@@ -466,13 +468,13 @@ const desktopPositions = [
 ];
 
 const tabletPositions = [
-  { id: "member1", top: "13%", left: "30%", transform: "translateX(-50%)" }, // Ed
+  { id: "member1", top: "20%", left: "15%", transform: "translateX(-50%)" }, // Ed
   { id: "member2", top: "2%", left: "50%", transform: "translateX(-50%)" }, // Alex
-  { id: "member3", top: "13%", left: "70%", transform: "translateX(-50%)" }, // Dar
-  { id: "member4", top: "50%", left: "5%", transform: "translateX(-50%)" }, // Ben
+  { id: "member3", top: "20%", left: "85%", transform: "translateX(-50%)" }, // Dar
+  { id: "member4", top: "50%", left: "10%", transform: "translateX(-50%)" }, // Ben
   { id: "member5", top: "31%", left: "40%", transform: "translateX(-50%)" }, // Mandem
   { id: "member6", top: "31%", left: "60%", transform: "translateX(-50%)" }, // Mestre
-  { id: "member7", top: "50%", left: "75%", transform: "translateX(-50%)" }, // Susy
+  { id: "member7", top: "50%", left: "90%", transform: "translateX(-50%)" }, // Susy
   { id: "member8", top: "70%", left: "70%", transform: "translateX(-50%)" }, // Yune
   { id: "member9", top: "70%", left: "30%", transform: "translateX(-50%)" }, // Haidee
   { id: "member10", top: "65%", left: "50%", transform: "translateX(-50%)" }, // Pandeiro
