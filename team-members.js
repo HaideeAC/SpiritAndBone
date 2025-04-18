@@ -481,15 +481,15 @@ const tabletPositions = [
 ];
 
 const mobilePositions = [
-  { id: "member1", top: "30%", left: "8%", transform: "translateX(-50%)" }, // Ed
+  { id: "member1", top: "30%", left: "10%", transform: "translateX(-50%)" }, // Ed
   { id: "member2", top: "15%", left: "50%", transform: "translateX(-50%)" }, // Alex
-  { id: "member3", top: "30%", left: "67%", transform: "translateX(-50%)" }, // Dar
-  { id: "member4", top: "60%", left: "67%", transform: "translateX(-50%)" }, // Ben
-  { id: "member5", top: "0%", left: "8%", transform: "translateX(-50%)" }, // Mandem
-  { id: "member6", top: "0%", left: "67%", transform: "translateX(-50%)" }, // Mestre
-  { id: "member7", top: "60%", left: "8%", transform: "translateX(-50%)" }, // Suzy
-  { id: "member8", top: "80%", left: "67%", transform: "translateX(-50%)" }, // Yune
-  { id: "member9", top: "80%", left: "8%", transform: "translateX(-50%)" }, // Haidee
+  { id: "member3", top: "30%", left: "90%", transform: "translateX(-50%)" }, // Dar
+  { id: "member4", top: "60%", left: "90%", transform: "translateX(-50%)" }, // Ben
+  { id: "member5", top: "0%", left: "20%", transform: "translateX(-50%)" }, // Mandem
+  { id: "member6", top: "0%", left: "80%", transform: "translateX(-50%)" }, // Mestre
+  { id: "member7", top: "60%", left: "10%", transform: "translateX(-50%)" }, // Suzy
+  { id: "member8", top: "80%", left: "80%", transform: "translateX(-50%)" }, // Yune
+  { id: "member9", top: "80%", left: "20%", transform: "translateX(-50%)" }, // Haidee
   { id: "member10", top: "55%", left: "50%", transform: "translateX(-50%)" }, // Pandeiro
 ];
 
