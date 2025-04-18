@@ -132,6 +132,14 @@ nav {
   animation: glitch 0.3s linear forwards;
 }
 
+.desktop-nav-text {
+  display: inline;
+}
+
+.mobile-nav-text {
+  display: none;
+}
+
 /* Close button */
 .close-menu {
   position: fixed;
@@ -202,8 +210,20 @@ body.is-transitioning {
   z-index: 200;
   background-color: var(--main-red);
   transform: translateY(-100%);
-  transition: transform 0.7s cubic-bezier(0.7, 0, 0.3, 1);
+  transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
   pointer-events: none;
+}
+
+.page-transition::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("/images/texture1.jpg") center/cover no-repeat;
+  opacity: 0.03; /* Subtle */
+  z-index: 0;
 }
 
 .page-transition.active {
@@ -263,7 +283,7 @@ body.is-transitioning {
 
 .indicator-dot.active::after {
   opacity: 1;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgb(255, 255, 255);
 }
 
 /* Scroll progress indicator */
@@ -280,7 +300,7 @@ body.is-transitioning {
 }
 
 /* Navigation-specific scroll down indicator - different from home.css */
-.nav-scroll-down {
+.scroll-down {
   position: absolute;
   bottom: 40px;
   left: 50%;
@@ -289,17 +309,17 @@ body.is-transitioning {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  color: white;
+  color: #F7A4A4;
   font-size: 14px;
   font-weight: 500;
   letter-spacing: 1px;
   text-transform: uppercase;
   animation: fadeInUp 1s ease-out forwards;
-  z-index: 10;
+  z-index: 100;
   cursor: pointer;
 }
 
-.nav-scroll-down i {
+.scroll-down i {
   font-size: 24px;
   animation: bounceArrow 2s infinite;
 }
@@ -319,7 +339,6 @@ body.is-transitioning {
   animation: background-fade 1s forwards;
 }
 
-
 /* Media Queries - Properly organized by screen size */
 
 /* Small phones */
@@ -335,6 +354,14 @@ body.is-transitioning {
   .close-icon::before,
   .close-icon::after {
     height: 3px;
+  }
+
+  .desktop-nav-text {
+    display: none;
+  }
+
+  .mobile-nav-text {
+    display: inline;
   }
 
   .section-indicator {
@@ -370,6 +397,14 @@ body.is-transitioning {
     height: 4px;
   }
 
+  .desktop-nav-text {
+    display: none;
+  }
+
+  .mobile-nav-text {
+    display: inline;
+  }
+
   .section-indicator {
     right: 10px;
     gap: 15px;
@@ -397,6 +432,14 @@ body.is-transitioning {
   .close-icon::before,
   .close-icon::after {
     height: 5px;
+  }
+
+  .desktop-nav-text {
+    display: inline;
+  }
+
+  .mobile-nav-text {
+    display: none;
   }
 
   .section-indicator {
@@ -427,6 +470,14 @@ body.is-transitioning {
   .close-icon::before,
   .close-icon::after {
     height: 10px;
+  }
+
+  .desktop-nav-text {
+    display: inline;
+  }
+
+  .mobile-nav-text {
+    display: none;
   }
 
   .section-indicator {

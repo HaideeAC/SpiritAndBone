@@ -414,6 +414,7 @@
   opacity: 0;
   animation: fadeIn 1s ease 1s forwards;
   z-index: 5;
+  display: flex;
 }
 
 .scroll-down2-text {
@@ -427,7 +428,6 @@
   font-size: 24px;
   animation: bounceArrow 2s infinite;
 }
-
 
 /* ---- RESPONSIVE DESIGN ---- */
 
@@ -517,6 +517,10 @@
   .tone-section h3 {
     font-size: 1.4rem;
   }
+  /* Hide Scroll down suggestion */
+  .scroll-down2 {
+    display: none !important;
+  }
 }
 
 /* Larger phones (480px) */
@@ -544,6 +548,10 @@
 
   .tone-section h3 {
     font-size: 1.6rem;
+  }
+  /* Hide Scroll down suggestion */
+  .scroll-down2 {
+    display: none !important;
   }
 }
 
@@ -650,6 +658,10 @@
     display: block;
     padding: 60px 20px 40px;
   }
+  /* Hide Scroll down suggestion */
+  .scroll-down2 {
+    display: none !important;
+  }
 }
 
 /* Small desktops and laptops (940px) */
@@ -746,6 +758,10 @@
   .tone-section h3 {
     font-size: 1.7rem;
   }
+  /* Display Scroll Down Suggestion */
+  .scroll-down2 {
+    display: flex !important;
+  }
 }
 
 /* Extra large screens (1400px) */
@@ -765,5 +781,9 @@
 
   .project-poster img {
     max-height: 65vh;
+  }
+  /* Display Scroll Down Suggestion */
+  .scroll-down2 {
+    display: flex !important;
   }
 }

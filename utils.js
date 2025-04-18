@@ -1,5 +1,5 @@
 /**
- * Spirit&Bone - Optimized Utility Functions
+ * Spirit&Bone - Utility Functions
  */
 
 /**
