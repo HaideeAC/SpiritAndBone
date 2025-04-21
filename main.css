@@ -14,7 +14,6 @@
 @import "/team.css";
 @import "/contact.css";
 
-
 /* ==========================================
 ---------------- ANIMATIONS -----------------
 ========================================== */
@@ -64,8 +63,6 @@
     filter: drop-shadow(0 0 30px rgba(192, 0, 1, 0.5)) brightness(1.5);
   }
 }
-
-
 
 /* ---- NAVIGATION ---- */
 
@@ -189,7 +186,6 @@
   }
 }
 
-
 /* ---- PROJECTS ---- */
 
 @keyframes revealFromBottom {
@@ -239,7 +235,38 @@
     transform: translateY(-8px);
   }
 }
+@keyframes floatInFromLeft {
+  from {
+    transform: translateX(-40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
 
+@keyframes floatInFromRight {
+  from {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes floatInFromBottom {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 
 /* ---- TEAMS ---- */
 

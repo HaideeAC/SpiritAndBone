@@ -200,7 +200,7 @@ body.is-transitioning {
   pointer-events: none;
 }
 
-/* Global Page Transition - moved from duplicate definitions */
+/* Global Page Transition  */
 .page-transition {
   position: fixed;
   top: 0;
@@ -210,7 +210,7 @@ body.is-transitioning {
   z-index: 200;
   background-color: var(--main-red);
   transform: translateY(-100%);
-  transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+  transition: transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
   pointer-events: none;
 }
 
@@ -309,7 +309,7 @@ body.is-transitioning {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  color: #F7A4A4;
+  color: #f7a4a4;
   font-size: 14px;
   font-weight: 500;
   letter-spacing: 1px;
@@ -317,6 +317,7 @@ body.is-transitioning {
   animation: fadeInUp 1s ease-out forwards;
   z-index: 100;
   cursor: pointer;
+  display: flex;
 }
 
 .scroll-down i {
@@ -381,6 +382,10 @@ body.is-transitioning {
   .nav-links.active .close-menu {
     animation: rotateInMobile 0.5s ease forwards;
   }
+
+  .scroll-down {
+    display: none !important;
+  }
 }
 
 /* Larger phones */
@@ -418,6 +423,9 @@ body.is-transitioning {
   .nav-links li a {
     font-size: 12vh;
   }
+  .scroll-down {
+    display: none !important;
+  }
 }
 
 /* Tablets */
@@ -454,6 +462,9 @@ body.is-transitioning {
 
   .nav-links li a {
     font-size: 13vh;
+  }
+  .scroll-down {
+    display: none !important;
   }
 }
 
@@ -500,6 +511,9 @@ body.is-transitioning {
   .close-menu:hover {
     transform: translateY(-50%) scale(1.1);
   }
+  .scroll-down {
+    display: flex !important;
+  }
 }
 
 /* Extra large screens */
@@ -526,5 +540,8 @@ body.is-transitioning {
 
   .nav-links li a {
     font-size: 15vh;
+  }
+  .scroll-down {
+    display: flex !important;
   }
 }

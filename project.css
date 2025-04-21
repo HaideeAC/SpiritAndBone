@@ -41,6 +41,16 @@
   padding: 60px 20px 40px;
   position: relative;
   overflow: hidden;
+  will-change: transform, opacity;
+}
+/* Sticky scroll trigger container - use for elements that need to stick */
+.sticky-scroll-trigger {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  z-index: 1;
 }
 
 /* Tier 2 (Information Layout) */
@@ -73,10 +83,38 @@
   overflow: hidden;
   border-radius: 5px;
   box-shadow: var(--shadow-md);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease;
   z-index: 1;
   opacity: 0;
-  animation: revealFromBottom 0.8s ease forwards;
+  transform: translateY(20px);
+  will-change: transform, opacity;
+}
+
+/* Transition delays for parallax boxes - staggered animation */
+.parallax-box#project-img1 {
+  transition-delay: 0.1s;
+}
+.parallax-box#project-img2 {
+  transition-delay: 0.2s;
+}
+.parallax-box#project-img3 {
+  transition-delay: 0.3s;
+}
+.parallax-box#project-img4 {
+  transition-delay: 0.15s;
+}
+.parallax-box#project-img5 {
+  transition-delay: 0.25s;
+}
+.parallax-box#project-img6 {
+  transition-delay: 0.35s;
+}
+.parallax-box#project-img7 {
+  transition-delay: 0.4s;
+}
+.parallax-box#project-img8 {
+  transition-delay: 0.45s;
 }
 
 /* Parallax box positioning */
@@ -412,9 +450,11 @@
   align-items: center;
   cursor: pointer;
   opacity: 0;
-  animation: fadeIn 1s ease 1s forwards;
+  transition: opacity 0.5s ease, transform 0.5s ease;
   z-index: 5;
-  display: flex;
+}
+.scroll-down2:hover {
+  transform: translateX(-50%) translateY(-5px);
 }
 
 .scroll-down2-text {
@@ -446,7 +486,14 @@
   .parallax-box {
     display: none;
   }
+  .parallax-box,
+  .project-text {
+    transition-duration: 0.4s; /* Slightly faster transitions on mobile */
+  }
 
+  .sticky-scroll-trigger {
+    position: relative; /* Don't use sticky on small screens */
+  }
   /* Only show project1 as requested */
   .parallax-box#project-img1 {
     display: block;
@@ -462,12 +509,22 @@
 
   /* Center text container */
   .project-text {
-    position: relative;
-    top: auto;
-    left: auto;
-    width: 100%;
-    max-width: 280px;
-    margin: 20px 0;
+    position: absolute;
+    top: 45%;
+    left: 35%;
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 25px;
+    background-color: rgba(192, 0, 1, 0.2);
+    border-radius: 5px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    z-index: 2;
+    transition: transform 0.7s cubic-bezier(0.165, 0.84, 0.44, 1),
+      opacity 0.7s cubic-bezier(0.165, 0.84, 0.44, 1);
+    will-change: transform, opacity;
   }
 
   .project-text h2 {
@@ -529,6 +586,14 @@
   .parallax-box#project-img1 {
     max-width: 350px;
   }
+  .parallax-box,
+  .project-text {
+    transition-duration: 0.4s; /* Slightly faster transitions on mobile */
+  }
+
+  .sticky-scroll-trigger {
+    position: relative; /* Don't use sticky on small screens */
+  }
 
   .project-text {
     max-width: 350px;
@@ -562,7 +627,14 @@
     display: block;
     position: absolute;
   }
+  .parallax-box,
+  .project-text {
+    transition-duration: 0.4s; /* Slightly faster transitions on mobile */
+  }
 
+  .sticky-scroll-trigger {
+    position: relative; /* Don't use sticky on small screens */
+  }
   .parallax-box#project-img1 {
     top: 12%;
     left: 8%;
