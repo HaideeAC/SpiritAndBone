@@ -5,6 +5,7 @@
 /* ---- VARIABLES & CONSTANTS ---- */
 :root {
   --main-red: #c00001;
+  --main-mustard: #F08C0E;
   --textured: url(/images/texture1.jpg);
   --transition-fast: 0.3s ease;
   --transition-medium: 0.5s ease;
@@ -190,7 +191,7 @@ main {
   width: 60px;
   height: 60px;
   border: 1px solid rgba(192, 0, 1, 0.3);
-  border-top: 6px solid var(--main-red);
+  border-top: 6px solid var(--main-mustard);
   border-radius: 50%;
   margin: 0 auto 20px;
   animation: spin 1s linear infinite;
