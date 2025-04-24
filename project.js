@@ -29,22 +29,8 @@ function initProjectParallax() {
     });
   }
 
-  // Add intersection observer for tier2
-  if (tier2) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            tier2.classList.add("tier2-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(tier2);
-  }
+  // Initialize scroll-based animations for tier2
+  initTier2ScrollAnimations(tier2);
 
   // Initialize tier1 scroll effects with IntersectionObserver
   initTier1ScrollEffects(tier1, parallaxBoxes, projectText);
@@ -53,6 +39,237 @@ function initProjectParallax() {
   initSimpleParallax();
   initProjectText();
   initPosterHover();
+}
+
+/**
+ * Initialize scroll-based animations for tier2 section
+ * @param {HTMLElement} tier2 - The tier2 container element
+ */
+function initTier2ScrollAnimations(tier2) {
+  if (!tier2) return;
+
+  // Ensure we have the proper structure for sticky animations
+  ensureStickyContainer(tier2);
+
+  // Get references to animation elements
+  const stickyContainer = tier2.querySelector(".project-sticky-container");
+  const fadeContainer = tier2.querySelector(".project-fade-container");
+
+  if (!stickyContainer || !fadeContainer) return;
+
+  // Get references to animated elements
+  const introTitle = fadeContainer.querySelector(".project-intro h2");
+  const introParagraph = fadeContainer.querySelector(".project-intro p");
+  const leftColSections = fadeContainer.querySelectorAll(
+    ".project-left-col .tone-section"
+  );
+  const rightColSections = fadeContainer.querySelectorAll(
+    ".project-right-col .tone-section"
+  );
+  const poster = fadeContainer.querySelector(".project-poster");
+
+  // Set initial state for all elements (off screen)
+  if (introTitle) {
+    introTitle.style.transform = "translateX(100%)";
+    introTitle.style.opacity = "0";
+  }
+
+  if (introParagraph) {
+    introParagraph.style.transform = "translateY(30px)";
+    introParagraph.style.opacity = "0";
+  }
+
+  leftColSections.forEach((section) => {
+    section.style.transform = "translateX(-100%)";
+    section.style.opacity = "0";
+  });
+
+  rightColSections.forEach((section) => {
+    section.style.transform = "translateX(100%)";
+    section.style.opacity = "0";
+  });
+
+  if (poster) {
+    poster.style.transform = "scale(0.9)";
+    poster.style.opacity = "0";
+  }
+
+  // Create scroll observer with high resolution thresholds
+  const thresholds = [];
+  for (let i = 0; i <= 20; i++) {
+    thresholds.push(i / 20);
+  }
+
+  // Observer for tracking the entire section's visibility
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        // Calculate progress based on intersection ratio
+        const progress = entry.intersectionRatio;
+
+        // Apply animations based on scroll progress
+        animateTier2Elements(
+          progress,
+          introTitle,
+          introParagraph,
+          leftColSections,
+          rightColSections,
+          poster,
+          fadeContainer
+        );
+      });
+    },
+    {
+      threshold: thresholds,
+      rootMargin: "-5% 0px -5% 0px",
+    }
+  );
+
+  // Observe the tier2 section
+  sectionObserver.observe(tier2);
+
+  // Add scroll event for smoother animations between thresholds
+  window.addEventListener("scroll", () => {
+    const rect = tier2.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    // Only process if section is in viewport
+    if (rect.top < windowHeight && rect.bottom > 0) {
+      // Calculate how much of the section is visible (0 to 1)
+      const visibleHeight =
+        Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
+      const visibleRatio = Math.min(
+        Math.max(visibleHeight / rect.height, 0),
+        1
+      );
+
+      // Apply animations based on scroll progress
+      animateTier2Elements(
+        visibleRatio,
+        introTitle,
+        introParagraph,
+        leftColSections,
+        rightColSections,
+        poster,
+        fadeContainer
+      );
+    }
+  });
+}
+
+/**
+ * Apply animations to tier2 elements based on scroll progress
+ * @param {number} progress - Scroll progress (0-1)
+ * @param {HTMLElement} introTitle - The intro title element
+ * @param {HTMLElement} introParagraph - The intro paragraph element
+ * @param {NodeList} leftColSections - Left column sections
+ * @param {NodeList} rightColSections - Right column sections
+ * @param {HTMLElement} poster - The poster element
+ * @param {HTMLElement} fadeContainer - The fade container element
+ */
+function animateTier2Elements(
+  progress,
+  introTitle,
+  introParagraph,
+  leftColSections,
+  rightColSections,
+  poster,
+  fadeContainer
+) {
+  // Use different timing curves for different elements
+  const titleProgress = Math.max(0, Math.min(1, progress * 2.5)); // Start early, finish first
+  const paragraphProgress = Math.max(0, Math.min(1, (progress - 0.1) * 2.5)); // Start after title
+  const leftColProgress = Math.max(0, Math.min(1, (progress - 0.15) * 2.5)); // Start after paragraph
+  const rightColProgress = Math.max(0, Math.min(1, (progress - 0.2) * 2.5)); // Start after left column
+  const posterProgress = Math.max(0, Math.min(1, (progress - 0.25) * 2.5)); // Start last
+
+  // Only fade out when really leaving the section (starts fading at 95% scrolled)
+  // During the main viewing area, keep it fully visible
+  const fadeOutProgress = progress < 0.95 ? 1 : 1 - (progress - 0.95) * 20;
+
+  if (fadeContainer) {
+    // Ensure it's fully visible during the prime viewing area (between 20% and 95% scrolled)
+    fadeContainer.style.opacity =
+      progress < 0.2 ? progress * 5 : fadeOutProgress;
+  }
+
+  // Apply smooth animations based on calculated progress
+
+  // Title animation (right to left)
+  if (introTitle) {
+    const titleX = 100 * (1 - titleProgress);
+    introTitle.style.transform = `translateX(${titleX}%)`;
+    introTitle.style.opacity = titleProgress;
+  }
+
+  // Paragraph animation (bottom to top)
+  if (introParagraph) {
+    const paragraphY = 30 * (1 - paragraphProgress);
+    introParagraph.style.transform = `translateY(${paragraphY}px)`;
+    introParagraph.style.opacity = paragraphProgress;
+  }
+
+  // Left column animations (left to right)
+  leftColSections.forEach((section, index) => {
+    // Add slight staggered delay for each section
+    const sectionProgress = Math.max(
+      0,
+      Math.min(1, leftColProgress - index * 0.1)
+    );
+    const sectionX = -100 * (1 - sectionProgress);
+    section.style.transform = `translateX(${sectionX}%)`;
+    section.style.opacity = sectionProgress;
+  });
+
+  // Right column animations (right to left)
+  rightColSections.forEach((section, index) => {
+    // Add slight staggered delay for each section
+    const sectionProgress = Math.max(
+      0,
+      Math.min(1, rightColProgress - index * 0.1)
+    );
+    const sectionX = 100 * (1 - sectionProgress);
+    section.style.transform = `translateX(${sectionX}%)`;
+    section.style.opacity = sectionProgress;
+  });
+
+  // Poster animation (scale up)
+  if (poster) {
+    const posterScale = 0.9 + 0.1 * posterProgress;
+    poster.style.transform = `scale(${posterScale})`;
+    poster.style.opacity = posterProgress;
+  }
+}
+
+/**
+ * Ensure tier2 has a sticky container for animations
+ * @param {HTMLElement} tier2 - The tier2 container element
+ */
+function ensureStickyContainer(tier2) {
+  // Check if the sticky container already exists
+  if (tier2.querySelector(".project-sticky-container")) return;
+
+  // Get all direct children of tier2
+  const children = Array.from(tier2.children);
+
+  // Create the sticky container
+  const stickyContainer = document.createElement("div");
+  stickyContainer.className = "project-sticky-container";
+
+  // Create the fade container
+  const fadeContainer = document.createElement("div");
+  fadeContainer.className = "project-fade-container";
+
+  // Move all children to the fade container
+  children.forEach((child) => {
+    fadeContainer.appendChild(child);
+  });
+
+  // Add fade container to sticky container
+  stickyContainer.appendChild(fadeContainer);
+
+  // Add sticky container to tier2
+  tier2.appendChild(stickyContainer);
 }
 
 /**
@@ -169,7 +386,7 @@ function applyTier1ScrollEffects(progress, parallaxBoxes, projectText) {
       // Bottom/background images - subtle fade and movement
       // Even more delayed to appear last
       const lateProgress = Math.max(0, (progress - 0.5) * 2);
-      const lateOpacity = lateProgress * 0.4; // Keep partially transparent
+      const lateOpacity = lateProgress * 1; // Keep partially transparent
 
       // Calculate vertical movement - starts below and moves up
       const yOffset = (1 - lateProgress) * 40;

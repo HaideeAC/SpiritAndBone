@@ -10,7 +10,8 @@
 
 /* Import section-specific styles */
 @import "/home.css";
-@import "/project.css";
+@import "/project1.css"; /* Tier1 - Gallery/Parallax Layout */
+@import "/project2.css"; /* Tier2 - Information/Content Layout */
 @import "/team.css";
 @import "/contact.css";
 
@@ -309,5 +310,30 @@
   75%,
   100% {
     transform: scale(1);
+  }
+}
+
+
+/* Mobile rotation animation support */
+@keyframes rotateInMobile {
+  from {
+    transform: rotate(0deg) scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(360deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Desktop rotation animation support */
+@keyframes rotateIn {
+  from {
+    transform: translateY(-50%) rotate(0deg) scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(-50%) rotate(360deg) scale(1);
+    opacity: 1;
   }
 }

@@ -1,5 +1,5 @@
 /* ===========================================
-   ------ SPIRIT & BONE - PROJECT SECTION ------
+   ------ SPIRIT & BONE - PROJECT SECTION (TIER 1) ------
    =========================================== */
 
 /* Base styling for project section */
@@ -38,11 +38,12 @@
 /* Tier 1 (Gallery Layout) */
 .tier1 {
   height: 100vh;
-  padding: 60px 20px 40px;
+  padding: 0px 20px 40px;
   position: relative;
   overflow: hidden;
   will-change: transform, opacity;
 }
+
 /* Sticky scroll trigger container - use for elements that need to stick */
 .sticky-scroll-trigger {
   position: sticky;
@@ -51,30 +52,6 @@
   width: 100%;
   overflow: hidden;
   z-index: 1;
-}
-
-/* Tier 2 (Information Layout) */
-.tier2 {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-  min-height: 100vh;
-  padding: 20px 30px;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.85) 0%,
-    rgba(192, 0, 1, 0.1) 10%,
-    rgba(192, 0, 1, 0.1) 90%,
-    rgba(0, 0, 0, 1) 100%
-  );
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.tier2.tier2-visible {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 /* ---- PARALLAX IMAGE BOXES ---- */
@@ -119,10 +96,11 @@
 
 /* Parallax box positioning */
 .parallax-box#project-img1 {
-  top: 8%;
+  top: 0%;
   left: 2%;
   height: 35vh;
   width: 35%;
+  border-radius: 10px;
   z-index: 1;
 }
 
@@ -131,7 +109,7 @@
   left: 40%;
   height: 30vh;
   width: 20%;
-  transform: rotate(-22deg);
+  transform: rotateX(-22deg);
 }
 
 .parallax-box#project-img3 {
@@ -142,11 +120,11 @@
 }
 
 .parallax-box#project-img4 {
-  top: 30%;
+  top: 33%;
   left: 6%;
   height: 60vh;
   width: 25%;
-  filter: blur(3px);
+  filter: blur(1px);
   z-index: 0;
 }
 
@@ -156,41 +134,36 @@
   height: 80vh;
   width: 32%;
   z-index: 0;
-  filter: blur(3px);
+  filter: blur(1px);
 }
 
 .parallax-box#project-img6 {
   top: 70%;
-  left: 10%;
+  left: 0%;
   height: 30vh;
   width: 18%;
-  filter: blur(0.5px);
   z-index: 1;
-  transform: rotate(-8deg);
+  transform: rotateX(-8deg);
 }
 
 .parallax-box#project-img7 {
-  top: 80%;
-  left: 58%;
-  opacity: 0.4;
-  filter: blur(2px);
+  top: 77%;
+  left: 60%;
   height: 18vh;
-  width: 41%;
+  width: 40%;
   z-index: 0;
-  transform: rotate(12deg);
+  transform: rotateX(12deg);
 }
 .parallax-box#project-img7 .parallax-image img {
   object-fit: cover;
-  object-position: 50% 35%; /* This makes the image start from the top */
+  object-position: 50% 35%;
 }
 
 .parallax-box#project-img8 {
-  top: 74%;
-  left: 0%;
-  opacity: 0.4;
+  top: 70%;
+  left: 25%;
   height: 23vh;
-  width: 7%;
-  filter: blur(2px);
+  width: 10%;
   z-index: 0;
 }
 
@@ -250,7 +223,7 @@
 /* ---- PROJECT TEXT ---- */
 .project-text {
   position: absolute;
-  top: 45%;
+  top: 30%;
   left: 35%;
   width: 25%;
   display: flex;
@@ -273,14 +246,14 @@
   width: 100%;
   height: 100%;
   background: url("/images/texture1.jpg");
-  opacity: 0.1;
+  opacity: 0.05;
   z-index: -1;
 }
 
 .project-text h2 {
   font-size: 3rem;
   color: rgb(247, 164, 164);
-  text-shadow: 0 0 10px rgba(192, 0, 1, 0.3);
+  text-shadow: 0 0 20px rgba(192, 0, 1, 0.3);
   margin: 0;
   position: relative;
   display: inline-block;
@@ -324,124 +297,10 @@
   transform: translateY(0);
 }
 
-/* ---- TIER 2 CONTENT ---- */
-.project-intro {
-  width: 100%;
-  margin: 0 0 40px 0;
-  position: relative;
-  padding-bottom: 20px;
-  padding-top: 0;
-}
-
-.project-intro h2 {
-  font-size: 3rem;
-  color: rgb(247, 164, 164);
-  text-shadow: 0 0 10px rgba(192, 0, 1, 0.3);
-  margin-bottom: 30px;
-  letter-spacing: 1px;
-}
-
-.project-intro p {
-  font-size: 1.2rem;
-  line-height: 1.4;
-  margin-bottom: 12px;
-  color: rgba(255, 255, 255, 0.9);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.project-intro p::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  width: 100px;
-  left: 0;
-  height: 2px;
-  background: var(--main-red);
-}
-
-/* Content grid for poster and descriptions */
-.project-content-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 40px;
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.project-left-col {
-  grid-column: 1;
-  padding-right: 15px;
-}
-
-.project-poster {
-  grid-column: 2;
-  width: 100%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.project-poster img {
-  max-width: 100%;
-  max-height: 60vh;
-  box-shadow: var(--shadow-lg);
-  border-radius: 5px;
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
-  animation: subtle-float 6s ease-in-out infinite;
-}
-
-.project-poster img:hover {
-  transform: scale(1.02);
-  box-shadow: var(--shadow-red);
-  animation: none;
-}
-
-.project-right-col {
-  grid-column: 3;
-  padding-left: 15px;
-}
-
-.tone-section {
-  margin-bottom: 20px;
-}
-
-.tone-section h3 {
-  font-size: 1.8rem;
-  margin: 0 0 15px 0;
-  color: rgb(247, 164, 164);
-  position: relative;
-  padding-bottom: 8px;
-  display: inline-block;
-}
-
-.tone-section h3::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 60px;
-  height: 2px;
-  background: var(--main-red);
-  transition: width 0.5s ease;
-}
-
-.tone-section:hover h3::after {
-  width: 100%;
-}
-
-.tone-section p {
-  font-size: 1rem;
-  line-height: 1.6;
-  margin: 0 0 10px 0;
-  color: rgba(255, 255, 255, 0.9);
-}
-
 /* ---- SCROLL DOWN INDICATOR ---- */
 .scroll-down2 {
   position: absolute;
-  bottom: 30px;
+  bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   color: #f7a4a4;
@@ -449,7 +308,6 @@
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  opacity: 0;
   transition: opacity 0.5s ease, transform 0.5s ease;
   z-index: 5;
 }
@@ -535,45 +393,6 @@
     font-size: 0.9rem;
   }
 
-  /* Tier 2 adjustments */
-  .tier2 {
-    padding: 20px 15px;
-  }
-
-  .project-content-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .project-poster {
-    grid-column: 1;
-    grid-row: 1;
-    margin-bottom: 20px;
-  }
-
-  .project-left-col {
-    grid-column: 1;
-    grid-row: 2;
-    padding-right: 0;
-  }
-
-  .project-right-col {
-    grid-column: 1;
-    grid-row: 3;
-    padding-left: 0;
-  }
-
-  .project-intro h2 {
-    font-size: 1.8rem;
-  }
-
-  .project-intro p {
-    font-size: 0.95rem;
-  }
-
-  .tone-section h3 {
-    font-size: 1.4rem;
-  }
   /* Hide Scroll down suggestion */
   .scroll-down2 {
     display: none !important;
@@ -607,13 +426,6 @@
     font-size: 1rem;
   }
 
-  .project-intro h2 {
-    font-size: 2.2rem;
-  }
-
-  .tone-section h3 {
-    font-size: 1.6rem;
-  }
   /* Hide Scroll down suggestion */
   .scroll-down2 {
     display: none !important;
@@ -692,39 +504,6 @@
     display: none;
   }
 
-  /* Tier 2 tablet adjustments */
-  .project-content-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 30px;
-  }
-
-  .project-poster {
-    grid-column: 1 / 3;
-    grid-row: 1;
-    margin-bottom: 30px;
-  }
-
-  .project-left-col {
-    grid-column: 1;
-    grid-row: 2;
-    padding-right: 10px;
-  }
-
-  .project-right-col {
-    grid-column: 2;
-    grid-row: 2;
-    padding-left: 10px;
-  }
-
-  .project-intro h2 {
-    font-size: 2.5rem;
-  }
-
-  .project-intro p {
-    font-size: 1.1rem;
-  }
-
   .tier1 {
     height: 100vh;
     display: block;
@@ -741,7 +520,7 @@
   /* Restore full gallery layout */
   .tier1 {
     height: 100vh;
-    padding: 60px 20px 40px;
+    padding: 0px 20px 40px;
   }
 
   /* Show all parallax boxes */
@@ -758,7 +537,7 @@
   }
 
   .parallax-box#project-img2 {
-    top: 12%;
+    top: 8%;
     left: 40%;
     height: 30vh;
     width: 20%;
@@ -773,14 +552,14 @@
   }
 
   .parallax-box#project-img4 {
-    top: 30%;
+    top: 33%;
     left: 6%;
     height: 60vh;
     width: 25%;
   }
 
   .project-text {
-    top: 45%;
+    top: 40%;
     left: 35%;
     width: 25%;
   }
@@ -799,61 +578,15 @@
     display: block;
   }
 
-  /* Three-column grid for tier2 */
-  .project-content-grid {
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto;
-  }
-
-  .project-poster {
-    grid-column: 2;
-    grid-row: 1;
-    margin-bottom: 0;
-  }
-
-  .project-left-col {
-    grid-column: 1;
-    grid-row: 1;
-    padding-right: 15px;
-  }
-
-  .project-right-col {
-    grid-column: 3;
-    grid-row: 1;
-    padding-left: 15px;
-  }
-
-  .project-intro h2 {
-    font-size: 2.8rem;
-  }
-
-  .tone-section h3 {
-    font-size: 1.7rem;
-  }
   /* Display Scroll Down Suggestion */
   .scroll-down2 {
+    bottom: 80px;
     display: flex !important;
   }
 }
 
 /* Extra large screens (1400px) */
 @media (min-width: 1400px) {
-  .project-content-grid {
-    max-width: 1200px;
-    gap: 50px;
-  }
-
-  .project-intro h2 {
-    font-size: 3rem;
-  }
-
-  .tone-section h3 {
-    font-size: 1.8rem;
-  }
-
-  .project-poster img {
-    max-height: 65vh;
-  }
   /* Display Scroll Down Suggestion */
   .scroll-down2 {
     display: flex !important;
