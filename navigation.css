@@ -220,7 +220,10 @@ body.is-transitioning {
 
 /* Up Direction Transition (Red) */
 .page-transition-up {
-  background-color: var(--main-red);
+  background-image: url("/images/transitred.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   transform: translateY(-100%);
 }
 
@@ -241,7 +244,7 @@ body.is-transitioning {
 
 /* Down Direction Transition (Mustard) */
 .page-transition-down {
-  background-image: url("/images/transit1.jpg");
+  background-image: url("/images/transit2.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
