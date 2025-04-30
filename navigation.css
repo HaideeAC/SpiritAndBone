@@ -220,7 +220,9 @@ body.is-transitioning {
 
 /* Up Direction Transition (Red) */
 .page-transition-up {
-  background-image: url("/images/transitred.jpg");
+  /* background-image: url("/images/transitred.jpg"); */
+  background-image: url("/images/transit1.jpg");
+
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

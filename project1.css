@@ -230,11 +230,11 @@
   flex-direction: column;
   justify-content: center;
   padding: 40px 25px;
-  background-color: rgba(192, 0, 1, 0.2);
+  background-color: rgba(16, 16, 16, 0.884);
   border-radius: 5px;
   box-shadow: var(--shadow-md);
   overflow: hidden;
-  z-index: 2;
+  z-index: 10;
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
@@ -285,7 +285,7 @@
 .project-text p {
   font-size: 1.1rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgb(255, 255, 255);
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s ease, transform 0.5s ease;
@@ -329,259 +329,311 @@
 
 /* ---- RESPONSIVE DESIGN ---- */
 
-/* Small phones (320px) */
-@media (min-width: 320px) {
+/* Small phones (320px - 419px) */
+@media (min-width: 320px) and (max-width: 419px) {
   .tier1 {
     height: auto;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 70px 15px 30px;
+    padding: 60px 15px 30px;
   }
 
-  /* Hide all parallax boxes except project1 */
+  /* Show selected parallax boxes with proper positioning */
   .parallax-box {
     display: none;
-  }
-  .parallax-box,
-  .project-text {
-    transition-duration: 0.4s; /* Slightly faster transitions on mobile */
+    position: relative;
+    margin-bottom: 15px;
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .sticky-scroll-trigger {
-    position: relative; /* Don't use sticky on small screens */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
   }
-  /* Only show project1 as requested */
+
   .parallax-box#project-img1 {
     display: block;
     position: relative;
-    top: auto;
+    top: 20px;
     left: auto;
     width: 100%;
     max-width: 280px;
     height: auto;
     aspect-ratio: 16/9;
     margin: 0 0 20px 0;
-  }
-
-  /* Center text container */
-  .project-text {
-    position: absolute;
-    top: 45%;
-    left: 35%;
-    width: 25%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 40px 25px;
-    background-color: rgba(192, 0, 1, 0.2);
-    border-radius: 5px;
-    box-shadow: var(--shadow-md);
-    overflow: hidden;
     z-index: 2;
-    transition: transform 0.7s cubic-bezier(0.165, 0.84, 0.44, 1),
-      opacity 0.7s cubic-bezier(0.165, 0.84, 0.44, 1);
-    will-change: transform, opacity;
+  }
+
+
+  .project-text {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 25px 0 0;
+    padding: 25px 20px;
+    background-color: rgba(16, 16, 16, 0.884);
+    backdrop-filter: blur(3px);
+    border-radius: 5px;
+    z-index: 3;
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .project-text h2 {
-    font-size: 2rem;
+    font-size: 2.1rem;
+    margin-bottom: 15px;
   }
 
   .project-text p {
-    font-size: 0.9rem;
-  }
-
-  /* Hide Scroll down suggestion */
-  .scroll-down2 {
-    display: none !important;
-  }
-}
-
-/* Larger phones (480px) */
-@media (min-width: 480px) {
-  /* Keep the simplified layout but adjust sizes */
-  .parallax-box#project-img1 {
-    max-width: 350px;
-  }
-  .parallax-box,
-  .project-text {
-    transition-duration: 0.4s; /* Slightly faster transitions on mobile */
-  }
-
-  .sticky-scroll-trigger {
-    position: relative; /* Don't use sticky on small screens */
-  }
-
-  .project-text {
-    max-width: 350px;
-  }
-
-  .project-text h2 {
-    font-size: 2.2rem;
-  }
-
-  .project-text p {
-    font-size: 1rem;
-  }
-
-  /* Hide Scroll down suggestion */
-  .scroll-down2 {
-    display: none !important;
-  }
-}
-
-/* Tablets (768px) */
-@media (min-width: 768px) {
-  /* Show only few images for tablet layout */
-  .parallax-box {
-    display: block;
-    position: absolute;
-  }
-  .parallax-box,
-  .project-text {
-    transition-duration: 0.4s; /* Slightly faster transitions on mobile */
-  }
-
-  .sticky-scroll-trigger {
-    position: relative; /* Don't use sticky on small screens */
-  }
-  .parallax-box#project-img1 {
-    top: 12%;
-    left: 8%;
-    width: 24%;
-    height: 25vh;
-    max-width: none;
-    aspect-ratio: auto;
-    margin: 0;
-  }
-
-  .parallax-box#project-img2 {
-    top: 15%;
-    left: 38%;
-    width: 24%;
-    height: 25vh;
-  }
-
-  .parallax-box#project-img3 {
-    top: 12%;
-    left: 68%;
-    width: 24%;
-    height: 25vh;
-  }
-
-  .project-text {
-    top: 50%;
-    left: 34%;
-    width: 32%;
-    position: absolute;
-    max-width: none;
-    margin: 0;
-  }
-
-  /* Show just one image in the bottom row */
-  .parallax-box#project-img4 {
-    display: block;
-    top: 50%;
-    left: 5%;
-    width: 24%;
-    height: 25vh;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: white;
   }
 
   .parallax-box#project-img5 {
     display: block;
-    top: 50%;
-    left: 70%;
-    width: 24%;
-    height: 25vh;
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    aspect-ratio: 16/9;
+    margin: 10px 0 0 0;
+    transform: rotate(3deg);
+    opacity: 0.95;
+    z-index: 1;
   }
 
-  /* Keep atmospheric/background images hidden */
-  .parallax-box#project-img6,
-  .parallax-box#project-img7,
-  .parallax-box#project-img8 {
-    display: none;
-  }
-
-  .tier1 {
-    height: 100vh;
-    display: block;
-    padding: 60px 20px 40px;
-  }
   /* Hide Scroll down suggestion */
   .scroll-down2 {
     display: none !important;
   }
 }
 
-/* Small desktops and laptops (940px) */
-@media (min-width: 940px) {
-  /* Restore full gallery layout */
+/* Larger phones (420px - 767px) */
+
+@media (min-width: 420px) and (max-width: 767px) {
+  .tier1 {
+    padding: 60px 30px 50px;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  /* Force all parallax boxes to be hidden by default */
+  .parallax-box {
+    display: none !important;
+  }
+
+  /* Reset the container */
+  .sticky-scroll-trigger {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+
+  /* Only show what we want, in the order we want */
+  /* 1. First image at top */
+  .parallax-box#project-img1 {
+    display: block !important;
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 90%;
+    height: auto;
+    aspect-ratio: 16/9;
+    margin: 0 auto 20px;
+    border-radius: 8px;
+  }
+
+  /* 2. Text directly below first image */
+  .project-text {
+    display: block;
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 90%;
+    margin: 0 auto 20px;
+    padding: 25px 20px;
+    background-color: rgba(16, 16, 16, 0.884);
+    backdrop-filter: blur(3px);
+    border-radius: 8px;
+  }
+
+  .project-text h2 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+  }
+
+  .project-text p {
+    color: white;
+    font-size: 1.2rem;
+    line-height: 1.6;
+  }
+
+  /* 4. Additional images below */
+  .parallax-box#project-img5 {
+    display: block !important;
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 80%;
+    height: auto;
+    aspect-ratio: 16/9;
+    margin: 0 auto 20px;
+    border-radius: 8px;
+  }
+
+  /* Hide scroll down indicator */
+  .scroll-down2 {
+    display: none !important;
+  }
+}
+
+/* Tablets (768px - 939px) */
+@media (min-width: 768px) and (max-width: 939px) {
   .tier1 {
     height: 100vh;
     padding: 0px 20px 40px;
+    display: block;
+    position: relative;
   }
 
-  /* Show all parallax boxes */
-  .parallax-box {
+  /* Force absolute positioning for tablet */
+  .sticky-scroll-trigger {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
     display: block;
   }
 
-  /* Reset original positions */
+  /* Show all parallax boxes with proper absolute positioning */
+  .parallax-box {
+    display: block;
+    position: absolute;
+    opacity: 1;
+    transform: translateY(0) !important;
+  }
+
+  /* Top center image */
   .parallax-box#project-img1 {
-    top: 2%;
-    left: 2%;
-    height: 35vh;
-    width: 35%;
+    top: 7%;
+    left: 50%;
+    transform: translateX(-50%) !important;
+    height: 22vh;
+    width: 45%;
+    z-index: 2;
   }
 
-  .parallax-box#project-img2 {
-    top: 8%;
-    left: 40%;
-    height: 30vh;
-    width: 20%;
-    transform: rotate(-22deg);
-  }
-
+  /* Red silhouette image */
   .parallax-box#project-img3 {
-    top: 4%;
-    left: 60%;
-    height: 28vh;
-    width: 32%;
+    top: 30%;
+    right: 5%;
+    left: auto;
+    height: 25vh;
+    width: 30%;
+    z-index: 2;
   }
 
+  /* Capoeira image */
   .parallax-box#project-img4 {
-    top: 33%;
-    left: 6%;
-    height: 60vh;
-    width: 25%;
+    top: 30%;
+    left: 5%;
+    height: 25vh;
+    width: 30%;
+    filter: none;
+    z-index: 2;
   }
 
+  /* Logline text box - centered and more prominent */
   .project-text {
-    top: 40%;
-    left: 35%;
-    width: 25%;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%) !important;
+    width: 40%;
+    padding: 25px;
+    background-color: rgba(16, 16, 16, 0.884);
+    backdrop-filter: blur(5px);
+    z-index: 5;
+    opacity: 1;
   }
 
-  .parallax-box#project-img5 {
-    top: 10%;
-    left: 65%;
-    height: 80vh;
-    width: 32%;
+  .project-text h2 {
+    font-size: 2.5rem;
   }
 
-  /* Show background/atmospheric images */
+  .project-text p {
+    color: white;
+    font-size: 1.2rem;
+    line-height: 1.6;
+  }
+
+  /* Additional images */
+  .parallax-box#project-img2,
+  .parallax-box#project-img5,
   .parallax-box#project-img6,
   .parallax-box#project-img7,
   .parallax-box#project-img8 {
     display: block;
+    opacity: 0.8;
   }
 
-  /* Display Scroll Down Suggestion */
+  .parallax-box#project-img2 {
+    top: 60%;
+    left: 70%;
+    height: 20vh;
+    width: 25%;
+    z-index: 1;
+  }
+
+  .parallax-box#project-img5 {
+    top: 60%;
+    left: 5%;
+    height: 30vh;
+    width: 25%;
+    z-index: 1;
+  }
+
+  .parallax-box#project-img6 {
+    top: 70%;
+    left: 35%;
+    height: 20vh;
+    width: 15%;
+    z-index: 1;
+  }
+
+  .parallax-box#project-img7 {
+    top: 5%;
+    left: 10%;
+    height: 15vh;
+    width: 20%;
+    opacity: 0.6;
+    z-index: 1;
+  }
+
+  .parallax-box#project-img8 {
+    top: 5%;
+    right: 10%;
+    left: auto;
+    height: 15vh;
+    width: 20%;
+    opacity: 0.6;
+    z-index: 1;
+  }
+
+  /* Hide scroll down indicator */
   .scroll-down2 {
-    bottom: 80px;
-    display: flex !important;
+    display: none !important;
   }
 }
 
