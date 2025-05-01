@@ -214,7 +214,7 @@ function animateTier2Elements(
     // Add slight staggered delay for each section
     const sectionProgress = Math.max(
       0,
-      Math.min(1, leftColProgress - index * 0.1)
+      Math.min(1, leftColProgress - index * 0.05)
     );
     const sectionX = -100 * (1 - sectionProgress);
     section.style.transform = `translateX(${sectionX}%)`;

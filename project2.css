@@ -72,7 +72,7 @@
 
 .project-left-col {
   grid-column: 1;
-  padding-right: 15px;
+  padding-right: 25px;
 }
 
 .project-poster {
@@ -102,7 +102,7 @@
 
 .project-right-col {
   grid-column: 3;
-  padding-left: 15px;
+  padding-left: 25px;
 }
 
 /* Left column tone sections */
@@ -271,17 +271,21 @@
   .project-left-col .tone-section,
   .project-right-col .tone-section {
     width: 90%;
-    margin: auto;
+    margin-left: 0;
   }
 
   .project-left-col {
     grid-column: 1;
     grid-row: 2;
+    padding-right: 0;
+    
   }
 
   .project-right-col {
     grid-column: 2;
     grid-row: 2;
+    padding-left: 0;
+
   }
 
   .project-intro h2 {
