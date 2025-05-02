@@ -2,6 +2,10 @@
    ------ SPIRIT & BONE - HOME SECTION ------
    =========================================== */
 
+.svg-mask {
+  filter: drop-shadow(0 0 10px var(--main-mustard));
+}
+
 /* Base home section styling */
 #home {
   height: 100vh;
@@ -276,7 +280,7 @@ svg {
   .vertical-letter {
     font-size: 30vw;
   }
-  
+
   .vertical-letter2 {
     font-size: 33vw;
   }
@@ -321,12 +325,12 @@ svg {
 }
 
 @media (min-width: 420px) and (max-width: 767px) {
-   .vertical-letter {
-    font-size: 34vw;
+  .vertical-letter {
+    font-size: 36vw;
   }
-  
+
   .vertical-letter2 {
-    font-size: 37vw;
+    font-size: 39vw;
   }
   .vertical-amp {
     font-size: 45vw;
@@ -369,7 +373,7 @@ svg {
 }
 
 /* Tablets */
-@media (min-width: 768px) and (max-width: 939px){
+@media (min-width: 768px) and (max-width: 939px) {
   .tittle {
     font-size: 26rem;
     letter-spacing: -1rem;
@@ -399,8 +403,6 @@ svg {
     display: block;
   }
 }
-
-
 
 /* Extra large screens */
 @media (min-width: 1400px) {

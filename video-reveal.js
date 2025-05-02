@@ -3,6 +3,8 @@
  * Optimized version with direct element references and improved transitions
  */
 
+
+
 // Initialize video reveal functionality
 function initVideoReveal() {
   // Get direct references to essential elements
