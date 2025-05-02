@@ -149,6 +149,7 @@ svg {
 .vertical-amp {
   font-size: 32vw;
   fill: var(--main-red);
+  text-shadow: 0 0 5px var(--main-red);
 }
 
 /* Display toggles */
@@ -271,22 +272,25 @@ svg {
 
 /* Media Queries */
 /* Small phones */
-@media (min-width: 320px) and (max-width: 419px){
+@media (min-width: 320px) and (max-width: 419px) {
   .vertical-letter {
-    font-size: 24vw;
+    font-size: 30vw;
   }
+  
   .vertical-letter2 {
-    font-size: 25vw;
+    font-size: 33vw;
   }
   .vertical-amp {
-    font-size: 44vw;
+    font-size: 40vw;
+    font-weight: 500;
+    text-shadow: 0 0 5px var(--main-red);
   }
 
   .close-video {
-    width: 25px;
-    height: 25px;
-    top: 10px;
-    right: 10px;
+    width: 30px;
+    height: 30px;
+    top: 20px;
+    right: 20px;
   }
 
   .close-video .close-icon::before,
@@ -316,42 +320,70 @@ svg {
   }
 }
 
-/* Larger phones */
-@media (min-width: 420px) {
-  .vertical-letter {
-    font-size: 25vw;
+@media (min-width: 420px) and (max-width: 767px) {
+   .vertical-letter {
+    font-size: 34vw;
+  }
+  
+  .vertical-letter2 {
+    font-size: 37vw;
   }
   .vertical-amp {
-    font-size: 36vw;
-  }
-
-  .home-social-icons {
-    bottom: 25px;
-    right: 25px;
-    gap: 12px;
+    font-size: 45vw;
+    font-weight: 500;
+    text-shadow: 0 0 5px var(--main-red);
   }
 
   .close-video {
     width: 30px;
     height: 30px;
-    top: 15px;
-    right: 15px;
+    top: 20px;
+    right: 20px;
   }
 
   .close-video .close-icon::before,
   .close-video .close-icon::after {
-    height: 4px;
+    height: 3px;
+  }
+
+  .home-social-icons {
+    bottom: 20px;
+    right: 20px;
+    gap: 10px;
+  }
+
+  .home-social-icons .social-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+
+  .desktop-title {
+    display: none;
+  }
+
+  .mobile-title {
+    display: block;
+    width: 100%;
   }
 }
 
 /* Tablets */
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 939px){
   .tittle {
-    font-size: 48vh;
+    font-size: 26rem;
+    letter-spacing: -1rem;
   }
 
   .tittleY {
-    font-size: 28vw;
+    font-size: 17rem;
+  }
+
+  .close-video {
+    width: 40px;
+    height: 40px;
+    top: 20px;
+    right: 20px;
   }
 
   .home-social-icons {
@@ -368,16 +400,7 @@ svg {
   }
 }
 
-/* Small desktops and laptops */
-@media (min-width: 940px) {
-  .tittle {
-    font-size: 48vh;
-  }
 
-  .tittleY {
-    font-size: 28vw;
-  }
-}
 
 /* Extra large screens */
 @media (min-width: 1400px) {
@@ -398,8 +421,8 @@ svg {
   .close-video {
     width: 40px;
     height: 40px;
-    top: 20px;
-    right: 20px;
+    top: 40px;
+    right: 40px;
   }
 
   .close-video .close-icon::before,

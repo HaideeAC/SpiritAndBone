@@ -386,13 +386,7 @@ body.is-transitioning {
   }
 
   .section-indicator {
-    right: 8px;
-    gap: 15px;
-  }
-
-  .indicator-dot {
-    width: 8px;
-    height: 8px;
+    display: none;
   }
 
   .nav-links li a {
@@ -431,13 +425,7 @@ body.is-transitioning {
   }
 
   .section-indicator {
-    right: 10px;
-    gap: 15px;
-  }
-
-  .indicator-dot {
-    width: 9px;
-    height: 9px;
+    display: none;
   }
 
   .nav-links li a {
@@ -472,13 +460,7 @@ body.is-transitioning {
   }
 
   .section-indicator {
-    right: 15px;
-    gap: 18px;
-  }
-
-  .indicator-dot {
-    width: 10px;
-    height: 10px;
+    display: none;
   }
 
   .nav-links li a {

@@ -5,7 +5,7 @@
 /* ---- VARIABLES & CONSTANTS ---- */
 :root {
   --main-red: #c00001;
-  --main-mustard: #F08C0E;
+  --main-mustard: #f08c0e;
   --textured: url(/images/texture1.jpg);
   --transition-fast: 0.3s ease;
   --transition-medium: 0.5s ease;
@@ -29,11 +29,9 @@
   font-style: normal;
 }
 .font-vertical {
-  font-family: "Climate Crisis", sans-serif;
-  font-optical-sizing: auto;
+  font-family: "Rubik Glitch", system-ui;
   font-weight: 400;
   font-style: normal;
-  font-variation-settings: "YEAR" 1979;
 }
 .font2 {
   font-family: "Rubik Maps", serif;
@@ -281,8 +279,6 @@ main {
     height: 45vh;
   }
 }
-
-
 
 /* Extra large screens */
 @media (min-width: 1400px) {
