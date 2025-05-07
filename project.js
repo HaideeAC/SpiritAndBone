@@ -39,6 +39,9 @@ function initProjectParallax() {
   initSimpleParallax();
   initProjectText();
   initPosterHover();
+
+  // Call the mobile layout function
+  mobileLayout();
 }
 
 /**
@@ -209,29 +212,49 @@ function animateTier2Elements(
     introParagraph.style.opacity = paragraphProgress;
   }
 
-  // Left column animations (left to right)
-  leftColSections.forEach((section, index) => {
-    // Add slight staggered delay for each section
-    const sectionProgress = Math.max(
-      0,
-      Math.min(1, leftColProgress - index * 0.05)
-    );
-    const sectionX = -100 * (1 - sectionProgress);
-    section.style.transform = `translateX(${sectionX}%)`;
-    section.style.opacity = sectionProgress;
-  });
+  // Skip animations for mobile devices
+  if (window.innerWidth > 767) {
+    // Left column animations (left to right)
+    leftColSections.forEach((section, index) => {
+      // Add slight staggered delay for each section
+      const sectionProgress = Math.max(
+        0,
+        Math.min(1, leftColProgress - index * 0.05)
+      );
+      const sectionX = -100 * (1 - sectionProgress);
+      section.style.transform = `translateX(${sectionX}%)`;
+      section.style.opacity = sectionProgress;
+    });
 
-  // Right column animations (right to left)
-  rightColSections.forEach((section, index) => {
-    // Add slight staggered delay for each section
-    const sectionProgress = Math.max(
-      0,
-      Math.min(1, rightColProgress - index * 0.1)
-    );
-    const sectionX = 100 * (1 - sectionProgress);
-    section.style.transform = `translateX(${sectionX}%)`;
-    section.style.opacity = sectionProgress;
-  });
+    // Right column animations (right to left)
+    rightColSections.forEach((section, index) => {
+      // Add slight staggered delay for each section
+      const sectionProgress = Math.max(
+        0,
+        Math.min(1, rightColProgress - index * 0.1)
+      );
+      const sectionX = 100 * (1 - sectionProgress);
+      section.style.transform = `translateX(${sectionX}%)`;
+      section.style.opacity = sectionProgress;
+    });
+  } else {
+    // For mobile, only animate opacity to avoid positioning issues
+    leftColSections.forEach((section, index) => {
+      const sectionProgress = Math.max(
+        0,
+        Math.min(1, leftColProgress - index * 0.05)
+      );
+      section.style.opacity = sectionProgress;
+    });
+
+    rightColSections.forEach((section, index) => {
+      const sectionProgress = Math.max(
+        0,
+        Math.min(1, rightColProgress - index * 0.1)
+      );
+      section.style.opacity = sectionProgress;
+    });
+  }
 
   // Poster animation (scale up)
   if (poster) {
@@ -509,6 +532,88 @@ function initPosterHover() {
   poster.addEventListener("mouseleave", () => {
     poster.classList.remove("hover");
   });
+}
+
+/**
+ * Handle mobile layout specifically for small screens
+ */
+function mobileLayout() {
+  // Get references to elements
+  const fadeContainer = document.querySelector(".project-fade-container");
+  const projectContentGrid = document.querySelector(".project-content-grid");
+  const tier2 = document.querySelector(".tier2");
+
+  // Function to apply proper mobile styling without affecting desktop animations
+  function applyMobileStyling() {
+    const isMobile = window.innerWidth <= 767;
+
+    if (isMobile) {
+      // Reset any fade animations for mobile view - keep content visible
+      if (fadeContainer) {
+        fadeContainer.style.opacity = "1"; // Always fully visible on mobile
+      }
+
+      // Set background to a slightly brighter gradient for mobile
+      if (tier2) {
+        tier2.style.background =
+          "linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(30, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.9) 100%)";
+      }
+
+      // Center the content grid
+      if (projectContentGrid) {
+        projectContentGrid.style.width = "90%";
+        projectContentGrid.style.margin = "0 auto";
+      }
+
+      // Ensure tone sections are properly styled and centered
+      const toneSections = document.querySelectorAll(".tone-section");
+      toneSections.forEach((section) => {
+        // Reset any transforms that might affect position
+        section.style.transform = "none";
+        section.style.position = "relative";
+        section.style.left = "auto";
+        section.style.right = "auto";
+
+        // Center the section with proper width and margin
+        section.style.width = "90%";
+        section.style.margin = "0 auto 20px auto";
+
+        // Add subtle container styling without overwhelming darkness
+        section.style.backgroundColor = "rgba(30, 0, 0, 0.4)";
+        section.style.padding = "15px";
+        section.style.borderRadius = "8px";
+        section.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
+      });
+    } else {
+      // For desktop, reset styles to default to allow CSS and animations to work
+      if (tier2) {
+        tier2.style.background = "";
+      }
+    }
+  }
+
+  // Apply immediately
+  applyMobileStyling();
+
+  // Apply on resize
+  window.addEventListener("resize", applyMobileStyling);
+
+  // Apply after scroll events to ensure it overrides animation changes
+  window.addEventListener("scroll", function () {
+    if (window.innerWidth <= 767) {
+      requestAnimationFrame(applyMobileStyling);
+    }
+  });
+
+  // For extra protection, periodically check and apply if needed
+  if (window.innerWidth <= 767) {
+    const intervalId = setInterval(applyMobileStyling, 1000);
+
+    // Clean up interval when navigating away
+    window.addEventListener("beforeunload", function () {
+      clearInterval(intervalId);
+    });
+  }
 }
 
 // Export the initialization function
