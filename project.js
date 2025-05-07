@@ -1,10 +1,8 @@
 /**
  * Spirit&Bone - Project Section Interactions
- * Enhanced with scroll-triggered animations
  */
 
 function initProjectParallax() {
-  // Get references to main elements
   const projectContainer = document.querySelector(".project-container");
   const scrollDown2 = document.getElementById("scroll-down2");
   const tier1 = document.querySelector(".tier1");
@@ -12,15 +10,12 @@ function initProjectParallax() {
   const parallaxBoxes = document.querySelectorAll(".parallax-box");
   const projectText = document.querySelector(".project-text");
 
-  // Exit if no project container
   if (!projectContainer) return;
 
-  // Make the container visible with a subtle animation
   setTimeout(() => {
     projectContainer.classList.add("visible");
   }, 300);
 
-  // Handle scroll down button
   if (scrollDown2) {
     scrollDown2.addEventListener("click", () => {
       if (tier2) {
@@ -29,38 +24,242 @@ function initProjectParallax() {
     });
   }
 
-  // Initialize scroll-based animations for tier2
-  initTier2ScrollAnimations(tier2);
+  if (window.innerWidth <= 767) {
+    renderMobileProjectLayout(tier2);
+  } else {
+    initTier2ScrollAnimations(tier2);
+  }
 
-  // Initialize tier1 scroll effects with IntersectionObserver
   initTier1ScrollEffects(tier1, parallaxBoxes, projectText);
-
-  // Initialize other interactions
   initSimpleParallax();
   initProjectText();
   initPosterHover();
 
-  // Call the mobile layout function
-  mobileLayout();
+  window.addEventListener("resize", () => {
+    if (
+      window.innerWidth <= 767 &&
+      !document.body.classList.contains("mobile-layout-applied")
+    ) {
+      renderMobileProjectLayout(tier2);
+      document.body.classList.add("mobile-layout-applied");
+      document.body.classList.remove("desktop-layout-applied");
+    } else if (
+      window.innerWidth > 767 &&
+      !document.body.classList.contains("desktop-layout-applied")
+    ) {
+      resetLayoutForDesktop(tier2);
+      initTier2ScrollAnimations(tier2);
+      document.body.classList.add("desktop-layout-applied");
+      document.body.classList.remove("mobile-layout-applied");
+    }
+  });
+}
+
+/**
+ * Renders mobile-specific layout
+ */
+function renderMobileProjectLayout(tier2) {
+  if (!tier2) return;
+
+  document.body.classList.add("mobile-layout-applied");
+  document.body.classList.remove("desktop-layout-applied");
+
+  const fadeContainer = document.querySelector(".project-fade-container");
+  const introTitle = document.querySelector(".project-intro h2");
+  const introParagraph = document.querySelector(".project-intro p");
+  const poster = document.querySelector(".project-poster");
+  const allToneSections = document.querySelectorAll(".tone-section");
+
+  if (fadeContainer) {
+    fadeContainer.style.opacity = "1";
+    fadeContainer.style.transition = "none";
+  }
+
+  allToneSections.forEach((section) => {
+    section.style.opacity = "1";
+    section.style.transform = "none";
+    section.style.position = "relative";
+    section.style.left = "auto";
+    section.style.right = "auto";
+
+    section.classList.add("mobile-tone-section");
+
+    section.style.width = "90%";
+    section.style.margin = "0 auto 20px auto";
+    section.style.backgroundColor = "rgba(30, 0, 0, 0.5)";
+    section.style.padding = "15px";
+    section.style.borderRadius = "8px";
+    section.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
+
+    section.style.display = "block";
+    section.style.visibility = "visible";
+  });
+
+  if (introTitle) {
+    introTitle.style.opacity = "1";
+    introTitle.style.transform = "none";
+  }
+
+  if (introParagraph) {
+    introParagraph.style.opacity = "1";
+    introParagraph.style.transform = "none";
+  }
+
+  if (poster) {
+    poster.style.opacity = "1";
+    poster.style.transform = "scale(1)";
+  }
+
+  tier2.style.height = "auto";
+  tier2.style.minHeight = "auto";
+
+  const stickyContainer = tier2.querySelector(".project-sticky-container");
+  if (stickyContainer) {
+    stickyContainer.style.position = "relative";
+    stickyContainer.style.height = "auto";
+    stickyContainer.style.overflow = "visible";
+  }
+
+  const contentGrid = document.querySelector(".project-content-grid");
+  if (contentGrid) {
+    contentGrid.style.gridTemplateColumns = "1fr";
+    contentGrid.style.width = "90%";
+    contentGrid.style.margin = "0 auto";
+
+    const leftCol = document.querySelector(".project-left-col");
+    const rightCol = document.querySelector(".project-right-col");
+
+    if (leftCol) {
+      leftCol.style.gridColumn = "1";
+      leftCol.style.gridRow = "2";
+      leftCol.style.padding = "0";
+    }
+
+    if (rightCol) {
+      rightCol.style.gridColumn = "1";
+      rightCol.style.gridRow = "3";
+      rightCol.style.padding = "0";
+    }
+
+    if (poster) {
+      poster.style.gridColumn = "1";
+      poster.style.gridRow = "1";
+      poster.style.marginBottom = "20px";
+    }
+  }
+
+  const styleElement = document.createElement("style");
+  styleElement.id = "mobile-project-styles";
+  styleElement.textContent = `
+    @media (max-width: 767px) {
+      .project-fade-container {
+        opacity: 1 !important;
+        height: auto !important;
+      }
+      
+      .mobile-tone-section {
+        opacity: 1 !important;
+        transform: none !important;
+        visibility: visible !important;
+        display: block !important;
+      }
+      
+      .project-sticky-container {
+        position: relative !important;
+        height: auto !important;
+      }
+      
+      .tier2 {
+        height: auto !important;
+        min-height: auto !important;
+      }
+    }
+  `;
+
+  if (!document.getElementById("mobile-project-styles")) {
+    document.head.appendChild(styleElement);
+  }
+
+  tier2.style.background =
+    "linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(30, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.9) 100%)";
+
+  if (window.projectScrollObserver) {
+    window.projectScrollObserver.disconnect();
+  }
+
+  const mobileStyleInterval = setInterval(() => {
+    if (window.innerWidth <= 767) {
+      allToneSections.forEach((section) => {
+        if (section.style.opacity !== "1") {
+          section.style.opacity = "1";
+        }
+      });
+
+      if (fadeContainer && fadeContainer.style.opacity !== "1") {
+        fadeContainer.style.opacity = "1";
+      }
+    } else {
+      clearInterval(mobileStyleInterval);
+    }
+  }, 500);
+
+  window.mobileStyleInterval = mobileStyleInterval;
+}
+
+/**
+ * Reset layout for desktop view
+ */
+function resetLayoutForDesktop(tier2) {
+  if (!tier2) return;
+
+  document.querySelectorAll(".mobile-tone-section").forEach((section) => {
+    section.classList.remove("mobile-tone-section");
+    section.removeAttribute("style");
+  });
+
+  const fadeContainer = document.querySelector(".project-fade-container");
+  if (fadeContainer) {
+    fadeContainer.removeAttribute("style");
+  }
+
+  const stickyContainer = tier2.querySelector(".project-sticky-container");
+  if (stickyContainer) {
+    stickyContainer.removeAttribute("style");
+  }
+
+  const contentGrid = document.querySelector(".project-content-grid");
+  if (contentGrid) {
+    contentGrid.removeAttribute("style");
+  }
+
+  const leftCol = document.querySelector(".project-left-col");
+  const rightCol = document.querySelector(".project-right-col");
+  const poster = document.querySelector(".project-poster");
+
+  if (leftCol) leftCol.removeAttribute("style");
+  if (rightCol) rightCol.removeAttribute("style");
+  if (poster) poster.removeAttribute("style");
+
+  if (window.mobileStyleInterval) {
+    clearInterval(window.mobileStyleInterval);
+  }
+
+  tier2.style.background = "";
 }
 
 /**
  * Initialize scroll-based animations for tier2 section
- * @param {HTMLElement} tier2 - The tier2 container element
  */
 function initTier2ScrollAnimations(tier2) {
   if (!tier2) return;
 
-  // Ensure we have the proper structure for sticky animations
   ensureStickyContainer(tier2);
 
-  // Get references to animation elements
   const stickyContainer = tier2.querySelector(".project-sticky-container");
   const fadeContainer = tier2.querySelector(".project-fade-container");
 
   if (!stickyContainer || !fadeContainer) return;
 
-  // Get references to animated elements
   const introTitle = fadeContainer.querySelector(".project-intro h2");
   const introParagraph = fadeContainer.querySelector(".project-intro p");
   const leftColSections = fadeContainer.querySelectorAll(
@@ -71,7 +270,6 @@ function initTier2ScrollAnimations(tier2) {
   );
   const poster = fadeContainer.querySelector(".project-poster");
 
-  // Set initial state for all elements (off screen)
   if (introTitle) {
     introTitle.style.transform = "translateX(100%)";
     introTitle.style.opacity = "0";
@@ -97,20 +295,15 @@ function initTier2ScrollAnimations(tier2) {
     poster.style.opacity = "0";
   }
 
-  // Create scroll observer with high resolution thresholds
   const thresholds = [];
   for (let i = 0; i <= 20; i++) {
     thresholds.push(i / 20);
   }
 
-  // Observer for tracking the entire section's visibility
   const sectionObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        // Calculate progress based on intersection ratio
         const progress = entry.intersectionRatio;
-
-        // Apply animations based on scroll progress
         animateTier2Elements(
           progress,
           introTitle,
@@ -128,17 +321,16 @@ function initTier2ScrollAnimations(tier2) {
     }
   );
 
-  // Observe the tier2 section
   sectionObserver.observe(tier2);
+  window.projectScrollObserver = sectionObserver;
 
-  // Add scroll event for smoother animations between thresholds
   window.addEventListener("scroll", () => {
+    if (window.innerWidth <= 767) return;
+
     const rect = tier2.getBoundingClientRect();
     const windowHeight = window.innerHeight;
 
-    // Only process if section is in viewport
     if (rect.top < windowHeight && rect.bottom > 0) {
-      // Calculate how much of the section is visible (0 to 1)
       const visibleHeight =
         Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
       const visibleRatio = Math.min(
@@ -146,7 +338,6 @@ function initTier2ScrollAnimations(tier2) {
         1
       );
 
-      // Apply animations based on scroll progress
       animateTier2Elements(
         visibleRatio,
         introTitle,
@@ -162,13 +353,6 @@ function initTier2ScrollAnimations(tier2) {
 
 /**
  * Apply animations to tier2 elements based on scroll progress
- * @param {number} progress - Scroll progress (0-1)
- * @param {HTMLElement} introTitle - The intro title element
- * @param {HTMLElement} introParagraph - The intro paragraph element
- * @param {NodeList} leftColSections - Left column sections
- * @param {NodeList} rightColSections - Right column sections
- * @param {HTMLElement} poster - The poster element
- * @param {HTMLElement} fadeContainer - The fade container element
  */
 function animateTier2Elements(
   progress,
@@ -179,82 +363,53 @@ function animateTier2Elements(
   poster,
   fadeContainer
 ) {
-  // Use different timing curves for different elements
-  const titleProgress = Math.max(0, Math.min(1, progress * 2.5)); // Start early, finish first
-  const paragraphProgress = Math.max(0, Math.min(1, (progress - 0.1) * 2.5)); // Start after title
-  const leftColProgress = Math.max(0, Math.min(1, (progress - 0.15) * 2.5)); // Start after paragraph
-  const rightColProgress = Math.max(0, Math.min(1, (progress - 0.2) * 2.5)); // Start after left column
-  const posterProgress = Math.max(0, Math.min(1, (progress - 0.25) * 2.5)); // Start last
+  if (window.innerWidth <= 767) return;
 
-  // Only fade out when really leaving the section (starts fading at 95% scrolled)
-  // During the main viewing area, keep it fully visible
+  const titleProgress = Math.max(0, Math.min(1, progress * 2.5));
+  const paragraphProgress = Math.max(0, Math.min(1, (progress - 0.1) * 2.5));
+  const leftColProgress = Math.max(0, Math.min(1, (progress - 0.15) * 2.5));
+  const rightColProgress = Math.max(0, Math.min(1, (progress - 0.2) * 2.5));
+  const posterProgress = Math.max(0, Math.min(1, (progress - 0.25) * 2.5));
   const fadeOutProgress = progress < 0.95 ? 1 : 1 - (progress - 0.95) * 20;
 
   if (fadeContainer) {
-    // Ensure it's fully visible during the prime viewing area (between 20% and 95% scrolled)
     fadeContainer.style.opacity =
       progress < 0.2 ? progress * 5 : fadeOutProgress;
   }
 
-  // Apply smooth animations based on calculated progress
-
-  // Title animation (right to left)
   if (introTitle) {
     const titleX = 100 * (1 - titleProgress);
     introTitle.style.transform = `translateX(${titleX}%)`;
     introTitle.style.opacity = titleProgress;
   }
 
-  // Paragraph animation (bottom to top)
   if (introParagraph) {
     const paragraphY = 30 * (1 - paragraphProgress);
     introParagraph.style.transform = `translateY(${paragraphY}px)`;
     introParagraph.style.opacity = paragraphProgress;
   }
 
-  // Skip animations for mobile devices
-  if (window.innerWidth > 767) {
-    // Left column animations (left to right)
-    leftColSections.forEach((section, index) => {
-      // Add slight staggered delay for each section
-      const sectionProgress = Math.max(
-        0,
-        Math.min(1, leftColProgress - index * 0.05)
-      );
-      const sectionX = -100 * (1 - sectionProgress);
-      section.style.transform = `translateX(${sectionX}%)`;
-      section.style.opacity = sectionProgress;
-    });
+  // Left column animations (left to right)
+  leftColSections.forEach((section, index) => {
+    const sectionProgress = Math.max(
+      0,
+      Math.min(1, leftColProgress - index * 0.05)
+    );
+    const sectionX = -100 * (1 - sectionProgress);
+    section.style.transform = `translateX(${sectionX}%)`;
+    section.style.opacity = sectionProgress;
+  });
 
-    // Right column animations (right to left)
-    rightColSections.forEach((section, index) => {
-      // Add slight staggered delay for each section
-      const sectionProgress = Math.max(
-        0,
-        Math.min(1, rightColProgress - index * 0.1)
-      );
-      const sectionX = 100 * (1 - sectionProgress);
-      section.style.transform = `translateX(${sectionX}%)`;
-      section.style.opacity = sectionProgress;
-    });
-  } else {
-    // For mobile, only animate opacity to avoid positioning issues
-    leftColSections.forEach((section, index) => {
-      const sectionProgress = Math.max(
-        0,
-        Math.min(1, leftColProgress - index * 0.05)
-      );
-      section.style.opacity = sectionProgress;
-    });
-
-    rightColSections.forEach((section, index) => {
-      const sectionProgress = Math.max(
-        0,
-        Math.min(1, rightColProgress - index * 0.1)
-      );
-      section.style.opacity = sectionProgress;
-    });
-  }
+  // Right column animations (right to left)
+  rightColSections.forEach((section, index) => {
+    const sectionProgress = Math.max(
+      0,
+      Math.min(1, rightColProgress - index * 0.1)
+    );
+    const sectionX = 100 * (1 - sectionProgress);
+    section.style.transform = `translateX(${sectionX}%)`;
+    section.style.opacity = sectionProgress;
+  });
 
   // Poster animation (scale up)
   if (poster) {
@@ -266,52 +421,36 @@ function animateTier2Elements(
 
 /**
  * Ensure tier2 has a sticky container for animations
- * @param {HTMLElement} tier2 - The tier2 container element
  */
 function ensureStickyContainer(tier2) {
-  // Check if the sticky container already exists
   if (tier2.querySelector(".project-sticky-container")) return;
 
-  // Get all direct children of tier2
   const children = Array.from(tier2.children);
-
-  // Create the sticky container
   const stickyContainer = document.createElement("div");
   stickyContainer.className = "project-sticky-container";
-
-  // Create the fade container
   const fadeContainer = document.createElement("div");
   fadeContainer.className = "project-fade-container";
 
-  // Move all children to the fade container
   children.forEach((child) => {
     fadeContainer.appendChild(child);
   });
 
-  // Add fade container to sticky container
   stickyContainer.appendChild(fadeContainer);
-
-  // Add sticky container to tier2
   tier2.appendChild(stickyContainer);
 }
 
 /**
  * Initialize scroll effects for tier1 section elements
- * @param {HTMLElement} tier1 - The tier1 container element
- * @param {NodeList} parallaxBoxes - Collection of parallax box elements
- * @param {HTMLElement} projectText - The project text element
  */
 function initTier1ScrollEffects(tier1, parallaxBoxes, projectText) {
   if (!tier1) return;
 
-  // Create a sticky sentinel element to help detect scroll direction and position
   const sentinel = document.createElement("div");
   sentinel.className = "scroll-sentinel";
   sentinel.style.cssText =
     "height: 1px; width: 100%; position: absolute; top: 0; left: 0; visibility: hidden;";
   tier1.appendChild(sentinel);
 
-  // Set up IntersectionObserver with multiple thresholds for granular control
   const thresholds = [];
   for (let i = 0; i <= 20; i++) {
     thresholds.push(i / 20);
@@ -319,14 +458,10 @@ function initTier1ScrollEffects(tier1, parallaxBoxes, projectText) {
 
   const scrollObserver = new IntersectionObserver(
     (entries) => {
-      // Get the main entry for the tier1 section
       const tier1Entry = entries.find((entry) => entry.target === tier1);
 
       if (tier1Entry) {
-        // Calculate scroll progress as a percentage (0 to 1)
         const progress = Math.max(0, Math.min(1, tier1Entry.intersectionRatio));
-
-        // Apply scroll progress to elements
         applyTier1ScrollEffects(progress, parallaxBoxes, projectText);
       }
     },
@@ -336,22 +471,16 @@ function initTier1ScrollEffects(tier1, parallaxBoxes, projectText) {
     }
   );
 
-  // Observe the tier1 section
   scrollObserver.observe(tier1);
 
-  // Also set up scroll event for smoother animation between thresholds
   window.addEventListener("scroll", () => {
-    // Only proceed if tier1 is in the viewport
     const rect = tier1.getBoundingClientRect();
     const windowHeight = window.innerHeight;
 
     if (rect.top < windowHeight && rect.bottom > 0) {
-      // Calculate visibility ratio
       const visibleHeight =
         Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
       const progress = Math.min(Math.max(visibleHeight / rect.height, 0), 1);
-
-      // Apply scroll effects based on visibility progress
       applyTier1ScrollEffects(progress, parallaxBoxes, projectText);
     }
   });
@@ -359,59 +488,40 @@ function initTier1ScrollEffects(tier1, parallaxBoxes, projectText) {
 
 /**
  * Apply scroll effects to tier1 elements based on scroll progress
- * @param {number} progress - Scroll progress (0-1)
- * @param {NodeList} parallaxBoxes - Collection of parallax boxes
- * @param {HTMLElement} projectText - The project text element
  */
 function applyTier1ScrollEffects(progress, parallaxBoxes, projectText) {
   if (!parallaxBoxes.length) return;
 
-  // Define animation curves for different effects
-  // Use cubic-bezier-like curves for more natural animation
-  const inCurve = progress * progress; // Ease-in effect
-  const outCurve = progress * (2 - progress); // Ease-out effect
+  const inCurve = progress * progress;
+  const outCurve = progress * (2 - progress);
   const inOutCurve =
     progress < 0.5
       ? 2 * progress * progress
-      : -1 + (4 - 2 * progress) * progress; // Ease-in-out
+      : -1 + (4 - 2 * progress) * progress;
 
-  // Base animation values
-  const opacityBase = Math.min(1, progress * 2); // 0 to 1 in first half
-  const scaleBase = 0.8 + progress * 0.2; // 0.8 to 1.0
+  const opacityBase = Math.min(1, progress * 2);
+  const scaleBase = 0.8 + progress * 0.2;
 
-  // Apply different animations to each parallax box
-  parallaxBoxes.forEach((box, index) => {
-    // Skip if box doesn't exist
+  parallaxBoxes.forEach((box) => {
     if (!box) return;
 
-    // Get the index position to determine animation style
     const boxIndex = parseInt(box.id.replace("project-img", ""));
 
-    // Different animation based on box position
     if (boxIndex <= 3) {
-      // Top row - slide in from sides
       const xOffset =
-        boxIndex % 2 === 0
-          ? (1 - inOutCurve) * -50 // Even - from left
-          : (1 - inOutCurve) * 50; // Odd - from right
+        boxIndex % 2 === 0 ? (1 - inOutCurve) * -50 : (1 - inOutCurve) * 50;
 
       box.style.transform = `translateX(${xOffset}px) scale(${scaleBase})`;
       box.style.opacity = opacityBase;
     } else if (boxIndex <= 5) {
-      // Middle row - fade in with delay
-      // Delayed progress - starts halfway through scroll
       const delayedProgress = Math.max(0, (progress - 0.3) * 1.4);
       const delayedCurve = delayedProgress * delayedProgress;
 
       box.style.opacity = delayedCurve;
       box.style.transform = `scale(${0.7 + delayedCurve * 0.3})`;
     } else {
-      // Bottom/background images - subtle fade and movement
-      // Even more delayed to appear last
       const lateProgress = Math.max(0, (progress - 0.5) * 2);
-      const lateOpacity = lateProgress * 1; // Keep partially transparent
-
-      // Calculate vertical movement - starts below and moves up
+      const lateOpacity = lateProgress * 1;
       const yOffset = (1 - lateProgress) * 40;
 
       box.style.opacity = lateOpacity;
@@ -421,20 +531,15 @@ function applyTier1ScrollEffects(progress, parallaxBoxes, projectText) {
     }
   });
 
-  // Project text animation
   if (projectText) {
-    // Text appears after the first few images
     const textProgress = Math.max(0, (progress - 0.2) * 1.25);
     const textOpacity = textProgress;
     const textScale = 0.9 + textProgress * 0.1;
-
-    // Calculate a subtle floating effect based on scroll position
     const floatY = Math.sin(progress * Math.PI) * 10;
 
     projectText.style.opacity = textOpacity;
     projectText.style.transform = `translateY(${floatY}px) scale(${textScale})`;
 
-    // Trigger the text-revealed class based on progress
     if (
       textProgress > 0.6 &&
       !projectText.classList.contains("text-revealed")
@@ -448,10 +553,8 @@ function applyTier1ScrollEffects(progress, parallaxBoxes, projectText) {
     }
   }
 
-  // Adjust scroll down indicator based on progress
   const scrollDown2 = document.getElementById("scroll-down2");
   if (scrollDown2) {
-    // Show the indicator as user reaches the end of the section
     const scrollIndicatorOpacity = progress > 0.7 ? (progress - 0.7) * 3 : 0;
     scrollDown2.style.opacity = scrollIndicatorOpacity;
   }
@@ -459,16 +562,13 @@ function applyTier1ScrollEffects(progress, parallaxBoxes, projectText) {
 
 /**
  * Initialize simple parallax effect for project images
- * Uses CSS-driven approach with hover effects
  */
 function initSimpleParallax() {
   const parallaxBoxes = document.querySelectorAll(".parallax-box");
 
   parallaxBoxes.forEach((box, index) => {
-    // Add data attribute for CSS-based parallax
     box.setAttribute("data-parallax-index", index % 3);
 
-    // Add hover state listeners with simpler transforms
     box.addEventListener("mouseenter", () => {
       box.classList.add("hover");
     });
@@ -477,17 +577,13 @@ function initSimpleParallax() {
       box.classList.remove("hover");
     });
 
-    // Add basic mouse move effect for images only (much simpler)
     const image = box.querySelector(".parallax-image");
     if (image) {
       box.addEventListener("mousemove", (e) => {
-        // Only do this calculation when hovered, to save performance
         if (box.classList.contains("hover")) {
           const rect = box.getBoundingClientRect();
           const xPos = (e.clientX - rect.left) / rect.width - 0.5;
           const yPos = (e.clientY - rect.top) / rect.height - 0.5;
-
-          // Apply light transform with reduced calculations
           image.style.transform = `translate(${xPos * 10}px, ${yPos * 10}px)`;
         }
       });
@@ -496,14 +592,13 @@ function initSimpleParallax() {
 }
 
 /**
- * Initialize project text reveal with simpler animation
+ * Initialize project text reveal with animation
  */
 function initProjectText() {
   const projectText = document.querySelector(".project-text");
 
   if (!projectText) return;
 
-  // Use IntersectionObserver for performant reveal
   const observer = new IntersectionObserver(
     (entries) => {
       if (entries[0].isIntersecting) {
@@ -532,88 +627,6 @@ function initPosterHover() {
   poster.addEventListener("mouseleave", () => {
     poster.classList.remove("hover");
   });
-}
-
-/**
- * Handle mobile layout specifically for small screens
- */
-function mobileLayout() {
-  // Get references to elements
-  const fadeContainer = document.querySelector(".project-fade-container");
-  const projectContentGrid = document.querySelector(".project-content-grid");
-  const tier2 = document.querySelector(".tier2");
-
-  // Function to apply proper mobile styling without affecting desktop animations
-  function applyMobileStyling() {
-    const isMobile = window.innerWidth <= 767;
-
-    if (isMobile) {
-      // Reset any fade animations for mobile view - keep content visible
-      if (fadeContainer) {
-        fadeContainer.style.opacity = "1"; // Always fully visible on mobile
-      }
-
-      // Set background to a slightly brighter gradient for mobile
-      if (tier2) {
-        tier2.style.background =
-          "linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(30, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.9) 100%)";
-      }
-
-      // Center the content grid
-      if (projectContentGrid) {
-        projectContentGrid.style.width = "90%";
-        projectContentGrid.style.margin = "0 auto";
-      }
-
-      // Ensure tone sections are properly styled and centered
-      const toneSections = document.querySelectorAll(".tone-section");
-      toneSections.forEach((section) => {
-        // Reset any transforms that might affect position
-        section.style.transform = "none";
-        section.style.position = "relative";
-        section.style.left = "auto";
-        section.style.right = "auto";
-
-        // Center the section with proper width and margin
-        section.style.width = "90%";
-        section.style.margin = "0 auto 20px auto";
-
-        // Add subtle container styling without overwhelming darkness
-        section.style.backgroundColor = "rgba(30, 0, 0, 0.4)";
-        section.style.padding = "15px";
-        section.style.borderRadius = "8px";
-        section.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
-      });
-    } else {
-      // For desktop, reset styles to default to allow CSS and animations to work
-      if (tier2) {
-        tier2.style.background = "";
-      }
-    }
-  }
-
-  // Apply immediately
-  applyMobileStyling();
-
-  // Apply on resize
-  window.addEventListener("resize", applyMobileStyling);
-
-  // Apply after scroll events to ensure it overrides animation changes
-  window.addEventListener("scroll", function () {
-    if (window.innerWidth <= 767) {
-      requestAnimationFrame(applyMobileStyling);
-    }
-  });
-
-  // For extra protection, periodically check and apply if needed
-  if (window.innerWidth <= 767) {
-    const intervalId = setInterval(applyMobileStyling, 1000);
-
-    // Clean up interval when navigating away
-    window.addEventListener("beforeunload", function () {
-      clearInterval(intervalId);
-    });
-  }
 }
 
 // Export the initialization function
