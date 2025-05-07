@@ -179,40 +179,60 @@
 
 /* ---- RESPONSIVE DESIGN ---- */
 
+
+
 /* Small phones (320px) */
 @media (min-width: 320px) and (max-width: 419px) {
   /* Tier 2 adjustments */
   .tier2 {
     padding: 10px 15px;
-    min-height: 100vh; 
+    min-height: 100vh;
     height: auto;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.95) 0%,
+      rgba(30, 0, 0, 0.9) 50%,
+      rgba(0, 0, 0, 0.95) 100%
+    );
   }
 
   .project-sticky-container {
-    position: relative; /* Change from sticky to relative for small screens */
-    height: auto; /* Allow container to expand with content */
-    min-height: unset; /* Remove any min-height constraint */
-    overflow: visible; /* Allow content to be visible outside the container */
+    position: relative;
+    height: auto;
+    min-height: unset;
+    overflow: visible;
   }
 
   .project-fade-container {
-    height: auto; /* Allow container to adjust to content */
+    height: auto;
     min-height: unset;
     padding: 20px 0;
-    display: block; /* Change from flex to block */
+    display: block;
+    opacity: 1;
+    transform: none;
   }
 
   .project-content-grid {
     grid-template-columns: 1fr;
     gap: 20px;
-    width: 95%; /* Slightly reduced width to create better margins */
-    margin: 0 auto; /* Center the grid */
+    width: 95%;
+    margin: 0 auto;
   }
 
   .project-poster {
     grid-column: 1;
     grid-row: 1;
     margin-bottom: 20px;
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .project-poster img {
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    animation: none;
+    transform: none;
   }
 
   .project-left-col,
@@ -237,29 +257,58 @@
 
   .project-left-col .tone-section,
   .project-right-col .tone-section {
-    width: 90%; 
+    width: 90%;
     margin-bottom: 15px;
-    text-align: left; 
+    text-align: left;
+    opacity: 1;
+    transform: none;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .tone-section {
+    transform : none;
+        position : relative;
+        left : auto;
+        right : auto;
+
+        width : 90%;
+        margin : 0 auto 20px auto;
+
+        background-color : rgba(30, 0, 0, 0.4);
+        padding : 15px;
+        border-radius : 8px;
+        box-shadow : 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
   .tone-section h3 {
     font-size: 1.4rem;
     margin: 0 0 10px 0;
+    color: #AC7273;
   }
 
   .tone-section p {
     font-size: 0.9rem;
     line-height: 1.5;
+    color: rgba(255, 255, 255, 0.813);
   }
 
   .project-intro h2 {
     font-size: 2rem;
+    opacity: 1;
+    transform: none;
+    color: #AC7273;
   }
 
   .project-intro p {
     font-size: 1rem;
     line-height: 1.4;
-    color: white;
+        color: rgba(255, 255, 255, 0.813);
+
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -269,6 +318,12 @@
     padding: 15px 20px;
     min-height: 100vh;
     height: auto;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.95) 0%,
+      rgba(30, 0, 0, 0.9) 50%,
+      rgba(0, 0, 0, 0.95) 100%
+    );
   }
 
   .project-sticky-container {
@@ -283,6 +338,8 @@
     min-height: unset;
     padding: 20px 0;
     display: block;
+    opacity: 1;
+    transform: none;
   }
 
   .project-content-grid {
@@ -295,6 +352,16 @@
     grid-column: 1;
     grid-row: 1;
     margin-bottom: 25px;
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .project-poster img {
+    max-width: 100%;
+    max-height: 450px;
+    object-fit: contain;
+    animation: none;
+    transform: none;
   }
 
   /* Create a flex row container for the tone sections */
@@ -323,18 +390,28 @@
   .project-right-col .tone-section {
     width: 90%;
     margin-bottom: 15px;
+    opacity: 1;
+    transform: none;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
   .project-intro h2 {
     font-size: 2.2rem;
-  }
-
-  .tone-section h3 {
-    font-size: 1.6rem;
+    opacity: 1;
+    transform: none;
   }
 
   .project-intro p {
     font-size: 1.1rem;
+    opacity: 1;
+    transform: none;
+  }
+
+  .tone-section h3 {
+    font-size: 1.6rem;
   }
 }
 

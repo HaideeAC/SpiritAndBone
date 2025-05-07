@@ -253,7 +253,7 @@
 .project-text h2 {
   font-size: 3rem;
   color: rgb(247, 164, 164);
-  text-shadow: 0 0 20px rgba(192, 0, 1, 0.3);
+    text-shadow: 0 0 10px rgba(192, 0, 0, 0.431);
   margin: 0;
   position: relative;
   display: inline-block;
