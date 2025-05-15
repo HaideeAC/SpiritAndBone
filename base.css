@@ -57,7 +57,7 @@ body {
   overflow-y: scroll; /* Ensure content is still scrollable */
 }
 
-/* Fix for iOS Safari and Chrome mobile */
+/*iOS Safari and Chrome mobile */
 @supports (-webkit-touch-callout: none) {
   html,
   body,
@@ -145,7 +145,7 @@ main {
 
 .section-spacerX {
   height: 40vh;
-  margin-top: -5px; /* Specifically for the shadow problem at the bottom of home section */
+  margin-top: -5px; 
   z-index: 10;
 }
 

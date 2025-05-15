@@ -1,13 +1,6 @@
-/**
- * Spirit&Bone - Video Reveal Module
- * Optimized version with direct element references and improved transitions
- */
+/*Video Reveal*/
 
-
-
-// Initialize video reveal functionality
 function initVideoReveal() {
-  // Get direct references to essential elements
   const desktopAmp = document.querySelector(".tittleY");
   const mobileAmp = document.querySelector(".vertical-amp");
   const desktopTitle = document.querySelector(".desktop-title");
@@ -15,27 +8,20 @@ function initVideoReveal() {
   const videoContainer = document.querySelector(".video-container");
   const homeBanner = document.querySelector(".banner");
 
-  // Exit early if essential elements don't exist
   if (!videoContainer || !homeBanner) {
     console.warn("Video reveal elements not found in the document.");
     return;
   }
 
-  // Create close button element and append to banner
   const closeVideoBtn = createCloseButton(homeBanner);
 
-  // Add styles for the fade animation
   addFadeAnimationStyles();
 
-  // Function to reveal video when ampersand is clicked
   function revealVideo() {
-    // Apply transformations to reveal video
     desktopTitle?.classList.add("video-reveal-active");
     mobileTitle?.classList.add("video-reveal-active");
     videoContainer.classList.add("video-revealed");
 
-    // Apply animation to the ampersand that was clicked
-    // Using responsive layout detection directly in the event
     const isDesktop = window.innerWidth > 768;
     const targetAmp = isDesktop ? desktopAmp : mobileAmp;
 
@@ -43,7 +29,6 @@ function initVideoReveal() {
       targetAmp.classList.add("amp-grow-animation");
     }
 
-    // Show close button with short delay for better UX
     setTimeout(() => {
       closeVideoBtn.style.display = "block";
       requestAnimationFrame(() => {
@@ -52,9 +37,7 @@ function initVideoReveal() {
     }, 400);
   }
 
-  // Function to hide video and return to title
   function hideVideo() {
-    // Add fade-in animation classes to the masks
     if (desktopTitle) {
       desktopTitle.classList.add("mask-fade-in");
       desktopTitle.classList.remove("video-reveal-active");
@@ -65,27 +48,22 @@ function initVideoReveal() {
       mobileTitle.classList.remove("video-reveal-active");
     }
 
-    // Start fading out the video
     videoContainer.classList.add("video-fade-out");
     videoContainer.classList.remove("video-revealed");
 
-    // Reset animations on both ampersands to ensure proper state
     desktopAmp?.classList.remove("amp-grow-animation");
     mobileAmp?.classList.remove("amp-grow-animation");
 
-    // Hide close button with transition
     closeVideoBtn.classList.remove("active");
     setTimeout(() => {
       closeVideoBtn.style.display = "none";
 
-      // Clean up the animation classes after animation completes
       desktopTitle?.classList.remove("mask-fade-in");
       mobileTitle?.classList.remove("mask-fade-in");
       videoContainer.classList.remove("video-fade-out");
     }, 600); // Match this with the animation duration
   }
 
-  // Set up event listeners
   if (desktopAmp) {
     desktopAmp.style.cursor = "pointer";
     desktopAmp.setAttribute("aria-label", "Reveal video");
@@ -98,10 +76,8 @@ function initVideoReveal() {
     mobileAmp.addEventListener("click", revealVideo);
   }
 
-  // Add click event to close button
   closeVideoBtn.addEventListener("click", hideVideo);
 
-  // Add keyboard support for accessibility
   document.addEventListener("keydown", (e) => {
     if (
       e.key === "Escape" &&
@@ -112,11 +88,6 @@ function initVideoReveal() {
   });
 }
 
-/**
- * Creates the close button element
- * @param {HTMLElement} parent - Parent element to append button to
- * @returns {HTMLElement} The created close button
- */
 function createCloseButton(parent) {
   const btn = document.createElement("div");
   btn.className = "close-video";
@@ -127,7 +98,6 @@ function createCloseButton(parent) {
   btn.setAttribute("tabindex", "0");
   parent.appendChild(btn);
 
-  // Add keyboard support
   btn.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
@@ -138,11 +108,7 @@ function createCloseButton(parent) {
   return btn;
 }
 
-/**
- * Adds required CSS for fade animations
- */
 function addFadeAnimationStyles() {
-  // Create a style element if it doesn't exist
   let styleElement = document.getElementById("video-reveal-styles");
 
   if (!styleElement) {
@@ -150,8 +116,6 @@ function addFadeAnimationStyles() {
     styleElement.id = "video-reveal-styles";
     document.head.appendChild(styleElement);
   }
-
-  // Add the animation styles
   styleElement.textContent = `
     @keyframes fade-out {
       0% {
@@ -173,5 +137,4 @@ function addFadeAnimationStyles() {
   `;
 }
 
-// Export the initialization function
 export { initVideoReveal };

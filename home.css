@@ -39,7 +39,7 @@ body.home-page {
     rgba(0, 0, 0, 0) 0%,
     rgba(0, 0, 0, 1) 100%
   );
-  z-index: 3; /* Above video but below text/content */
+  z-index: 3;
   pointer-events: none;
 }
 
