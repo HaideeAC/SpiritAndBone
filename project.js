@@ -1,54 +1,57 @@
-/**
- * Spirit&Bone - Project Section Interactions
- */
+/* ---project section--- */
 
 function initProjectParallax() {
-  const projectContainer = document.querySelector(".project-container");
-  const scrollDown2 = document.getElementById("scroll-down2");
-  const tier1 = document.querySelector(".tier1");
-  const tier2 = document.querySelector(".tier2");
-  const parallaxBoxes = document.querySelectorAll(".parallax-box");
-  const projectText = document.querySelector(".project-text");
+  var container = document.querySelector(".project-container");
+  var scrollIndicator = document.getElementById("scroll-down2");
+  var sectionTier1 = document.querySelector(".tier1");
+  var sectionTier2 = document.querySelector(".tier2");
+  var imageBoxes = document.querySelectorAll(".parallax-box");
+  var projectDesc = document.querySelector(".project-text");
 
-  if (!projectContainer) return;
+  if (!container) return;
 
-  setTimeout(() => {
-    projectContainer.classList.add("visible");
+  // Fade in container
+  setTimeout(function () {
+    container.classList.add("visible");
   }, 300);
 
-  if (scrollDown2) {
-    scrollDown2.addEventListener("click", () => {
-      if (tier2) {
-        tier2.scrollIntoView({ behavior: "smooth" });
+  // Scroll down to tier2 when clicking arrow
+  if (scrollIndicator) {
+    scrollIndicator.addEventListener("click", function () {
+      if (sectionTier2) {
+        sectionTier2.scrollIntoView({ behavior: "smooth" });
       }
     });
   }
 
+  // Mobile or desktop layout?
   if (window.innerWidth <= 767) {
-    renderMobileProjectLayout(tier2);
+    makeMobileLayout(sectionTier2);
   } else {
-    initTier2ScrollAnimations(tier2);
+    setupDesktopEffects(sectionTier2);
   }
 
-  initTier1ScrollEffects(tier1, parallaxBoxes, projectText);
-  initSimpleParallax();
-  initProjectText();
-  initPosterHover();
+  // Setup various effects
+  setupTier1Effects(sectionTier1, imageBoxes, projectDesc);
+  setupSimpleParallax();
+  setupTextReveal();
+  addPosterHoverEffect();
 
-  window.addEventListener("resize", () => {
+  // Handle resize between mobile/desktop
+  window.addEventListener("resize", function () {
     if (
       window.innerWidth <= 767 &&
       !document.body.classList.contains("mobile-layout-applied")
     ) {
-      renderMobileProjectLayout(tier2);
+      makeMobileLayout(sectionTier2);
       document.body.classList.add("mobile-layout-applied");
       document.body.classList.remove("desktop-layout-applied");
     } else if (
       window.innerWidth > 767 &&
       !document.body.classList.contains("desktop-layout-applied")
     ) {
-      resetLayoutForDesktop(tier2);
-      initTier2ScrollAnimations(tier2);
+      resetToDesktop(sectionTier2);
+      setupDesktopEffects(sectionTier2);
       document.body.classList.add("desktop-layout-applied");
       document.body.classList.remove("mobile-layout-applied");
     }
@@ -56,26 +59,30 @@ function initProjectParallax() {
 }
 
 /**
- * Renders mobile-specific layout
+ * Mobile layout for project section
  */
-function renderMobileProjectLayout(tier2) {
+function makeMobileLayout(tier2) {
   if (!tier2) return;
 
+  // Mark as mobile
   document.body.classList.add("mobile-layout-applied");
   document.body.classList.remove("desktop-layout-applied");
 
-  const fadeContainer = document.querySelector(".project-fade-container");
-  const introTitle = document.querySelector(".project-intro h2");
-  const introParagraph = document.querySelector(".project-intro p");
-  const poster = document.querySelector(".project-poster");
-  const allToneSections = document.querySelectorAll(".tone-section");
+  var fadeContainer = document.querySelector(".project-fade-container");
+  var title = document.querySelector(".project-intro h2");
+  var paragraph = document.querySelector(".project-intro p");
+  var poster = document.querySelector(".project-poster");
+  var toneSections = document.querySelectorAll(".tone-section");
 
+  // Ensure fade container is visible
   if (fadeContainer) {
     fadeContainer.style.opacity = "1";
     fadeContainer.style.transition = "none";
   }
 
-  allToneSections.forEach((section) => {
+  // Style all tone sections
+  for (var i = 0; i < toneSections.length; i++) {
+    var section = toneSections[i];
     section.style.opacity = "1";
     section.style.transform = "none";
     section.style.position = "relative";
@@ -93,41 +100,45 @@ function renderMobileProjectLayout(tier2) {
 
     section.style.display = "block";
     section.style.visibility = "visible";
-  });
-
-  if (introTitle) {
-    introTitle.style.opacity = "1";
-    introTitle.style.transform = "none";
   }
 
-  if (introParagraph) {
-    introParagraph.style.opacity = "1";
-    introParagraph.style.transform = "none";
+  // Title and paragraph visible
+  if (title) {
+    title.style.opacity = "1";
+    title.style.transform = "none";
   }
 
+  if (paragraph) {
+    paragraph.style.opacity = "1";
+    paragraph.style.transform = "none";
+  }
+
+  // Show poster
   if (poster) {
     poster.style.opacity = "1";
     poster.style.transform = "scale(1)";
   }
 
+  // Make tier2 regular flow not sticky
   tier2.style.height = "auto";
   tier2.style.minHeight = "auto";
 
-  const stickyContainer = tier2.querySelector(".project-sticky-container");
+  var stickyContainer = tier2.querySelector(".project-sticky-container");
   if (stickyContainer) {
     stickyContainer.style.position = "relative";
     stickyContainer.style.height = "auto";
     stickyContainer.style.overflow = "visible";
   }
 
-  const contentGrid = document.querySelector(".project-content-grid");
+  // Layout grid for mobile
+  var contentGrid = document.querySelector(".project-content-grid");
   if (contentGrid) {
     contentGrid.style.gridTemplateColumns = "1fr";
     contentGrid.style.width = "90%";
     contentGrid.style.margin = "0 auto";
 
-    const leftCol = document.querySelector(".project-left-col");
-    const rightCol = document.querySelector(".project-right-col");
+    var leftCol = document.querySelector(".project-left-col");
+    var rightCol = document.querySelector(".project-right-col");
 
     if (leftCol) {
       leftCol.style.gridColumn = "1";
@@ -148,9 +159,10 @@ function renderMobileProjectLayout(tier2) {
     }
   }
 
-  const styleElement = document.createElement("style");
-  styleElement.id = "mobile-project-styles";
-  styleElement.textContent = `
+  // Add mobile styles for small screens
+  var styleTag = document.createElement("style");
+  styleTag.id = "mobile-project-styles";
+  styleTag.textContent = `
     @media (max-width: 767px) {
       .project-fade-container {
         opacity: 1 !important;
@@ -177,99 +189,107 @@ function renderMobileProjectLayout(tier2) {
   `;
 
   if (!document.getElementById("mobile-project-styles")) {
-    document.head.appendChild(styleElement);
+    document.head.appendChild(styleTag);
   }
 
+  // Add dark gradient background
   tier2.style.background =
     "linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(30, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.9) 100%)";
 
+  // Disconnect any scroll observers
   if (window.projectScrollObserver) {
     window.projectScrollObserver.disconnect();
   }
 
-  const mobileStyleInterval = setInterval(() => {
+  // Force mobile styles with interval
+  var styleFixInterval = setInterval(function () {
     if (window.innerWidth <= 767) {
-      allToneSections.forEach((section) => {
-        if (section.style.opacity !== "1") {
-          section.style.opacity = "1";
+      for (var i = 0; i < toneSections.length; i++) {
+        if (toneSections[i].style.opacity !== "1") {
+          toneSections[i].style.opacity = "1";
         }
-      });
+      }
 
       if (fadeContainer && fadeContainer.style.opacity !== "1") {
         fadeContainer.style.opacity = "1";
       }
     } else {
-      clearInterval(mobileStyleInterval);
+      clearInterval(styleFixInterval);
     }
   }, 500);
 
-  window.mobileStyleInterval = mobileStyleInterval;
+  window.mobileStyleInterval = styleFixInterval;
 }
 
-/**
- * Reset layout for desktop view
- */
-function resetLayoutForDesktop(tier2) {
+// Reset to desktop layout
+function resetToDesktop(tier2) {
   if (!tier2) return;
 
-  document.querySelectorAll(".mobile-tone-section").forEach((section) => {
-    section.classList.remove("mobile-tone-section");
-    section.removeAttribute("style");
-  });
+  // Remove mobile styles from sections
+  var mobileStyled = document.querySelectorAll(".mobile-tone-section");
+  for (var i = 0; i < mobileStyled.length; i++) {
+    mobileStyled[i].classList.remove("mobile-tone-section");
+    mobileStyled[i].removeAttribute("style");
+  }
 
-  const fadeContainer = document.querySelector(".project-fade-container");
+  // Reset containers
+  var fadeContainer = document.querySelector(".project-fade-container");
   if (fadeContainer) {
     fadeContainer.removeAttribute("style");
   }
 
-  const stickyContainer = tier2.querySelector(".project-sticky-container");
+  var stickyContainer = tier2.querySelector(".project-sticky-container");
   if (stickyContainer) {
     stickyContainer.removeAttribute("style");
   }
 
-  const contentGrid = document.querySelector(".project-content-grid");
+  var contentGrid = document.querySelector(".project-content-grid");
   if (contentGrid) {
     contentGrid.removeAttribute("style");
   }
 
-  const leftCol = document.querySelector(".project-left-col");
-  const rightCol = document.querySelector(".project-right-col");
-  const poster = document.querySelector(".project-poster");
+  // Clear columns and poster
+  var leftCol = document.querySelector(".project-left-col");
+  var rightCol = document.querySelector(".project-right-col");
+  var poster = document.querySelector(".project-poster");
 
   if (leftCol) leftCol.removeAttribute("style");
   if (rightCol) rightCol.removeAttribute("style");
   if (poster) poster.removeAttribute("style");
 
+  // Clear style interval
   if (window.mobileStyleInterval) {
     clearInterval(window.mobileStyleInterval);
   }
 
+  // Clear background
   tier2.style.background = "";
 }
 
-/**
- * Initialize scroll-based animations for tier2 section
- */
-function initTier2ScrollAnimations(tier2) {
+// Setup scroll animations for tier2
+function setupDesktopEffects(tier2) {
   if (!tier2) return;
 
-  ensureStickyContainer(tier2);
+  // Make sure container exists
+  ensureStickySetup(tier2);
 
-  const stickyContainer = tier2.querySelector(".project-sticky-container");
-  const fadeContainer = tier2.querySelector(".project-fade-container");
+  var stickyContainer = tier2.querySelector(".project-sticky-container");
+  var fadeContainer = tier2.querySelector(".project-fade-container");
 
   if (!stickyContainer || !fadeContainer) return;
 
-  const introTitle = fadeContainer.querySelector(".project-intro h2");
-  const introParagraph = fadeContainer.querySelector(".project-intro p");
-  const leftColSections = fadeContainer.querySelectorAll(
+  // Get elements to animate
+  var introTitle = fadeContainer.querySelector(".project-intro h2");
+  var introParagraph = fadeContainer.querySelector(".project-intro p");
+  var leftSections = fadeContainer.querySelectorAll(
     ".project-left-col .tone-section"
   );
-  const rightColSections = fadeContainer.querySelectorAll(
+  var rightSections = fadeContainer.querySelectorAll(
     ".project-right-col .tone-section"
   );
-  const poster = fadeContainer.querySelector(".project-poster");
+  var poster = fadeContainer.querySelector(".project-poster");
 
+  // Set initial state
   if (introTitle) {
     introTitle.style.transform = "translateX(100%)";
     introTitle.style.opacity = "0";
@@ -280,36 +300,39 @@ function initTier2ScrollAnimations(tier2) {
     introParagraph.style.opacity = "0";
   }
 
-  leftColSections.forEach((section) => {
-    section.style.transform = "translateX(-100%)";
-    section.style.opacity = "0";
-  });
+  // Hide sections offscreen
+  for (var i = 0; i < leftSections.length; i++) {
+    leftSections[i].style.transform = "translateX(-100%)";
+    leftSections[i].style.opacity = "0";
+  }
 
-  rightColSections.forEach((section) => {
-    section.style.transform = "translateX(100%)";
-    section.style.opacity = "0";
-  });
+  for (var j = 0; j < rightSections.length; j++) {
+    rightSections[j].style.transform = "translateX(100%)";
+    rightSections[j].style.opacity = "0";
+  }
 
   if (poster) {
     poster.style.transform = "scale(0.9)";
     poster.style.opacity = "0";
   }
 
-  const thresholds = [];
-  for (let i = 0; i <= 20; i++) {
-    thresholds.push(i / 20);
+  // Create detailed thresholds
+  var thresholds = [];
+  for (var t = 0; t <= 20; t++) {
+    thresholds.push(t / 20);
   }
 
-  const sectionObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const progress = entry.intersectionRatio;
-        animateTier2Elements(
+  // Set up scroll watcher
+  var watchScroll = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        var progress = entry.intersectionRatio;
+        animateTier2Stuff(
           progress,
           introTitle,
           introParagraph,
-          leftColSections,
-          rightColSections,
+          leftSections,
+          rightSections,
           poster,
           fadeContainer
         );
@@ -321,29 +344,27 @@ function initTier2ScrollAnimations(tier2) {
     }
   );
 
-  sectionObserver.observe(tier2);
-  window.projectScrollObserver = sectionObserver;
+  watchScroll.observe(tier2);
+  window.projectScrollObserver = watchScroll;
 
-  window.addEventListener("scroll", () => {
+  // Also watch scroll directly for smoother animations
+  window.addEventListener("scroll", function () {
     if (window.innerWidth <= 767) return;
 
-    const rect = tier2.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
+    var rect = tier2.getBoundingClientRect();
+    var windowHeight = window.innerHeight;
 
     if (rect.top < windowHeight && rect.bottom > 0) {
-      const visibleHeight =
+      var visibleHeight =
         Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
-      const visibleRatio = Math.min(
-        Math.max(visibleHeight / rect.height, 0),
-        1
-      );
+      var visibleRatio = Math.min(Math.max(visibleHeight / rect.height, 0), 1);
 
-      animateTier2Elements(
+      animateTier2Stuff(
         visibleRatio,
         introTitle,
         introParagraph,
-        leftColSections,
-        rightColSections,
+        leftSections,
+        rightSections,
         poster,
         fadeContainer
       );
@@ -351,117 +372,127 @@ function initTier2ScrollAnimations(tier2) {
   });
 }
 
-/**
- * Apply animations to tier2 elements based on scroll progress
- */
-function animateTier2Elements(
+// Animate tier2 elements based on scroll
+function animateTier2Stuff(
   progress,
   introTitle,
   introParagraph,
-  leftColSections,
-  rightColSections,
+  leftSections,
+  rightSections,
   poster,
   fadeContainer
 ) {
+  // Skip if mobile
   if (window.innerWidth <= 767) return;
 
-  const titleProgress = Math.max(0, Math.min(1, progress * 2.5));
-  const paragraphProgress = Math.max(0, Math.min(1, (progress - 0.1) * 2.5));
-  const leftColProgress = Math.max(0, Math.min(1, (progress - 0.15) * 2.5));
-  const rightColProgress = Math.max(0, Math.min(1, (progress - 0.2) * 2.5));
-  const posterProgress = Math.max(0, Math.min(1, (progress - 0.25) * 2.5));
-  const fadeOutProgress = progress < 0.95 ? 1 : 1 - (progress - 0.95) * 20;
+  // Calculate progress values for different elements with offsets
+  var titleProgress = Math.max(0, Math.min(1, progress * 2.5));
+  var paragraphProgress = Math.max(0, Math.min(1, (progress - 0.1) * 2.5));
+  var leftColProgress = Math.max(0, Math.min(1, (progress - 0.15) * 2.5));
+  var rightColProgress = Math.max(0, Math.min(1, (progress - 0.2) * 2.5));
+  var posterProgress = Math.max(0, Math.min(1, (progress - 0.25) * 2.5));
 
+  // Fade out at end
+  var fadeOutProgress = progress < 0.95 ? 1 : 1 - (progress - 0.95) * 20;
+
+  // Apply fade to container
   if (fadeContainer) {
     fadeContainer.style.opacity =
       progress < 0.2 ? progress * 5 : fadeOutProgress;
   }
 
+  // Title animation
   if (introTitle) {
-    const titleX = 100 * (1 - titleProgress);
-    introTitle.style.transform = `translateX(${titleX}%)`;
+    var titleX = 100 * (1 - titleProgress);
+    introTitle.style.transform = "translateX(" + titleX + "%)";
     introTitle.style.opacity = titleProgress;
   }
 
+  // Paragraph animation
   if (introParagraph) {
-    const paragraphY = 30 * (1 - paragraphProgress);
-    introParagraph.style.transform = `translateY(${paragraphY}px)`;
+    var paragraphY = 30 * (1 - paragraphProgress);
+    introParagraph.style.transform = "translateY(" + paragraphY + "px)";
     introParagraph.style.opacity = paragraphProgress;
   }
 
-  // Left column animations (left to right)
-  leftColSections.forEach((section, index) => {
-    const sectionProgress = Math.max(
-      0,
-      Math.min(1, leftColProgress - index * 0.05)
-    );
-    const sectionX = -100 * (1 - sectionProgress);
-    section.style.transform = `translateX(${sectionX}%)`;
-    section.style.opacity = sectionProgress;
-  });
+  // Left sections animation
+  for (var i = 0; i < leftSections.length; i++) {
+    var sectionProgress = Math.max(0, Math.min(1, leftColProgress - i * 0.05));
+    var sectionX = -100 * (1 - sectionProgress);
+    leftSections[i].style.transform = "translateX(" + sectionX + "%)";
+    leftSections[i].style.opacity = sectionProgress;
+  }
 
-  // Right column animations (right to left)
-  rightColSections.forEach((section, index) => {
-    const sectionProgress = Math.max(
+  // Right sections animation
+  for (var j = 0; j < rightSections.length; j++) {
+    var rightSectionProgress = Math.max(
       0,
-      Math.min(1, rightColProgress - index * 0.1)
+      Math.min(1, rightColProgress - j * 0.1)
     );
-    const sectionX = 100 * (1 - sectionProgress);
-    section.style.transform = `translateX(${sectionX}%)`;
-    section.style.opacity = sectionProgress;
-  });
+    var rightSectionX = 100 * (1 - rightSectionProgress);
+    rightSections[j].style.transform = "translateX(" + rightSectionX + "%)";
+    rightSections[j].style.opacity = rightSectionProgress;
+  }
 
-  // Poster animation (scale up)
+  // Poster animation
   if (poster) {
-    const posterScale = 0.9 + 0.1 * posterProgress;
-    poster.style.transform = `scale(${posterScale})`;
+    var posterScale = 0.9 + 0.1 * posterProgress;
+    poster.style.transform = "scale(" + posterScale + ")";
     poster.style.opacity = posterProgress;
   }
 }
 
-/**
- * Ensure tier2 has a sticky container for animations
- */
-function ensureStickyContainer(tier2) {
+// Make sure tier2 has needed container structure
+function ensureStickySetup(tier2) {
+  // Skip if already has container
   if (tier2.querySelector(".project-sticky-container")) return;
 
-  const children = Array.from(tier2.children);
-  const stickyContainer = document.createElement("div");
-  stickyContainer.className = "project-sticky-container";
-  const fadeContainer = document.createElement("div");
-  fadeContainer.className = "project-fade-container";
+  // Collect children
+  var kids = Array.from(tier2.children);
 
-  children.forEach((child) => {
-    fadeContainer.appendChild(child);
+  // Create containers
+  var stickyBox = document.createElement("div");
+  stickyBox.className = "project-sticky-container";
+
+  var fadeBox = document.createElement("div");
+  fadeBox.className = "project-fade-container";
+
+  // Move all children inside fade container
+  kids.forEach(function (kid) {
+    fadeBox.appendChild(kid);
   });
 
-  stickyContainer.appendChild(fadeContainer);
-  tier2.appendChild(stickyContainer);
+  // Nest containers and add to tier2
+  stickyBox.appendChild(fadeBox);
+  tier2.appendChild(stickyBox);
 }
 
-/**
- * Initialize scroll effects for tier1 section elements
- */
-function initTier1ScrollEffects(tier1, parallaxBoxes, projectText) {
+// Setup effects for tier1 section
+function setupTier1Effects(tier1, parallaxBoxes, projectText) {
   if (!tier1) return;
 
-  const sentinel = document.createElement("div");
+  // Create sentinel for visibility detection
+  var sentinel = document.createElement("div");
   sentinel.className = "scroll-sentinel";
   sentinel.style.cssText =
     "height: 1px; width: 100%; position: absolute; top: 0; left: 0; visibility: hidden;";
   tier1.appendChild(sentinel);
 
-  const thresholds = [];
-  for (let i = 0; i <= 20; i++) {
+  // Create thresholds for smoother animation
+  var thresholds = [];
+  for (var i = 0; i <= 20; i++) {
     thresholds.push(i / 20);
   }
 
-  const scrollObserver = new IntersectionObserver(
-    (entries) => {
-      const tier1Entry = entries.find((entry) => entry.target === tier1);
+  // Watch for tier1 scrolling
+  var scrollWatcher = new IntersectionObserver(
+    function (entries) {
+      var tier1Entry = entries.find(function (entry) {
+        return entry.target === tier1;
+      });
 
       if (tier1Entry) {
-        const progress = Math.max(0, Math.min(1, tier1Entry.intersectionRatio));
+        var progress = Math.max(0, Math.min(1, tier1Entry.intersectionRatio));
         applyTier1ScrollEffects(progress, parallaxBoxes, projectText);
       }
     },
@@ -471,75 +502,91 @@ function initTier1ScrollEffects(tier1, parallaxBoxes, projectText) {
     }
   );
 
-  scrollObserver.observe(tier1);
+  scrollWatcher.observe(tier1);
 
-  window.addEventListener("scroll", () => {
-    const rect = tier1.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
+  // Direct scroll listener for smoother animation
+  window.addEventListener("scroll", function () {
+    var rect = tier1.getBoundingClientRect();
+    var windowHeight = window.innerHeight;
 
     if (rect.top < windowHeight && rect.bottom > 0) {
-      const visibleHeight =
+      var visibleHeight =
         Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
-      const progress = Math.min(Math.max(visibleHeight / rect.height, 0), 1);
+      var progress = Math.min(Math.max(visibleHeight / rect.height, 0), 1);
       applyTier1ScrollEffects(progress, parallaxBoxes, projectText);
     }
   });
 }
 
-/**
- * Apply scroll effects to tier1 elements based on scroll progress
- */
+// Apply scroll effects to tier1
 function applyTier1ScrollEffects(progress, parallaxBoxes, projectText) {
   if (!parallaxBoxes.length) return;
 
-  const inCurve = progress * progress;
-  const outCurve = progress * (2 - progress);
-  const inOutCurve =
+  // Different easing curves
+  var inCurve = progress * progress;
+  var outCurve = progress * (2 - progress);
+  var inOutCurve =
     progress < 0.5
       ? 2 * progress * progress
       : -1 + (4 - 2 * progress) * progress;
 
-  const opacityBase = Math.min(1, progress * 2);
-  const scaleBase = 0.8 + progress * 0.2;
+  // Base values
+  var opacityBase = Math.min(1, progress * 2);
+  var scaleBase = 0.8 + progress * 0.2;
 
-  parallaxBoxes.forEach((box) => {
-    if (!box) return;
+  // Apply to each box
+  for (var i = 0; i < parallaxBoxes.length; i++) {
+    var box = parallaxBoxes[i];
+    if (!box) continue;
 
-    const boxIndex = parseInt(box.id.replace("project-img", ""));
+    // Get index from ID
+    var boxId = box.id;
+    var boxIndex = parseInt(boxId.replace("project-img", ""));
 
+    // Different animation based on box position
     if (boxIndex <= 3) {
-      const xOffset =
+      // First group of images
+      var xOffset =
         boxIndex % 2 === 0 ? (1 - inOutCurve) * -50 : (1 - inOutCurve) * 50;
 
-      box.style.transform = `translateX(${xOffset}px) scale(${scaleBase})`;
+      box.style.transform =
+        "translateX(" + xOffset + "px) scale(" + scaleBase + ")";
       box.style.opacity = opacityBase;
     } else if (boxIndex <= 5) {
-      const delayedProgress = Math.max(0, (progress - 0.3) * 1.4);
-      const delayedCurve = delayedProgress * delayedProgress;
+      // Second group of images
+      var delayedProgress = Math.max(0, (progress - 0.3) * 1.4);
+      var delayedCurve = delayedProgress * delayedProgress;
 
       box.style.opacity = delayedCurve;
-      box.style.transform = `scale(${0.7 + delayedCurve * 0.3})`;
+      box.style.transform = "scale(" + (0.7 + delayedCurve * 0.3) + ")";
     } else {
-      const lateProgress = Math.max(0, (progress - 0.5) * 2);
-      const lateOpacity = lateProgress * 1;
-      const yOffset = (1 - lateProgress) * 40;
+      // Last group of images
+      var lateProgress = Math.max(0, (progress - 0.5) * 2);
+      var lateOpacity = lateProgress * 1;
+      var yOffset = (1 - lateProgress) * 40;
 
       box.style.opacity = lateOpacity;
-      box.style.transform = `translateY(${yOffset}px) scale(${
-        0.9 + lateProgress * 0.1
-      })`;
+      box.style.transform =
+        "translateY(" +
+        yOffset +
+        "px) scale(" +
+        (0.9 + lateProgress * 0.1) +
+        ")";
     }
-  });
+  }
 
+  // Project text animation
   if (projectText) {
-    const textProgress = Math.max(0, (progress - 0.2) * 1.25);
-    const textOpacity = textProgress;
-    const textScale = 0.9 + textProgress * 0.1;
-    const floatY = Math.sin(progress * Math.PI) * 10;
+    var textProgress = Math.max(0, (progress - 0.2) * 1.25);
+    var textOpacity = textProgress;
+    var textScale = 0.9 + textProgress * 0.1;
+    var floatY = Math.sin(progress * Math.PI) * 10;
 
     projectText.style.opacity = textOpacity;
-    projectText.style.transform = `translateY(${floatY}px) scale(${textScale})`;
+    projectText.style.transform =
+      "translateY(" + floatY + "px) scale(" + textScale + ")";
 
+    // Add/remove revealed class
     if (
       textProgress > 0.6 &&
       !projectText.classList.contains("text-revealed")
@@ -553,81 +600,85 @@ function applyTier1ScrollEffects(progress, parallaxBoxes, projectText) {
     }
   }
 
-  const scrollDown2 = document.getElementById("scroll-down2");
-  if (scrollDown2) {
-    const scrollIndicatorOpacity = progress > 0.7 ? (progress - 0.7) * 3 : 0;
-    scrollDown2.style.opacity = scrollIndicatorOpacity;
+  // Scroll indicator opacity
+  var scrollIndicator = document.getElementById("scroll-down2");
+  if (scrollIndicator) {
+    var indicatorOpacity = progress > 0.7 ? (progress - 0.7) * 3 : 0;
+    scrollIndicator.style.opacity = indicatorOpacity;
   }
 }
 
-/**
- * Initialize simple parallax effect for project images
- */
-function initSimpleParallax() {
-  const parallaxBoxes = document.querySelectorAll(".parallax-box");
+// Setup simple mouse-based parallax
+function setupSimpleParallax() {
+  var boxes = document.querySelectorAll(".parallax-box");
 
-  parallaxBoxes.forEach((box, index) => {
-    box.setAttribute("data-parallax-index", index % 3);
+  for (var i = 0; i < boxes.length; i++) {
+    var box = boxes[i];
+    box.setAttribute("data-parallax-index", i % 3);
 
-    box.addEventListener("mouseenter", () => {
-      box.classList.add("hover");
+    // Hover state
+    box.addEventListener("mouseenter", function () {
+      this.classList.add("hover");
     });
 
-    box.addEventListener("mouseleave", () => {
-      box.classList.remove("hover");
+    box.addEventListener("mouseleave", function () {
+      this.classList.remove("hover");
     });
 
-    const image = box.querySelector(".parallax-image");
+    // Mouse move parallax
+    var image = box.querySelector(".parallax-image");
     if (image) {
-      box.addEventListener("mousemove", (e) => {
-        if (box.classList.contains("hover")) {
-          const rect = box.getBoundingClientRect();
-          const xPos = (e.clientX - rect.left) / rect.width - 0.5;
-          const yPos = (e.clientY - rect.top) / rect.height - 0.5;
-          image.style.transform = `translate(${xPos * 10}px, ${yPos * 10}px)`;
+      box.addEventListener("mousemove", function (e) {
+        if (this.classList.contains("hover")) {
+          var rect = this.getBoundingClientRect();
+          var xPos = (e.clientX - rect.left) / rect.width - 0.5;
+          var yPos = (e.clientY - rect.top) / rect.height - 0.5;
+
+          var img = this.querySelector(".parallax-image");
+          if (img) {
+            img.style.transform =
+              "translate(" + xPos * 10 + "px, " + yPos * 10 + "px)";
+          }
         }
       });
     }
-  });
+  }
 }
 
-/**
- * Initialize project text reveal with animation
- */
-function initProjectText() {
-  const projectText = document.querySelector(".project-text");
+// Setup project text reveal animation
+function setupTextReveal() {
+  var projectText = document.querySelector(".project-text");
 
   if (!projectText) return;
 
-  const observer = new IntersectionObserver(
-    (entries) => {
+  // Watch for text becoming visible
+  var watcher = new IntersectionObserver(
+    function (entries) {
       if (entries[0].isIntersecting) {
         projectText.classList.add("text-revealed");
-        observer.unobserve(projectText);
+        watcher.unobserve(projectText);
       }
     },
     { threshold: 0.3 }
   );
 
-  observer.observe(projectText);
+  watcher.observe(projectText);
 }
 
-/**
- * Initialize a simple hover effect for the poster
- */
-function initPosterHover() {
-  const poster = document.querySelector(".project-poster img");
+// Add hover effect to poster
+function addPosterHoverEffect() {
+  var poster = document.querySelector(".project-poster img");
 
   if (!poster) return;
 
-  poster.addEventListener("mouseenter", () => {
-    poster.classList.add("hover");
+  poster.addEventListener("mouseenter", function () {
+    this.classList.add("hover");
   });
 
-  poster.addEventListener("mouseleave", () => {
-    poster.classList.remove("hover");
+  poster.addEventListener("mouseleave", function () {
+    this.classList.remove("hover");
   });
 }
 
-// Export the initialization function
+// Export init function
 export { initProjectParallax };
