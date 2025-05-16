@@ -1,60 +1,57 @@
-/**
- * Spirit&Bone - Optimized Scroll Effects Module
- */
+/* --Scroll effects-- */
 
 import { debounce } from "./utils.js";
 import { updateActiveIndicator } from "./main.js";
 
-// Initialize scroll effects
+// main init function
 function initScrollEffects() {
-  // Core elements
-  const sections = document.querySelectorAll(".section");
-  const menuCircle = document.getElementById("menu-circle");
-  const progressBar = document.getElementById("scroll-progress");
+  // grab elements
+  var sections = document.querySelectorAll(".section");
+  var menuCircle = document.getElementById("menu-circle");
+  var progressBar = document.getElementById("scroll-progress");
 
-  // Early exit if essential elements are missing
+  // bail if no sections
   if (!sections.length) return;
 
-  // Setup
-  initScrollIndicators();
-  initSmoothScrolling();
-  window.scrollTo(0, 0); // Ensure top position on init
+  // run setup functions
+  setupScrollIndicators();
+  makeScrollingSmoother();
+  window.scrollTo(0, 0); // start at top
 
-  // Section visibility observer
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const sectionId = entry.target.id;
+  // watch for sections becoming visible
+  var observer = new IntersectionObserver(
+    function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        var entry = entries[i];
+        var sectionId = entry.target.id;
 
         if (entry.isIntersecting) {
           entry.target.classList.add("fade-in");
 
-          // Update indicators and URL when page is loaded
+          // update nav dots and URL when loaded
           if (document.readyState === "complete") {
             updateActiveIndicator(sectionId);
 
-            // Update history state
+            // update URL hash
             if (sectionId !== "home") {
-              history.replaceState(null, null, `#${sectionId}`);
+              history.replaceState(null, null, "#" + sectionId);
             } else {
               history.replaceState(null, null, window.location.pathname);
             }
           }
 
-          // Section-specific actions (footer visibility now handled by contact-form.js)
+          // section-specific stuff
           if (sectionId === "contact") {
-            const contactForm = document.querySelector(
-              ".contact-form-container"
-            );
+            var contactForm = document.querySelector(".contact-form-container");
             if (contactForm) contactForm.classList.add("visible");
 
-            // Use the global showFooter method if available (defined in contact-form.js)
+            // show footer if available
             if (typeof window.showFooter === "function") {
               window.showFooter();
             }
           }
         }
-      });
+      }
     },
     {
       root: null,
@@ -63,181 +60,196 @@ function initScrollEffects() {
     }
   );
 
-  // Observe all sections
-  sections.forEach((section) => observer.observe(section));
+  // observe all sections
+  for (var i = 0; i < sections.length; i++) {
+    observer.observe(sections[i]);
+  }
 
-  // Core scroll handlers
-  window.addEventListener("scroll", handleScroll);
-  window.addEventListener("scroll", debounce(handleScrollDebounced, 50));
+  // add scroll handlers
+  window.addEventListener("scroll", handleQuickScrollUpdates);
+  window.addEventListener("scroll", debounce(handleSlowScrollUpdates, 50));
 
-  // Fast scroll handler for critical UI updates
-  function handleScroll() {
+  // fast scroll handler for UI updates
+  function handleQuickScrollUpdates() {
+    // bail if elements missing
     if (!progressBar && !menuCircle) return;
 
-    const scrollTop = window.scrollY;
-    const windowHeight = window.innerHeight;
+    var scrollPos = window.scrollY;
+    var windowHeight = window.innerHeight;
 
-    // Update progress bar
+    // update progress bar width
     if (progressBar) {
-      const fullHeight = document.body.scrollHeight - windowHeight;
-      const progress = (scrollTop / fullHeight) * 100;
-      progressBar.style.width = `${progress}%`;
+      var pageHeight = document.body.scrollHeight - windowHeight;
+      var scrollPercent = (scrollPos / pageHeight) * 100;
+      progressBar.style.width = scrollPercent + "%";
     }
 
-    // Update menu circle size
+    // shrink menu circle as we scroll
     if (menuCircle) {
-      const circle = menuCircle.querySelector(".circle");
+      var circle = menuCircle.querySelector(".circle");
       if (circle) {
-        const baseSize = 40;
-        const shrinkFactor = 0.9;
-        const scrollFactor = Math.min(scrollTop / 300, 1);
-        const newSize = baseSize * (1 - scrollFactor * (1 - shrinkFactor));
+        var startSize = 40; // original size in px
+        var minSize = 36; // smallest size in px
+        var scrollFactor = Math.min(scrollPos / 300, 1);
+        var newSize = startSize - (startSize - minSize) * scrollFactor;
 
-        circle.style.width = `${newSize}px`;
-        circle.style.height = `${newSize}px`;
+        circle.style.width = newSize + "px";
+        circle.style.height = newSize + "px";
       }
     }
   }
 
-  // Debounced scroll handler for less frequent updates
-  function handleScrollDebounced() {
-    const scrollTop = window.scrollY;
-    const windowHeight = window.innerHeight;
-    const fullHeight = document.body.scrollHeight - windowHeight;
+  // slower scroll handler for less frequent stuff
+  function handleSlowScrollUpdates() {
+    var scrollPos = window.scrollY;
+    var windowHeight = window.innerHeight;
+    var pageHeight = document.body.scrollHeight - windowHeight;
 
-    // Check bottom of page for footer visibility (using global method)
+    // check if we're near bottom - show footer
     if (
-      (fullHeight - scrollTop < 50 || scrollTop >= fullHeight) &&
+      (pageHeight - scrollPos < 50 || scrollPos >= pageHeight) &&
       typeof window.showFooter === "function"
     ) {
       window.showFooter();
     }
 
-    // Apply parallax effects to all relevant elements
-    applyParallaxEffects(scrollTop, windowHeight);
+    // apply parallax effects based on scroll position
+    doParallaxStuff(scrollPos, windowHeight);
   }
 
-  // Consolidated parallax effects function
-  function applyParallaxEffects(scrolled, windowHeight) {
-    // Video container parallax
-    const videoContainer = document.querySelector(".video-container");
-    if (videoContainer) {
-      const movement = scrolled * 0.15;
-      const scale = 1 + scrolled * 0.0002;
-      videoContainer.style.transform = `translateY(${movement}px) translateZ(-1px) scale(${scale})`;
+  // apply various parallax effects
+  function doParallaxStuff(scrollPos, windowHeight) {
+    // video background parallax
+    var videoBox = document.querySelector(".video-container");
+    if (videoBox) {
+      var moveAmount = scrollPos * 0.15;
+      var scaleAmount = 1 + scrollPos * 0.0002;
+      videoBox.style.transform =
+        "translateY(" +
+        moveAmount +
+        "px) translateZ(-1px) scale(" +
+        scaleAmount +
+        ")";
     }
 
-    // Team section parallax
-    const teamMembers = document.querySelectorAll(".team-member");
-    const teamSection = document.getElementById("team");
+    // team section parallax
+    var teamPeople = document.querySelectorAll(".team-member");
+    var teamSection = document.getElementById("team");
 
-    if (teamMembers.length && teamSection) {
-      const teamOffset = scrolled - teamSection.offsetTop;
+    if (teamPeople.length && teamSection) {
+      var teamPos = scrollPos - teamSection.offsetTop;
 
-      if (teamOffset > -windowHeight && teamOffset < windowHeight) {
-        teamMembers.forEach((member, index) => {
-          const depth = 0.05 + (index % 3) * 0.02;
-          const xDirection = index % 2 === 0 ? 1 : -1;
-          const yMovement = teamOffset * depth * 0.5;
-          const xMovement = teamOffset * depth * 0.2 * xDirection;
+      // only apply when team section is visible
+      if (teamPos > -windowHeight && teamPos < windowHeight) {
+        for (var i = 0; i < teamPeople.length; i++) {
+          var member = teamPeople[i];
+          var depthFactor = 0.05 + (i % 3) * 0.02;
+          var xDir = i % 2 === 0 ? 1 : -1; // alternate direction
+          var yMove = teamPos * depthFactor * 0.5;
+          var xMove = teamPos * depthFactor * 0.2 * xDir;
 
-          member.style.transform = `translate(${xMovement}px, ${yMovement}px)`;
-        });
+          member.style.transform =
+            "translate(" + xMove + "px, " + yMove + "px)";
+        }
       }
     }
 
-    // Contact section parallax
-    const contactInfoElements = document.querySelectorAll(".contact-info > *");
-    const contactSection = document.getElementById("contact");
+    // contact section parallax
+    var contactItems = document.querySelectorAll(".contact-info > *");
+    var contactSection = document.getElementById("contact");
 
-    if (contactInfoElements.length && contactSection) {
-      const contactOffset = scrolled - contactSection.offsetTop;
+    if (contactItems.length && contactSection) {
+      var contactPos = scrollPos - contactSection.offsetTop;
 
-      if (contactOffset > -windowHeight && contactOffset < windowHeight) {
-        contactInfoElements.forEach((element, index) => {
-          const movement = contactOffset * 0.05 * (index % 2 === 0 ? 1 : -1);
-          element.style.transform = `translateY(${movement}px)`;
-        });
+      // only apply when contact section is visible
+      if (contactPos > -windowHeight && contactPos < windowHeight) {
+        for (var j = 0; j < contactItems.length; j++) {
+          var item = contactItems[j];
+          var moveY = contactPos * 0.05 * (j % 2 === 0 ? 1 : -1);
+          item.style.transform = "translateY(" + moveY + "px)";
+        }
       }
     }
   }
 
-  // Initialize smooth scrolling behavior
-  function initSmoothScrolling() {
-    // Use native smooth scrolling if available
+  // setup smooth scrolling
+  function makeScrollingSmoother() {
+    // use native smooth scrolling if browser supports it
     if ("scrollBehavior" in document.documentElement.style) {
       document.documentElement.style.scrollBehavior = "smooth";
 
-      // Apply to all anchor links
-      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-        anchor.addEventListener("click", function (e) {
-          const href = this.getAttribute("href");
+      // apply to all anchor links
+      var anchorLinks = document.querySelectorAll('a[href^="#"]');
+      for (var i = 0; i < anchorLinks.length; i++) {
+        anchorLinks[i].addEventListener("click", function (e) {
+          var href = this.getAttribute("href");
           if (href.length > 1) {
-            const targetElement = document.querySelector(href);
-            if (targetElement) {
+            var target = document.querySelector(href);
+            if (target) {
               e.preventDefault();
-              targetElement.scrollIntoView({ behavior: "smooth" });
+              target.scrollIntoView({ behavior: "smooth" });
             }
           }
         });
-      });
+      }
       return;
     }
 
-    // Fallback for browsers without native support
-    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-      anchor.addEventListener("click", function (e) {
-        const href = this.getAttribute("href");
+    // fallback for older browsers
+    var links = document.querySelectorAll('a[href^="#"]');
+    for (var j = 0; j < links.length; j++) {
+      links[j].addEventListener("click", function (e) {
+        var href = this.getAttribute("href");
         if (href.length > 1) {
           e.preventDefault();
 
-          const targetElement = document.querySelector(href);
-          if (targetElement) {
-            const targetPosition =
-              targetElement.getBoundingClientRect().top + window.pageYOffset;
-            const startPosition = window.pageYOffset;
-            const distance = targetPosition - startPosition;
-            const duration = 2000; // ms
-            let startTime = null;
+          var target = document.querySelector(href);
+          if (target) {
+            var targetY =
+              target.getBoundingClientRect().top + window.pageYOffset;
+            var startY = window.pageYOffset;
+            var distance = targetY - startY;
+            var duration = 2000; // ms
+            var startTime = null;
 
-            function animation(currentTime) {
+            function scrollAnimation(currentTime) {
               if (startTime === null) startTime = currentTime;
-              const timeElapsed = currentTime - startTime;
-              const scrollY = easeInOutQuad(
+              var timeElapsed = currentTime - startTime;
+              var scrollY = easeScrolling(
                 timeElapsed,
-                startPosition,
+                startY,
                 distance,
                 duration
               );
               window.scrollTo(0, scrollY);
 
               if (timeElapsed < duration) {
-                requestAnimationFrame(animation);
+                requestAnimationFrame(scrollAnimation);
               }
             }
 
-            // Easing function
-            function easeInOutQuad(t, b, c, d) {
+            // easing function - quadratic
+            function easeScrolling(t, b, c, d) {
               t /= d / 2;
               if (t < 1) return (c / 2) * t * t + b;
               t--;
               return (-c / 2) * (t * (t - 2) - 1) + b;
             }
 
-            requestAnimationFrame(animation);
+            requestAnimationFrame(scrollAnimation);
           }
         }
       });
-    });
+    }
   }
 
-  // Initialize scroll indicators
-  function initScrollIndicators() {
-    // Home scroll indicator
-    const scrollDownBtn = document.querySelector(".scroll-down");
+  // setup scroll indicators
+  function setupScrollIndicators() {
+    // handle home scroll down arrow
+    var scrollDownBtn = document.querySelector(".scroll-down");
     if (scrollDownBtn) {
-      scrollDownBtn.addEventListener("click", () => {
-        const projectSection = document.getElementById("project");
+      scrollDownBtn.addEventListener("click", function () {
+        var projectSection = document.getElementById("project");
         if (projectSection) {
           projectSection.scrollIntoView({ behavior: "smooth" });
           updateActiveIndicator("project");
@@ -245,24 +257,24 @@ function initScrollEffects() {
       });
     }
 
-    // Handle scroll indicator visibility
+    // handle indicator visibility based on scroll
     window.addEventListener(
       "scroll",
-      debounce(() => {
-        const scrollPosition = window.scrollY;
-        const windowHeight = window.innerHeight;
+      debounce(function () {
+        var scrollPos = window.scrollY;
+        var windowHeight = window.innerHeight;
 
-        // Handle home scroll indicator
+        // home scroll indicator
         if (scrollDownBtn) {
-          const homeSection = document.getElementById("home");
-          if (homeSection && scrollPosition > windowHeight / 2) {
+          var homeSection = document.getElementById("home");
+          if (homeSection && scrollPos > windowHeight / 2) {
             scrollDownBtn.style.opacity = "0";
-            setTimeout(() => {
+            setTimeout(function () {
               scrollDownBtn.style.display = "none";
             }, 500);
           } else if (homeSection) {
             scrollDownBtn.style.display = "block";
-            setTimeout(() => {
+            setTimeout(function () {
               scrollDownBtn.style.opacity = "1";
             }, 100);
           }
@@ -272,5 +284,5 @@ function initScrollEffects() {
   }
 }
 
-// Export functions (removed fixFooterPosition as it's now handled by contact-form.js)
+// export just the init function
 export { initScrollEffects };
