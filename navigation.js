@@ -1,182 +1,178 @@
-/**
- * Spirit&Bone - Navigation Module
- * Simplified page transition approach with clearly separated up/down directions
- */
+/* ---Navigation--- */
 
 import { updateActiveIndicator } from "/main.js";
 
-// Initialize navigation functionality
+// setup nav elements and handlers
 function initNavigation() {
-  // Get DOM references
-  const menuCircle = document.getElementById("menu-circle");
-  const navLinks = document.getElementById("nav-links");
-  const closeMenu = document.getElementById("close-menu");
+  // grab elements we need
+  var menuBtn = document.getElementById("menu-circle");
+  var navMenu = document.getElementById("nav-links");
+  var closeBtn = document.getElementById("close-menu");
 
-  // Create both transition elements once during initialization
-  createTransitionElements();
+  // make transition elements
+  makeTransitionElements();
 
-  // Exit early if key elements don't exist
-  if (!menuCircle || !navLinks) return;
+  // bail if stuff is missing
+  if (!menuBtn || !navMenu) return;
 
-  // Menu toggle functionality
-  menuCircle.addEventListener("click", () => {
-    navLinks.classList.toggle("active");
-    const circle = menuCircle.querySelector(".circle");
+  // toggle menu when clicked
+  menuBtn.addEventListener("click", function () {
+    navMenu.classList.toggle("active");
+    var circle = menuBtn.querySelector(".circle");
     if (circle) {
       circle.classList.add("pulse");
-      setTimeout(() => circle.classList.remove("pulse"), 700);
+      setTimeout(function () {
+        circle.classList.remove("pulse");
+      }, 700);
     }
   });
 
-  // Close menu with X button
-  closeMenu?.addEventListener("click", () =>
-    navLinks.classList.remove("active")
-  );
+  // close with X button
+  if (closeBtn) {
+    closeBtn.addEventListener("click", function () {
+      navMenu.classList.remove("active");
+    });
+  }
 
-  // Set up navigation link transitions
-  setupNavListeners(navLinks);
+  // hook up nav links
+  hookupNavLinks(navMenu);
 
-  // Close menu when clicking outside
-  document.addEventListener("click", (event) => {
+  // close menu when clicking elsewhere
+  document.addEventListener("click", function (e) {
     if (
-      navLinks.classList.contains("active") &&
-      !navLinks.contains(event.target) &&
-      !menuCircle.contains(event.target)
+      navMenu.classList.contains("active") &&
+      !navMenu.contains(e.target) &&
+      !menuBtn.contains(e.target)
     ) {
-      navLinks.classList.remove("active");
+      navMenu.classList.remove("active");
     }
   });
 
-  // Close menu with Escape key
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && navLinks.classList.contains("active")) {
-      navLinks.classList.remove("active");
+  // escape key closes menu
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && navMenu.classList.contains("active")) {
+      navMenu.classList.remove("active");
     }
   });
 
-  // Section indicator dots
-  document.querySelectorAll(".indicator-dot").forEach((dot) => {
-    dot.addEventListener("click", () => {
-      const sectionId = dot.getAttribute("data-section");
-      const sectionElement = document.getElementById(sectionId);
-      if (sectionElement) {
-        executeTransition(sectionElement, sectionId);
+  // section dots
+  var dots = document.querySelectorAll(".indicator-dot");
+  dots.forEach(function (dot) {
+    dot.addEventListener("click", function () {
+      var sectionId = this.getAttribute("data-section");
+      var sectionEl = document.getElementById(sectionId);
+      if (sectionEl) {
+        doTransition(sectionEl, sectionId);
       }
     });
   });
 }
 
-/**
- * Creates both transition overlay elements (up and down)
- */
-function createTransitionElements() {
-  // Remove any existing transition elements
-  const existingTransitions = document.querySelectorAll(
+// create both transition overlays
+function makeTransitionElements() {
+  // remove any existing ones
+  var oldOnes = document.querySelectorAll(
     ".page-transition-up, .page-transition-down"
   );
-  existingTransitions.forEach((el) => el.remove());
+  for (var i = 0; i < oldOnes.length; i++) {
+    oldOnes[i].remove();
+  }
 
-  // Create up transition element
-  const upTransition = document.createElement("div");
+  // make upward transition
+  var upTransition = document.createElement("div");
   upTransition.className = "page-transition page-transition-up";
   document.body.appendChild(upTransition);
 
-  // Create down transition element
-  const downTransition = document.createElement("div");
+  // make downward transition
+  var downTransition = document.createElement("div");
   downTransition.className = "page-transition page-transition-down";
   document.body.appendChild(downTransition);
 }
 
-/**
- * Set up listeners for nav links
- * @param {HTMLElement} navLinks - Navigation links container
- */
-function setupNavListeners(navLinks) {
-  document.querySelectorAll(".nav-links li a").forEach((link) => {
-    link.addEventListener("click", function (event) {
-      event.preventDefault();
+// attach click handlers to nav links
+function hookupNavLinks(menu) {
+  var links = document.querySelectorAll(".nav-links li a");
+  for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener("click", function (e) {
+      // don't follow the link
+      e.preventDefault();
 
-      const targetId = this.getAttribute("href").substring(1);
-      const targetSection = document.getElementById(targetId);
+      // figure out where to go
+      var targetId = this.getAttribute("href").substring(1);
+      var targetSection = document.getElementById(targetId);
 
-      // Close the menu and execute transition
-      navLinks.classList.remove("active");
-      executeTransition(targetSection, targetId, this);
+      // close menu and run transition
+      menu.classList.remove("active");
+      doTransition(targetSection, targetId, this);
     });
-  });
+  }
 }
 
-/**
- * Get the ordered section list and current active section
- * @returns {Object} Object containing sections array and current section index
- */
-function getSectionContext() {
-  const sections = ["home", "project", "team", "contact"];
-  const activeDot = document.querySelector(".indicator-dot.active");
-  const currentId = activeDot ? activeDot.getAttribute("data-section") : "";
+// figure out section order
+function getSectionInfo() {
+  var sectionIds = ["home", "project", "team", "contact"];
+  var activeDot = document.querySelector(".indicator-dot.active");
+  var currentId = activeDot ? activeDot.getAttribute("data-section") : "";
 
   return {
-    sections,
-    currentIndex: sections.indexOf(currentId),
+    list: sectionIds,
+    current: sectionIds.indexOf(currentId),
   };
 }
 
-/**
- * Execute the transition in the correct direction
- * @param {HTMLElement} targetSection - Section to transition to
- * @param {string} targetId - ID of target section
- * @param {HTMLElement} [clickedLink] - Clicked navigation link (optional)
- */
-function executeTransition(targetSection, targetId, clickedLink = null) {
-  if (!targetSection) return;
+// run page transition animation
+function doTransition(target, targetId, clickedLink) {
+  // bail if no target
+  if (!target) return;
 
-  // Get section context
-  const { sections, currentIndex } = getSectionContext();
-  const targetIndex = sections.indexOf(targetId);
+  // figure out where we are
+  var info = getSectionInfo();
+  var targetIndex = info.list.indexOf(targetId);
 
-  // Determine direction - default to down if we can't determine
-  const isGoingUp = currentIndex !== -1 && targetIndex < currentIndex;
+  // figure out direction - default to down if we can't tell
+  var goingUp = info.current !== -1 && targetIndex < info.current;
 
-  // Get the appropriate transition element
-  const transitionElement = document.querySelector(
-    isGoingUp ? ".page-transition-up" : ".page-transition-down"
+  // get the right transition element
+  var transEl = document.querySelector(
+    goingUp ? ".page-transition-up" : ".page-transition-down"
   );
 
-  if (!transitionElement) return;
+  if (!transEl) return;
 
-  // Start transition sequence
+  // lock the page
   document.body.classList.add("is-transitioning");
   if (clickedLink) clickedLink.classList.add("nav-selected");
 
-  // Phase 1: Enter from top or bottom
-  transitionElement.classList.add("enter");
+  // Phase 1: transition slides in
+  transEl.classList.add("enter");
 
-  // Phase 2: After transition covers screen, update content
-  setTimeout(() => {
-    // Update active section
-    document.querySelectorAll(".section").forEach((section) => {
-      section.classList.remove("transition-in");
-    });
+  // Phase 2: after covering screen, update content
+  setTimeout(function () {
+    // mark active section
+    var allSections = document.querySelectorAll(".section");
+    for (var i = 0; i < allSections.length; i++) {
+      allSections[i].classList.remove("transition-in");
+    }
 
-    targetSection.classList.add("transition-in");
+    target.classList.add("transition-in");
 
-    // Update active indicator and URL
+    // update indicator and URL
     updateActiveIndicator(targetId);
-    targetSection.scrollIntoView({ behavior: "auto" });
-    history.pushState(null, null, `#${targetId}`);
+    target.scrollIntoView({ behavior: "auto" });
+    history.pushState(null, null, "#" + targetId);
 
-    // Phase 3: Exit in opposite direction
-    transitionElement.classList.remove("enter");
-    transitionElement.classList.add("exit");
+    // Phase 3: slide out in opposite direction
+    transEl.classList.remove("enter");
+    transEl.classList.add("exit");
 
-    // Phase 4: Cleanup after exit animation completes
-    setTimeout(() => {
-      transitionElement.classList.remove("exit");
+    // Phase 4: cleanup after exit done
+    setTimeout(function () {
+      transEl.classList.remove("exit");
       document.body.classList.remove("is-transitioning");
       if (clickedLink) clickedLink.classList.remove("nav-selected");
     }, 700);
   }, 700);
 }
 
-// Export the initialization function
+// export just the init function
 export { initNavigation };
