@@ -1,85 +1,89 @@
-/**
- * Spirit&Bone - Utility Functions
- */
+/* ---Utility functions--- */
 
-/**
- * Debounce function to limit how often a function can run
- * @param {Function} func - Function to debounce
- * @param {number} wait - Milliseconds to wait
- * @param {boolean} immediate - Whether to run immediately
- * @returns {Function} Debounced function
- */
-function debounce(func, wait = 20, immediate = false) {
-  let timeout;
+// stops functions from firing too often during scroll
+function debounce(fn, wait, runFirst) {
+  var timer;
 
   return function () {
-    const context = this;
-    const args = arguments;
+    var context = this;
+    var args = arguments;
 
-    const later = function () {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
+    // function to run after delay
+    var laterFn = function () {
+      timer = null;
+      if (!runFirst) fn.apply(context, args);
     };
 
-    const callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
+    // if we want to run immediately and no timer exists
+    var callNow = runFirst && !timer;
 
-    if (callNow) func.apply(context, args);
+    // clear existing timer
+    clearTimeout(timer);
+
+    // set new timer
+    timer = setTimeout(laterFn, wait || 20);
+
+    // run now if needed
+    if (callNow) fn.apply(context, args);
   };
 }
 
-/**
- * Throttle function to limit execution rate
- * @param {Function} func - Function to throttle
- * @param {number} limit - Milliseconds between allowed executions
- * @returns {Function} Throttled function
- */
-function throttle(func, limit = 300) {
-  let lastRan = 0;
-  let timeout;
+// limits how often a function runs
+function throttle(fn, limit) {
+  var lastRun = 0;
+  var waiting = null;
+
+  // set default if not provided
+  limit = limit || 300;
 
   return function () {
-    const context = this;
-    const args = arguments;
-    const now = Date.now();
+    var self = this;
+    var stuff = arguments;
+    var now = Date.now();
 
-    if (now - lastRan >= limit) {
-      // If enough time has passed, run the function immediately
-      func.apply(context, args);
-      lastRan = now;
+    // if enough time passed, run right away
+    if (now - lastRun >= limit) {
+      // if there's a waiting call, cancel it
+      if (waiting) clearTimeout(waiting);
+
+      // run function & update timestamp
+      fn.apply(self, stuff);
+      lastRun = now;
     } else {
-      // Otherwise, schedule to run once enough time has passed
-      clearTimeout(timeout);
-      timeout = setTimeout(function () {
-        lastRan = Date.now();
-        func.apply(context, args);
-      }, limit - (now - lastRan));
+      // not enough time passed, schedule for later
+      clearTimeout(waiting);
+      waiting = setTimeout(function () {
+        // make sure we update lastRun when it finally executes
+        lastRun = Date.now();
+        fn.apply(self, stuff);
+      }, limit - (now - lastRun));
     }
   };
 }
 
-/**
- * Check if element is in viewport
- * @param {HTMLElement} el - Element to check
- * @param {number} offset - Optional offset to consider element in view before it actually is
- * @returns {boolean} Whether element is in viewport
- */
-function isElementInViewport(el, offset = 0) {
+// check if element is visible
+function isInViewport(el, offset) {
+  // bail if element not found
   if (!el) return false;
 
-  const rect = el.getBoundingClientRect();
-  const windowHeight =
-    window.innerHeight || document.documentElement.clientHeight;
-  const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+  // default offset to 0 if not passed
+  offset = offset || 0;
 
+  // get element position
+  var box = el.getBoundingClientRect();
+
+  // get viewport dimensions
+  var winHeight = window.innerHeight || document.documentElement.clientHeight;
+  var winWidth = window.innerWidth || document.documentElement.clientWidth;
+
+  // check if element is in viewport with offset
   return (
-    rect.top - offset <= windowHeight &&
-    rect.left - offset <= windowWidth &&
-    rect.bottom + offset >= 0 &&
-    rect.right + offset >= 0
+    box.top - offset <= winHeight &&
+    box.left - offset <= winWidth &&
+    box.bottom + offset >= 0 &&
+    box.right + offset >= 0
   );
 }
 
-// Export only the functions that are actually used
-export { debounce, throttle, isElementInViewport };
+// export our functions
+export { debounce, throttle, isInViewport };
