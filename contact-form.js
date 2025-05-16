@@ -1,92 +1,97 @@
-/* Contact Form */
-
-// Initialize contact form
+// Find form when page loads, set up events
 function initContactForm() {
-  const contactFormContainer = document.querySelector(
-    ".contact-form-container"
-  );
-  if (!contactFormContainer) {
-    console.error("Contact form container not found");
+  let formBox = document.querySelector(".contact-form-container");
+  if (!formBox) {
+    console.error("Can't find the contact form box");
     return;
   }
 
-  contactFormContainer.classList.add("visible");
+  formBox.classList.add("visible");
 
-  const form = contactFormContainer.querySelector("form");
-  if (!form) {
-    console.error("Contact form not found");
+  let formEl = formBox.querySelector("form");
+  if (!formEl) {
+    console.error("No form inside the container");
     return;
   }
 
-  form.addEventListener("submit", function (event) {
-    event.preventDefault();
+  // Form submit handler
+  formEl.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-    if (!validateForm(form)) return;
+    // Check valid inputs
+    if (!checkFormFields(formEl)) return;
 
-    const submitButton = form.querySelector('button[type="submit"]');
-    if (!submitButton) return;
+    // Get button for status updates
+    let submitBtn = formEl.querySelector('button[type="submit"]');
+    if (!submitBtn) return;
 
-    const originalText = submitButton.textContent;
-    submitButton.disabled = true;
-    submitButton.textContent = "Sending...";
+    // Save text and update status
+    let btnText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending...";
 
-    const formData = new FormData(form);
-    formData.append("recipient", "alexanderopera@gmail.com");
+    // Prepare data to send
+    let data = new FormData(formEl);
+    data.append("recipient", "alexanderopera@gmail.com");
 
+    // Send the form data
     fetch("https://formsubmit.co/alexanderopera@gmail.com", {
       method: "POST",
-      body: formData,
+      body: data,
     })
-      .then((response) => {
-        if (response.ok) return response;
-        throw new Error("Network response was not ok.");
+      .then((res) => {
+        if (res.ok) return res;
+        throw new Error("Server error");
       })
       .then(() => {
         alert("Thank you for your message! We will get back to you soon.");
-        form.reset();
+        formEl.reset();
       })
-      .catch((error) => {
-        console.error("Error:", error);
-        alert(
-          "There was an issue sending your message. Please try again later."
-        );
+      .catch((err) => {
+        console.error("Problem:", err);
+        alert("Sorry, couldn't send your message. Try again later.");
       })
       .finally(() => {
-        submitButton.disabled = false;
-        submitButton.textContent = originalText;
-
-        showFooter();
+        submitBtn.disabled = false;
+        submitBtn.textContent = btnText;
+        makeFooterVisible();
       });
   });
 
-  setupVisibilityObserver(contactFormContainer);
+  // Set up fade-in effects
+  setupFadeEffects(formBox);
 
-  showFooterOnScroll();
+  // Handle footer visibility on scroll
+  setupFooterVisibility();
 
-  window.addEventListener("resize", fixFooterSpace);
+  // Get footer element
+  let footerEl = document.querySelector("footer");
+  if (footerEl) {
+    // Make function available globally
+    window.showFooter = makeFooterVisible;
 
-  const footer = document.querySelector("footer");
-  if (footer) {
-    window.showFooter = showFooter;
-
-    if (isNearPageBottom()) {
-      showFooter();
+    // Show footer if we're at bottom
+    if (isAtPageBottom()) {
+      makeFooterVisible();
     }
   }
 }
 
-function validateForm(form) {
-  const name = form.querySelector("#name")?.value.trim();
-  const email = form.querySelector("#email")?.value.trim();
-  const message = form.querySelector("#message")?.value.trim();
+// Make sure all required fields are filled
+function checkFormFields(form) {
+  let nameVal = form.querySelector("#name")?.value.trim();
+  let emailVal = form.querySelector("#email")?.value.trim();
+  let msgVal = form.querySelector("#message")?.value.trim();
 
-  if (!name || !email || !message) {
+  // Make sure everything is filled
+  if (!nameVal || !emailVal || !msgVal) {
     alert("Please fill out all fields.");
     return false;
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
+  // Check email format
+  let emailCheck = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailCheck.test(emailVal)) {
     alert("Please enter a valid email address.");
     return false;
   }
@@ -94,95 +99,116 @@ function validateForm(form) {
   return true;
 }
 
-function setupVisibilityObserver(container) {
-  const formGroups = container.querySelectorAll(".form-group");
-  formGroups.forEach((group, index) => {
-    group.style.transitionDelay = `${index * 0.1}s`;
+// Add fade-in animation to form elements
+function setupFadeEffects(container) {
+  let inputs = container.querySelectorAll(".form-group");
+
+  // Add staggered delays
+  inputs.forEach(function (inp, idx) {
+    inp.style.transitionDelay = idx * 0.1 + "s";
   });
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          container.classList.add("visible");
+  // Create scroll watcher
+  let watcher = new IntersectionObserver(
+    function (items) {
+      if (items[0].isIntersecting) {
+        container.classList.add("visible");
 
-          const contactInfo = document.querySelector(".contact-info");
-          if (contactInfo) {
-            contactInfo.style.transition = "transform 0.5s ease 0.3s";
-            contactInfo.style.transform = "translateY(0)";
-          }
-
-          observer.unobserve(entry.target);
+        // Also animate contact info
+        let infoBox = document.querySelector(".contact-info");
+        if (infoBox) {
+          infoBox.style.transition = "transform 0.5s ease 0.3s";
+          infoBox.style.transform = "translateY(0)";
         }
-      });
+
+        // Stop watching
+        watcher.unobserve(items[0].target);
+      }
     },
     { threshold: 0.2 }
   );
 
-  observer.observe(container);
+  // Start watching
+  watcher.observe(container);
 
-  const contactInfo = document.querySelector(".contact-info");
-  if (contactInfo) {
-    contactInfo.style.transform = "translateY(20px)";
+  // Set initial state
+  let infoBox = document.querySelector(".contact-info");
+  if (infoBox) {
+    infoBox.style.transform = "translateY(20px)";
   }
 }
 
-function showFooterOnScroll() {
-  const contactSection = document.getElementById("contact");
-  if (!contactSection) return;
+// Watch for contact section visibility
+function setupFooterVisibility() {
+  let contactEl = document.getElementById("contact");
+  if (!contactEl) return;
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      if (entries[0].isIntersecting || isNearPageBottom()) {
-        showFooter();
+  // Create watcher
+  let watcher = new IntersectionObserver(
+    function (items) {
+      if (items[0].isIntersecting || isAtPageBottom()) {
+        makeFooterVisible();
       }
     },
     { threshold: 0.8 }
   );
 
-  observer.observe(contactSection);
+  // Start watching
+  watcher.observe(contactEl);
+
+  // Fix spacing when window resizes
+  window.addEventListener("resize", fixPageSpacing);
 }
 
-function isNearPageBottom() {
-  const scrollTop = window.scrollY || document.documentElement.scrollTop;
-  const windowHeight = window.innerHeight;
-  const docHeight = Math.max(
+// Check if we're near the bottom of page
+function isAtPageBottom() {
+  let scrollPos = window.scrollY || document.documentElement.scrollTop;
+  let viewportHeight = window.innerHeight;
+  let docHeight = Math.max(
     document.body.scrollHeight,
     document.documentElement.scrollHeight
   );
 
-  return docHeight - (scrollTop + windowHeight) < 100;
+  // Within 100px of bottom
+  return docHeight - (scrollPos + viewportHeight) < 100;
 }
 
-function showFooter() {
-  const footer = document.querySelector("footer");
-  if (!footer) return;
+// Show the footer element
+function makeFooterVisible() {
+  let footerEl = document.querySelector("footer");
+  if (!footerEl) return;
 
-  footer.classList.add("visible");
-  fixFooterSpace();
+  footerEl.classList.add("visible");
+  fixPageSpacing();
 }
 
-function fixFooterSpace() {
-  const contactSection = document.getElementById("contact");
-  if (contactSection) {
-    const nextElement = contactSection.nextElementSibling;
-    if (nextElement && nextElement.classList.contains("section-spacer")) {
-      nextElement.style.display = "none";
+// Fix spacing issues with footer
+function fixPageSpacing() {
+  // Handle contact section
+  let contactEl = document.getElementById("contact");
+  if (contactEl) {
+    let nextEl = contactEl.nextElementSibling;
+    if (nextEl && nextEl.classList.contains("section-spacer")) {
+      nextEl.style.display = "none";
     }
 
-    contactSection.style.marginBottom = "0";
-    contactSection.style.paddingBottom = "0";
+    // Remove margins
+    contactEl.style.marginBottom = "0";
+    contactEl.style.paddingBottom = "0";
   }
 
-  const footer = document.querySelector("footer");
-  if (footer) {
-    footer.style.marginBottom = "0";
+  // Fix footer margin
+  let footerEl = document.querySelector("footer");
+  if (footerEl) {
+    footerEl.style.marginBottom = "0";
   }
 
+  // Fix body margins
   document.body.style.marginBottom = "0";
   document.body.style.paddingBottom = "0";
   document.documentElement.style.marginBottom = "0";
   document.documentElement.style.paddingBottom = "0";
 }
 
-export { initContactForm, showFooter };
+// Export these functions for use elsewhere
+export { initContactForm, makeFooterVisible as showFooter };
