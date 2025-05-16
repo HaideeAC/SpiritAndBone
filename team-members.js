@@ -1,187 +1,181 @@
-/**
- * Spirit&Bone - Team Members Module (Optimized)
+/* ---Team section---
+ * Known issues: mobile rotation sometimes sticks
  */
 
-// Initialize team section
+// main init for team section
 function initTeamSection() {
-  // Get references to all team members
-  const teamMembers = document.querySelectorAll(".team-member");
-  const teamContainer = document.querySelector(".team-container");
-  const teamSection = document.getElementById("team");
-  const pandeiro = document.getElementById("member10");
+  // get elements from page
+  var teamMembers = document.querySelectorAll(".team-member");
+  var teamBox = document.querySelector(".team-container");
+  var teamSection = document.getElementById("team");
+  var pandeiro = document.getElementById("member10");
 
-  // If no team members or container are found, exit early
-  if (!teamMembers.length || !teamContainer || !teamSection || !pandeiro) {
-    console.warn("Team section elements not found in the document.");
+  // bail if missing key elements
+  if (!teamMembers.length || !teamBox || !teamSection || !pandeiro) {
+    console.warn("Missing team elements, skipping...");
     return;
   }
 
-  // Set up the pandeiro audio interaction
-  initPandeiroAudio();
+  // setup the audio interaction for pandeiro
+  setupPandeiroAudio();
 
-  // Set up interactions for regular team members
-  initTeamMemberInteractions(teamMembers);
+  // setup core member interactions
+  setupTeamMembers(teamMembers);
 
-  // Initialize responsive layout and add resize listener
-  adjustTeamLayout();
-  window.addEventListener("resize", adjustTeamLayout);
+  // fix layout based on screen size
+  fixTeamLayout();
+  window.addEventListener("resize", fixTeamLayout);
 
-  // Add document-level touch handler for closing flipped cards
-  addDocumentTouchHandler(teamMembers);
+  // add touch handler to close flipped cards
+  setupTouchHandler(teamMembers);
 
-  // Initialize the scroll effects for the team members
-  initScrollEffect(teamMembers, pandeiro, teamSection);
+  // setup scroll effects that make members emerge from pandeiro
+  setupScrollEffect(teamMembers, pandeiro, teamSection);
 }
 
 /**
- * Initialize scroll effect for team members emerging/hiding from pandeiro
- * @param {NodeList} teamMembers - Collection of team member elements
- * @param {HTMLElement} pandeiro - The pandeiro element
- * @param {HTMLElement} teamSection - The team section element
+ * Setup scroll effect for team members
  */
-function initScrollEffect(teamMembers, pandeiro, teamSection) {
-  // Set initial state - all team members behind pandeiro
-  const pandeiroPos = getPandeiroPosition(pandeiro, teamSection);
+function setupScrollEffect(members, pandeiro, section) {
+  // initially hide all members behind pandeiro
+  var pandeiroPos = getPandeiroPos(pandeiro, section);
 
-  teamMembers.forEach((member) => {
-    if (member.id === "member10") return; // Skip pandeiro
+  for (var i = 0; i < members.length; i++) {
+    var member = members[i];
+    if (member.id === "member10") continue; // skip pandeiro
 
-    // Initially hide all team members behind pandeiro
-    member.style.top = `${pandeiroPos.top}px`;
-    member.style.left = `${pandeiroPos.left}px`;
+    // hide behind pandeiro
+    member.style.top = pandeiroPos.top + "px";
+    member.style.left = pandeiroPos.left + "px";
     member.style.opacity = "0";
     member.style.transform = "scale(0.5)";
     member.style.zIndex = "1";
-  });
+  }
 
-  // Create Intersection Observer to detect when section is in viewport
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        // Calculate how much of the section is visible (0 to 1)
-        let ratio = entry.intersectionRatio;
+  // create watcher to detect when section visible
+  var watcher = new IntersectionObserver(
+    function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        var entry = entries[i];
 
-        // If section is entering viewport
+        // how much is visible
+        var visibleAmount = entry.intersectionRatio;
+
+        // show members as section becomes visible
         if (entry.isIntersecting) {
-          animateTeamMembers(teamMembers, pandeiro, teamSection, ratio);
+          animateMembers(members, pandeiro, section, visibleAmount);
         } else {
-          // If section is completely out of view, reset positions
-          if (ratio === 0) {
-            resetTeamMembers(teamMembers, pandeiro, teamSection);
+          // reset when completely hidden
+          if (visibleAmount === 0) {
+            resetMembers(members, pandeiro, section);
           }
         }
-      });
+      }
     },
     {
-      root: null, // Use viewport as root
+      root: null, // use viewport
       rootMargin: "0px",
       threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
     }
   );
 
-  // Start observing team section
-  observer.observe(teamSection);
+  // start watching
+  watcher.observe(section);
 
-  // Also handle scroll events for smoother animation between thresholds
-  window.addEventListener("scroll", () => {
-    // Check if team section is in viewport
-    const rect = teamSection.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
+  // also handle scroll for smoother animation
+  window.addEventListener("scroll", function () {
+    // check if section is in view
+    var rect = section.getBoundingClientRect();
+    var windowHeight = window.innerHeight;
 
     if (rect.top < windowHeight && rect.bottom > 0) {
-      // Calculate visibility ratio
-      const visibleHeight =
+      // calculate how much is visible
+      var visibleHeight =
         Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
-      const ratio = Math.min(Math.max(visibleHeight / rect.height, 0), 1);
+      var ratio = Math.min(Math.max(visibleHeight / rect.height, 0), 1);
 
-      // Apply animation based on visibility ratio
-      animateTeamMembers(teamMembers, pandeiro, teamSection, ratio);
+      // animate members based on visibility
+      animateMembers(members, pandeiro, section, ratio);
     }
   });
 }
 
 /**
- * Animate team members based on section visibility ratio
- * @param {NodeList} teamMembers - Collection of team member elements
- * @param {HTMLElement} pandeiro - The pandeiro element
- * @param {HTMLElement} teamSection - The team section element
- * @param {number} ratio - Visibility ratio (0-1)
+ * Animate team members based on scroll
  */
-function animateTeamMembers(teamMembers, pandeiro, teamSection, ratio) {
-  const pandeiroPos = getPandeiroPosition(pandeiro, teamSection);
+function animateMembers(members, pandeiro, section, ratio) {
+  var pandeiroPos = getPandeiroPos(pandeiro, section);
 
-  // Ensure pandeiro is on top
+  // pandeiro on top
   pandeiro.style.zIndex = "10";
 
-  teamMembers.forEach((member) => {
-    if (member.id === "member10") return; // Skip pandeiro
+  for (var i = 0; i < members.length; i++) {
+    var member = members[i];
+    if (member.id === "member10") continue; // skip pandeiro
 
-    // Get the final position for this member
-    const finalPos = getFinalPosition(member.id, teamSection);
+    // get final position
+    var finalPos = getFinalPos(member.id, section);
 
-    // Calculate current position based on ratio
-    const curvedRatio = Math.pow(ratio, 2.5);
-    let currentTop =
+    // make animation more dramatic with curve
+    var curvedRatio = Math.pow(ratio, 2.5);
+
+    // calculate current position
+    var currentTop =
       pandeiroPos.top + (finalPos.top - pandeiroPos.top) * curvedRatio;
-    let currentLeft =
+    var currentLeft =
       pandeiroPos.left + (finalPos.left - pandeiroPos.left) * curvedRatio;
 
-    // Calculate opacity and scale based on ratio
-    let opacity = Math.min(ratio * 2, 1);
-    let scale = 0.01 + ratio * 0.99;
+    // fade in and scale up
+    var opacity = Math.min(ratio * 2, 1);
+    var scale = 0.01 + ratio * 0.99;
 
-    // Apply calculated styles
+    // apply styles
     member.style.transition = "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)";
-    member.style.top = `${currentTop}px`;
-    member.style.left = `${currentLeft}px`;
+    member.style.top = currentTop + "px";
+    member.style.left = currentLeft + "px";
     member.style.opacity = opacity;
 
-    // Apply transformation including any needed translateX
-    const posData = getCurrentLayoutPositions().find(
-      (pos) => pos.id === member.id
-    );
+    // apply transform with any needed translation
+    var posData = getCurrentLayoutPos().find(function (pos) {
+      return pos.id === member.id;
+    });
+
     if (posData && posData.transform) {
-      member.style.transform = `${posData.transform} scale(${scale})`;
+      member.style.transform = posData.transform + " scale(" + scale + ")";
     } else {
-      member.style.transform = `scale(${scale})`;
+      member.style.transform = "scale(" + scale + ")";
     }
-  });
+  }
 }
 
 /**
- * Reset team members to initial position (behind pandeiro)
- * @param {NodeList} teamMembers - Collection of team member elements
- * @param {HTMLElement} pandeiro - The pandeiro element
- * @param {HTMLElement} teamSection - The team section element
+ * Reset members to starting position
  */
-function resetTeamMembers(teamMembers, pandeiro, teamSection) {
-  const pandeiroPos = getPandeiroPosition(pandeiro, teamSection);
+function resetMembers(members, pandeiro, section) {
+  var pandeiroPos = getPandeiroPos(pandeiro, section);
 
-  teamMembers.forEach((member) => {
-    if (member.id === "member10") return; // Skip pandeiro
+  for (var i = 0; i < members.length; i++) {
+    var member = members[i];
+    if (member.id === "member10") continue; // skip pandeiro
 
-    member.style.top = `${pandeiroPos.top}px`;
-    member.style.left = `${pandeiroPos.left}px`;
+    member.style.top = pandeiroPos.top + "px";
+    member.style.left = pandeiroPos.left + "px";
     member.style.opacity = "0";
-    member.style.transform = "translate(-50%, -50%) scale(0.01)"; // Center the member and make it tiny
-    member.style.transformOrigin = "center center"; // Ensure scaling from center
-  });
+    member.style.transform = "translate(-50%, -50%) scale(0.01)";
+    member.style.transformOrigin = "center center";
+  }
 }
 
 /**
- * Get pandeiro position relative to team section
- * @param {HTMLElement} pandeiro - The pandeiro element
- * @param {HTMLElement} teamSection - The team section element
- * @returns {Object} Position with top and left in pixels
+ * Get pandeiro position
  */
-function getPandeiroPosition(pandeiro, teamSection) {
-  const pandeiroRect = pandeiro.getBoundingClientRect();
-  const sectionRect = teamSection.getBoundingClientRect();
+function getPandeiroPos(pandeiro, section) {
+  var pandeiroRect = pandeiro.getBoundingClientRect();
+  var sectionRect = section.getBoundingClientRect();
 
-  const centerX = pandeiroRect.left + pandeiroRect.width / 2 - sectionRect.left;
-  const centerY = pandeiroRect.top + pandeiroRect.height / 2 - sectionRect.top;
+  var centerX = pandeiroRect.left + pandeiroRect.width / 2 - sectionRect.left;
+  var centerY = pandeiroRect.top + pandeiroRect.height / 2 - sectionRect.top;
 
-  // Return coordinates of the pandeiro
   return {
     top: centerY - 100,
     left: centerX,
@@ -189,272 +183,295 @@ function getPandeiroPosition(pandeiro, teamSection) {
 }
 
 /**
- * Get final position for a team member based on current layout
- * @param {string} memberId - ID of the team member
- * @param {HTMLElement} teamSection - The team section element
- * @returns {Object} Position with top and left in pixels
+ * Get final position for member
  */
-function getFinalPosition(memberId, teamSection) {
-  const sectionWidth = teamSection.offsetWidth;
-  const sectionHeight = teamSection.offsetHeight;
+function getFinalPos(memberId, section) {
+  var sectionWidth = section.offsetWidth;
+  var sectionHeight = section.offsetHeight;
 
-  // Get position data based on screen size
-  const positionData = getCurrentLayoutPositions().find(
-    (pos) => pos.id === memberId
-  );
+  // get layout data based on screen size
+  var posData = getCurrentLayoutPos().find(function (pos) {
+    return pos.id === memberId;
+  });
 
-  if (!positionData) {
+  if (!posData) {
     return { top: 0, left: 0 };
   }
 
-  // Convert percentage to pixels
-  const top = (parseFloat(positionData.top) / 100) * sectionHeight;
-  const left = (parseFloat(positionData.left) / 100) * sectionWidth;
+  // convert % to pixels
+  var top = (parseFloat(posData.top) / 100) * sectionHeight;
+  var left = (parseFloat(posData.left) / 100) * sectionWidth;
 
-  return { top, left };
+  return { top: top, left: left };
 }
 
 /**
  * Get current layout positions based on screen width
- * @returns {Array} Array of position objects
  */
-function getCurrentLayoutPositions() {
-  const viewportWidth = window.innerWidth;
+function getCurrentLayoutPos() {
+  var width = window.innerWidth;
 
-  if (viewportWidth <= 480) {
-    return mobilePositions;
-  } else if (viewportWidth <= 768) {
-    return tabletPositions;
+  if (width <= 480) {
+    return mobilePos;
+  } else if (width <= 768) {
+    return tabletPos;
   } else {
-    return desktopPositions;
+    return desktopPos;
   }
 }
 
 /**
- * Initialize pandeiro audio element and interactions
+ * Setup pandeiro audio
  */
-function initPandeiroAudio() {
-  const pandeiroMember = document.getElementById("member10");
-  if (!pandeiroMember) return;
+function setupPandeiroAudio() {
+  var pandeiroEl = document.getElementById("member10");
+  if (!pandeiroEl) return;
 
-  // Create and configure audio element
-  const pandeiro = new Audio("audio/pandeiro.mp3");
-  pandeiro.preload = "auto";
+  // create audio element
+  var audio = new Audio("audio/pandeiro.mp3");
+  audio.preload = "auto";
 
-  // Track playing state to avoid multiple plays
-  let isPlaying = false;
+  // track state
+  var playing = false;
 
-  // Toggle function for audio play/pause
-  function togglePandeiro(e) {
-    // Prevent default behavior for touch events
+  // toggle audio playback
+  function toggleAudio(e) {
+    // prevent defaults
     if (e.type === "touchend") e.preventDefault();
 
-    if (isPlaying) {
-      // Stop audio
-      pandeiro.pause();
-      pandeiro.currentTime = 0;
-      isPlaying = false;
-      pandeiroMember
+    if (playing) {
+      // stop playback
+      audio.pause();
+      audio.currentTime = 0;
+      playing = false;
+      pandeiroEl
         .querySelector(".member-image-container1")
         ?.classList.remove("audio-playing");
     } else {
-      // Start audio
-      pandeiro
-        .play()
-        .catch((err) => console.error("Error playing audio:", err));
-      isPlaying = true;
-      pandeiroMember
+      // start playback - catch errors
+      audio.play().catch(function (err) {
+        console.error("Audio error:", err);
+      });
+      playing = true;
+      pandeiroEl
         .querySelector(".member-image-container1")
         ?.classList.add("audio-playing");
     }
 
-    // Prevent propagation to avoid unwanted effects
+    // prevent bubbling
     e.stopPropagation();
 
-    // Make sure the element doesn't flip like regular team members
-    pandeiroMember.classList.remove("flipped");
+    // don't flip
+    pandeiroEl.classList.remove("flipped");
   }
 
-  // Add event listeners
-  pandeiroMember.addEventListener("click", togglePandeiro);
+  // add event handlers
+  pandeiroEl.addEventListener("click", toggleAudio);
 
-  // Touch event handlers with proper event prevention for mobile
-  pandeiroMember.addEventListener("touchstart", (e) => e.preventDefault(), {
+  // touch handlers
+  pandeiroEl.addEventListener(
+    "touchstart",
+    function (e) {
+      e.preventDefault();
+    },
+    {
+      passive: false,
+    }
+  );
+
+  pandeiroEl.addEventListener("touchend", toggleAudio, {
     passive: false,
   });
-  pandeiroMember.addEventListener("touchend", togglePandeiro, {
-    passive: false,
-  });
 
-  // Reset when audio finishes playing
-  pandeiro.addEventListener("ended", () => {
-    isPlaying = false;
-    pandeiroMember
+  // reset when audio ends
+  audio.addEventListener("ended", function () {
+    playing = false;
+    pandeiroEl
       .querySelector(".member-image-container1")
       ?.classList.remove("audio-playing");
   });
 }
 
 /**
- * Set up flip interactions for team members
- * @param {NodeList} teamMembers - Collection of team member elements
+ * Setup team member interactions
  */
-function initTeamMemberInteractions(teamMembers) {
-  teamMembers.forEach((member) => {
-    // Skip the pandeiro member as it has special handling
-    if (member.id === "member10") return;
+function setupTeamMembers(members) {
+  for (var i = 0; i < members.length; i++) {
+    var member = members[i];
 
-    const memberImageContainer = member.querySelector(
-      ".member-image-container"
-    );
-    if (!memberImageContainer) return;
+    // skip pandeiro
+    if (member.id === "member10") continue;
 
-    // Handle mouse interactions (desktop)
-    member.addEventListener("mouseenter", () => {
-      memberImageContainer.style.animationPlayState = "paused";
-      member.classList.add("flipped");
+    var container = member.querySelector(".member-image-container");
+    if (!container) continue;
+
+    // mouse hover (desktop)
+    member.addEventListener("mouseenter", function () {
+      var imgContainer = this.querySelector(".member-image-container");
+      if (imgContainer) {
+        imgContainer.style.animationPlayState = "paused";
+      }
+      this.classList.add("flipped");
     });
 
-    member.addEventListener("mouseleave", () => {
-      memberImageContainer.style.animationPlayState = "running";
-      member.classList.remove("flipped");
+    member.addEventListener("mouseleave", function () {
+      var imgContainer = this.querySelector(".member-image-container");
+      if (imgContainer) {
+        imgContainer.style.animationPlayState = "running";
+      }
+      this.classList.remove("flipped");
     });
 
-    // Handle touch interactions (mobile & tablet)
+    // touch handlers (mobile)
     member.addEventListener(
       "touchstart",
-      (e) => {
-        // Necessary to prevent scrolling when tapping on cards
+      function (e) {
+        // prevent scrolling when tapping cards
         e.preventDefault();
 
-        // Toggle flipped state and animation
-        member.classList.toggle("flipped");
-        const currentState = memberImageContainer.style.animationPlayState;
-        memberImageContainer.style.animationPlayState =
-          currentState === "paused" ? "running" : "paused";
+        // toggle flipped state
+        this.classList.toggle("flipped");
+
+        // toggle animation state
+        var imgContainer = this.querySelector(".member-image-container");
+        if (imgContainer) {
+          var currentState = imgContainer.style.animationPlayState;
+          imgContainer.style.animationPlayState =
+            currentState === "paused" ? "running" : "paused";
+        }
       },
-      { passive: false }
+      {
+        passive: false,
+      }
     );
-  });
+  }
 }
 
 /**
- * Add document-level touch handler to reset cards
- * @param {NodeList} teamMembers - Collection of team member elements
+ * Handle document touch to reset cards
  */
-function addDocumentTouchHandler(teamMembers) {
-  document.addEventListener("touchend", (e) => {
-    // If touch ends outside any team member, reset all flipped states
-    const touchedMember = e.target.closest(".team-member");
-    if (!touchedMember) {
-      teamMembers.forEach((member) => {
-        // Skip the pandeiro member
-        if (member.id === "member10") return;
+function setupTouchHandler(members) {
+  document.addEventListener("touchend", function (e) {
+    // if touch ends outside a member, reset all
+    var touched = e.target.closest(".team-member");
+    if (!touched) {
+      for (var i = 0; i < members.length; i++) {
+        var member = members[i];
+        // skip pandeiro
+        if (member.id === "member10") continue;
 
         member.classList.remove("flipped");
-        const container = member.querySelector(".member-image-container");
+        var container = member.querySelector(".member-image-container");
         if (container) {
           container.style.animationPlayState = "running";
         }
-      });
+      }
     }
   });
 }
 
 /**
- * Adjust team layout based on screen size
+ * Fix layout based on screen size
  */
-function adjustTeamLayout() {
-  const viewportWidth = window.innerWidth;
-  let positions;
+function fixTeamLayout() {
+  var width = window.innerWidth;
+  var positions;
 
-  if (viewportWidth <= 480) {
-    positions = mobilePositions;
-  } else if (viewportWidth <= 768) {
-    positions = tabletPositions;
+  if (width <= 480) {
+    positions = mobilePos;
+  } else if (width <= 768) {
+    positions = tabletPos;
   } else {
-    positions = desktopPositions;
+    positions = desktopPos;
   }
 
-  // Apply layout for pandeiro - team members will be positioned by scroll effect
-  const pandeiro = document.getElementById("member10");
+  // apply pandeiro position
+  var pandeiro = document.getElementById("member10");
   if (pandeiro) {
-    const pandeiroPosition = positions.find((pos) => pos.id === "member10");
-    if (pandeiroPosition) {
-      pandeiro.style.top = pandeiroPosition.top;
-      pandeiro.style.left = pandeiroPosition.left;
+    var pandeiroPos = positions.find(function (pos) {
+      return pos.id === "member10";
+    });
 
-      // Apply transform property if it exists
-      if (pandeiroPosition.transform) {
-        pandeiro.style.transform = pandeiroPosition.transform;
+    if (pandeiroPos) {
+      pandeiro.style.top = pandeiroPos.top;
+      pandeiro.style.left = pandeiroPos.left;
+
+      if (pandeiroPos.transform) {
+        pandeiro.style.transform = pandeiroPos.transform;
       }
     }
   }
 
-  // Update positions of all members based on current scroll position
-  updateTeamMembersPositions();
+  // update member positions based on current scroll
+  updateMemberPositions();
 }
 
 /**
- * Update team members positions based on current scroll position
+ * Update member positions based on scroll
  */
-function updateTeamMembersPositions() {
-  const teamSection = document.getElementById("team");
-  const teamMembers = document.querySelectorAll(".team-member");
-  const pandeiro = document.getElementById("member10");
+function updateMemberPositions() {
+  var teamSection = document.getElementById("team");
+  var members = document.querySelectorAll(".team-member");
+  var pandeiro = document.getElementById("member10");
 
-  if (!teamSection || !teamMembers.length || !pandeiro) return;
+  if (!teamSection || !members.length || !pandeiro) return;
 
-  // Check if team section is in viewport
-  const rect = teamSection.getBoundingClientRect();
+  // check if section is visible
+  var rect = teamSection.getBoundingClientRect();
 
   if (rect.top < window.innerHeight && rect.bottom > 0) {
-    // Calculate visibility ratio
-    const visibleHeight =
+    // calculate visibility ratio
+    var visibleHeight =
       Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
-    const ratio = Math.min(Math.max(visibleHeight / rect.height, 0), 1);
+    var ratio = Math.min(Math.max(visibleHeight / rect.height, 0), 1);
 
-    // Skip animation and apply position immediately
-    const pandeiroPos = getPandeiroPosition(pandeiro, teamSection);
+    // get pandeiro position
+    var pandeiroPos = getPandeiroPos(pandeiro, teamSection);
 
-    teamMembers.forEach((member) => {
-      if (member.id === "member10") return; // Skip pandeiro
+    for (var i = 0; i < members.length; i++) {
+      var member = members[i];
+      if (member.id === "member10") continue; // skip pandeiro
 
-      // Get final position for this member
-      const finalPos = getFinalPosition(member.id, teamSection);
+      // get final position
+      var finalPos = getFinalPos(member.id, teamSection);
 
-      // Calculate current position
-      const top = pandeiroPos.top + (finalPos.top - pandeiroPos.top) * ratio;
-      const left =
-        pandeiroPos.left + (finalPos.left - pandeiroPos.left) * ratio;
+      // calculate current position
+      var top = pandeiroPos.top + (finalPos.top - pandeiroPos.top) * ratio;
+      var left = pandeiroPos.left + (finalPos.left - pandeiroPos.left) * ratio;
 
-      // Apply styles without transition for immediate effect
+      // apply immediately without transition
       member.style.transition = "none";
-      member.style.top = `${top}px`;
-      member.style.left = `${left}px`;
+      member.style.top = top + "px";
+      member.style.left = left + "px";
       member.style.opacity = Math.min(ratio * 2, 1);
 
-      // Apply transformation including any needed translateX
-      const posData = getCurrentLayoutPositions().find(
-        (pos) => pos.id === member.id
-      );
+      // apply transform and scale
+      var posData = getCurrentLayoutPos().find(function (pos) {
+        return pos.id === member.id;
+      });
+
       if (posData && posData.transform) {
-        member.style.transform = `${posData.transform} scale(${
-          0.01 + ratio * 0.99
-        })`;
+        member.style.transform =
+          posData.transform + " scale(" + (0.01 + ratio * 0.99) + ")";
       } else {
-        member.style.transform = `scale(${0.01 + ratio * 0.99})`;
+        member.style.transform = "scale(" + (0.01 + ratio * 0.99) + ")";
       }
 
-      // Re-enable transitions after a small delay
-      setTimeout(() => {
-        member.style.transition = "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)";
-      }, 5000);
-    });
+      // re-enable transitions with delay
+      setTimeout(function () {
+        for (var j = 0; j < members.length; j++) {
+          if (members[j].id !== "member10") {
+            members[j].style.transition =
+              "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)";
+          }
+        }
+      }, 50);
+    }
   }
 }
 
-const desktopPositions = [
+// Layout position data
+var desktopPos = [
   { id: "member1", top: "10%", left: "25%", transform: "translateX(-50%)" }, // Ed
   { id: "member2", top: "5%", left: "50%", transform: "translateX(-50%)" }, // Alex
   { id: "member3", top: "10%", left: "75%", transform: "translateX(-50%)" }, // Dar
@@ -467,7 +484,7 @@ const desktopPositions = [
   { id: "member10", top: "70%", left: "50%", transform: "translateX(-50%)" }, // Pandeiro
 ];
 
-const tabletPositions = [
+var tabletPos = [
   { id: "member1", top: "20%", left: "15%", transform: "translateX(-50%)" }, // Ed
   { id: "member2", top: "2%", left: "50%", transform: "translateX(-50%)" }, // Alex
   { id: "member3", top: "20%", left: "85%", transform: "translateX(-50%)" }, // Dar
@@ -480,7 +497,7 @@ const tabletPositions = [
   { id: "member10", top: "65%", left: "50%", transform: "translateX(-50%)" }, // Pandeiro
 ];
 
-const mobilePositions = [
+var mobilePos = [
   { id: "member1", top: "30%", left: "20%", transform: "translateX(-50%)" }, // Ed
   { id: "member2", top: "15%", left: "50%", transform: "translateX(-50%)" }, // Alex
   { id: "member3", top: "30%", left: "80%", transform: "translateX(-50%)" }, // Dar
@@ -493,5 +510,5 @@ const mobilePositions = [
   { id: "member10", top: "55%", left: "50%", transform: "translateX(-50%)" }, // Pandeiro
 ];
 
-// Export initialization function
+// Export the init function
 export { initTeamSection };
