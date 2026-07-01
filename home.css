@@ -274,6 +274,47 @@ svg {
   transform: scale(1.1);
 }
 
+/* --- Video Controls Bar --- */
+.video-controls-bar {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  display: flex;
+  gap: 15px;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.video-controls-bar.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.video-control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid white;
+  background-color: transparent;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.video-control-btn:hover {
+  background-color: var(--main-red);
+  border-color: var(--main-red);
+  transform: scale(1.1);
+}
+
+
+
 /* Media Queries */
 /* Small phones */
 @media (min-width: 320px) and (max-width: 419px) {
@@ -321,6 +362,18 @@ svg {
   .mobile-title {
     display: block;
     width: 100%;
+  }
+
+  /* video-controls */
+  .video-controls-bar {
+    bottom: 20px;
+    left: 20px;
+    gap: 10px;
+  }
+  .video-control-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
   }
 }
 
@@ -370,6 +423,18 @@ svg {
     display: block;
     width: 100%;
   }
+
+  /* video-controls */
+  .video-controls-bar {
+    bottom: 20px;
+    left: 20px;
+    gap: 10px;
+  }
+  .video-control-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
 }
 
 /* Tablets */
@@ -402,6 +467,8 @@ svg {
   .desktop-title {
     display: block;
   }
+
+  
 }
 
 /* Extra large screens */
@@ -436,5 +503,10 @@ svg {
     width: 40px;
     height: 40px;
     font-size: 1.2rem;
+  }
+  /* video-controls */
+  .video-controls-bar {
+    bottom: 40px;
+    left: 40px;
   }
 }

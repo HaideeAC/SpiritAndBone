@@ -7,6 +7,7 @@ import { initTeamSection } from "/team-members.js";
 import { initContactForm } from "/contact-form.js";
 import { initProjectParallax } from "/project.js";
 import { debounce } from "/utils.js";
+import { initVideoControls } from "/video-controls.js";
 
 // tracking vars
 var pageLoadStatus = true;
@@ -256,6 +257,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // init all the modules
   initVideoReveal();
+  initVideoControls();
   initNavigation(transEl);
   initScrollEffects();
   initTeamSection();
