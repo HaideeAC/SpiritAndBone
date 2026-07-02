@@ -57,7 +57,7 @@ function initScrollEffects() {
       root: null,
       rootMargin: "-5% 0px -5% 0px",
       threshold: [0.05, 0.25],
-    }
+    },
   );
 
   // observe all sections
@@ -155,7 +155,9 @@ function initScrollEffects() {
     }
 
     // contact section parallax
-    var contactItems = document.querySelectorAll(".contact-info > *");
+    var contactItems = document.querySelectorAll(
+      ".contact-info > .social-icons",
+    );
     var contactSection = document.getElementById("contact");
 
     if (contactItems.length && contactSection) {
@@ -219,7 +221,7 @@ function initScrollEffects() {
                 timeElapsed,
                 startY,
                 distance,
-                duration
+                duration,
               );
               window.scrollTo(0, scrollY);
 
@@ -279,7 +281,7 @@ function initScrollEffects() {
             }, 100);
           }
         }
-      }, 100)
+      }, 100),
     );
   }
 }
