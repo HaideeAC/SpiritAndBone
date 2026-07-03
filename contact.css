@@ -22,7 +22,7 @@
   position: relative;
   width: 100%;
   margin: 0 auto;
-  padding-top: 100px;
+  padding-top: 80px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -247,7 +247,7 @@
 
 .intro-text {
   color: rgba(255, 255, 255, 0.85);
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.6;
   margin: 0 0 35px 0;
 }
@@ -274,7 +274,7 @@
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  font-size: 0.9rem;
+  font-size: 15px;
   color: rgba(255, 255, 255, 0.7);
   font-weight: 500;
   letter-spacing: 1px;
