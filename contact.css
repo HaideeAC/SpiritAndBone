@@ -187,10 +187,10 @@
   inset: 0;
   border-radius: inherit;
   background: radial-gradient(
-      circle,
-      rgba(0, 0, 0, 0.85) 51%,
-      rgba(192, 0, 1, 0.85) 0%
-    );
+    circle,
+    rgba(0, 0, 0, 0.85) 51%,
+    rgba(192, 0, 1, 0.85) 0%
+  );
   opacity: 0;
   transition: opacity 0.4s ease;
   z-index: -1;
@@ -412,15 +412,14 @@ footer p {
     height: 260px;
     margin: 0 20px 15px 20px;
   }
-
+.mailing-list-circle:hover {
+    animation: none;
+  }
   .mailing-list-circle h3 {
     font-size: 50px;
   }
   .mailing-circle-image {
     width: 300px;
-  }
-  .mailing-circle-image:hover {
-    animation: none;
   }
   .mailing-list-input {
     font-size: 10px;
@@ -456,7 +455,7 @@ footer p {
     margin: 0 0 20px;
     text-align: center;
   }
-  .intro-text a{
+  .intro-text a {
     color: var(--main-mustard);
     filter: drop-shadow(0 0 0.1px white);
   }
@@ -536,16 +535,16 @@ footer p {
     height: 380px;
     margin: 0 20px 15px 20px;
   }
-
+  .mailing-list-circle:hover {
+    animation: none;
+  }
   .mailing-list-circle h3 {
     font-size: 75px;
   }
   .mailing-circle-image {
     width: 435px;
   }
-  .mailing-circle-image:hover {
-    animation: none;
-  }
+
   .mailing-list-input {
     font-size: 12px;
   }
