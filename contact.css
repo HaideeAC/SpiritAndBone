@@ -29,7 +29,7 @@
 }
 
 .contact-title {
-  font-size: 4rem;
+  font-size: 70px;
   margin-top: 0px;
   color: white;
   text-transform: uppercase;
@@ -75,6 +75,7 @@
 }
 
 .pledge h2 {
+  animation: pulse-pledge 2s ease-in-out infinite;
   margin: 0;
   font-size: 70px;
   font-weight: bolder;
@@ -119,10 +120,10 @@
   border-radius: 50%;
   object-fit: contain;
   z-index: 10;
-  /* filter: drop-shadow(0 0 5px var(--main-red)); */
+  animation: subtler-float 4s ease-in-out infinite;
 }
-.mailing-circle-image:hover {
-  inset: 10% -5.5%;
+.mailing-list-circle:hover .mailing-circle-image {
+  animation: snake-float 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   filter: drop-shadow(0 0 5px white);
 }
 
@@ -166,7 +167,7 @@
   position: absolute;
   top: 69%;
   left: 71%;
-  background-color: transparent;
+  background: transparent;
   color: white;
   border: none;
   border-radius: 20px;
@@ -176,14 +177,27 @@
   padding: 3px 10px;
   letter-spacing: 5px;
   white-space: nowrap;
-  transition: all 0.3s ease;
   z-index: 101;
+  overflow: hidden;
 }
 
-.mailing-list-join-btn:hover {
-  background-color: var(--main-red);
-  color: white;
-  box-shadow: 0px 0px 30px var(--main-red);
+.mailing-list-join-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+      circle,
+      rgba(0, 0, 0, 0.85) 51%,
+      rgba(192, 0, 1, 0.85) 0%
+    );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+
+.mailing-list-join-btn:hover::before {
+  opacity: 1;
 }
 
 /* Social icons */
@@ -218,7 +232,7 @@
   border-color: transparent;
 }
 
-/* Right side with contact form */
+/* Right side with contact intro text and form */
 .contact-form-container {
   margin: 0 60px 30px 0;
   opacity: 0;
@@ -238,13 +252,16 @@
   margin: 0 0 35px 0;
 }
 .intro-text a {
-  color: var(--main-red);
+  font-weight: 800;
+  color: var(--main-mustard);
+  filter: drop-shadow(0 0 0.1px white);
   text-decoration: none;
   transition: all 0.3s ease;
   display: inline-block;
+  filter: drop-shadow(0 0 1.5px var(--main-red));
 }
 .intro-text a:hover {
-  color: var(--main-mustard);
+  color: var(--main-red);
   transform: scale(1.05);
 }
 
@@ -341,7 +358,7 @@ footer p {
 
 /* Media Queries */
 /* Small phones & Larger phones */
-@media (min-width: 320px) and (max-width: 767px){
+@media (min-width: 320px) and (max-width: 767px) {
   .contact-hero {
     padding-top: 60px;
   }
@@ -378,6 +395,9 @@ footer p {
     transform: rotate(-10deg);
     align-self: flex-start;
   }
+  .pledge a:hover {
+    transform: none;
+  }
   .pledge a {
     font-size: 40px;
   }
@@ -392,11 +412,15 @@ footer p {
     height: 260px;
     margin: 0 20px 15px 20px;
   }
+
   .mailing-list-circle h3 {
     font-size: 50px;
   }
   .mailing-circle-image {
     width: 300px;
+  }
+  .mailing-circle-image:hover {
+    animation: none;
   }
   .mailing-list-input {
     font-size: 10px;
@@ -406,6 +430,12 @@ footer p {
     left: 71%;
     font-size: 13px;
     letter-spacing: 2px;
+    animation: pulse-pledge 1s ease-in-out infinite;
+    background: radial-gradient(
+      circle,
+      rgba(0, 0, 0, 0.85) 51%,
+      rgba(192, 0, 1, 0.85) 0%
+    );
   }
 
   .social-icons {
@@ -421,13 +451,26 @@ footer p {
   .contact-form-container {
     margin: 0 20px 30px;
   }
-  .form-group {
-    margin-left: 0;
-  }
   .intro-text {
     font-size: 15px;
     margin: 0 0 20px;
     text-align: center;
+  }
+  .intro-text a{
+    color: var(--main-mustard);
+    filter: drop-shadow(0 0 0.1px white);
+  }
+  .intro-text a:hover {
+    transform: none;
+  }
+  .form-group input,
+  .form-group textarea {
+    padding: 5px 0;
+    font-size: 10px;
+  }
+
+  .form-group {
+    margin-left: 0;
   }
   .send-button {
     display: block;
@@ -438,47 +481,127 @@ footer p {
   }
 }
 
-
 /* Tablets */
 @media (min-width: 768px) and (max-width: 939px) {
   .contact-hero {
-    padding: 60px 20px;
+    padding-top: 60px;
   }
 
   .contact-title {
-    font-size: 3rem;
-    margin-bottom: 60px;
+    font-size: 60px;
+    margin-bottom: 10px;
+  }
+  .contact-title::after {
+    margin-bottom: 15px;
   }
 
   .contact-wrapper {
     grid-template-columns: 1fr;
-    gap: 50px;
+    gap: 10px;
   }
 
-  .pledge a {
-    font-size: 2rem;
-  }
-
-  /* Stage resets: below stack breakpoint, go back to normal flex flow */
   .contact-info {
-    position: static;
+    position: relative;
     min-height: auto;
+    margin: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 25px;
+    align-items: flex-start;
+    gap: 0;
   }
 
   .pledge,
-  .mailing-list-circle,
   .social-icons {
     position: static;
+  }
+
+  .pledge {
+    transform: rotate(-10deg);
+    align-self: flex-start;
+  }
+  .pledge a {
+    font-size: 50px;
+  }
+  .pledge a:hover {
     transform: none;
   }
 
   .mailing-list-circle {
-    width: min(50vw, 340px);
-    height: min(50vw, 340px);
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    align-self: center;
+    width: 380px;
+    height: 380px;
+    margin: 0 20px 15px 20px;
+  }
+
+  .mailing-list-circle h3 {
+    font-size: 75px;
+  }
+  .mailing-circle-image {
+    width: 435px;
+  }
+  .mailing-circle-image:hover {
+    animation: none;
+  }
+  .mailing-list-input {
+    font-size: 12px;
+  }
+  .mailing-list-join-btn {
+    top: 69.5%;
+    left: 71.5%;
+    font-size: 11px;
+    letter-spacing: 5px;
+    animation: pulse-pledge 1s ease-in-out infinite;
+    background: radial-gradient(
+      circle,
+      rgba(0, 0, 0, 0.85) 51%,
+      rgba(192, 0, 1, 0.85) 0%
+    );
+  }
+
+  .social-icons {
+    margin: 5px 15px;
+    align-self: flex-end;
+  }
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 15px;
+  }
+
+  .contact-form-container {
+    margin: 0 20px 30px;
+  }
+  .intro-text {
+    font-size: 15px;
+    margin: 0 0 20px;
+    text-align: center;
+  }
+  .intro-text a {
+    color: var(--main-mustard);
+    filter: drop-shadow(0 0 0.1px white);
+    font-weight: 800;
+  }
+  .intro-text a:hover {
+    transform: none;
+  }
+  .form-group input,
+  .form-group textarea {
+    padding: 5px 0;
+    font-size: 10px;
+  }
+
+  .form-group {
+    margin-left: 0;
+  }
+  .send-button {
+    display: block;
+    margin: 20px auto 0;
+  }
+  footer {
+    padding: 10px 0;
   }
 }

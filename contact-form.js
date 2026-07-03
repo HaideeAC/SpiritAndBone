@@ -1,3 +1,5 @@
+
+
 // Find form when page loads, set up events
 function initContactForm() {
   let formBox = document.querySelector(".contact-form-container");
