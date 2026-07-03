@@ -54,7 +54,7 @@
   grid-template-columns: 1.05fr 1fr;
   gap: 10px;
   width: 100%;
-  margin: auto 0;   
+  margin: auto 0;
 }
 
 /* Left side stage: PLEDGE, mailing circle, social icons */
@@ -69,8 +69,8 @@
   position: absolute;
   top: 0;
   left: 0;
-    transform: rotate(-20deg);
-    transform-origin: left top;
+  transform: rotate(-20deg);
+  transform-origin: left top;
   z-index: 2;
 }
 
@@ -149,7 +149,7 @@
   font-size: 15px;
 }
 
-.mailing-list-input:hover{
+.mailing-list-input:hover {
   cursor: text;
 }
 
@@ -239,7 +239,7 @@
 }
 .intro-text a {
   color: var(--main-red);
-   text-decoration: none;
+  text-decoration: none;
   transition: all 0.3s ease;
   display: inline-block;
 }
@@ -340,8 +340,8 @@ footer p {
 }
 
 /* Media Queries */
-/* Small phones */
-@media (min-width: 320px) and (max-width: 419px) {
+/* Small phones & Larger phones */
+@media (min-width: 320px) and (max-width: 767px){
   .contact-hero {
     padding-top: 60px;
   }
@@ -358,108 +358,86 @@ footer p {
     grid-template-columns: 1fr;
     gap: 10px;
   }
-  
+
   .contact-info {
     position: relative;
     min-height: auto;
+    margin: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 15px;
+    align-items: flex-start;
+    gap: 0;
   }
 
   .pledge,
-  .mailing-list-circle,
   .social-icons {
-    transform: none;
-    position: relative;
-  }
-  .pledge{
-    transform: rotate(-20deg);
-  transform-origin: left top;
+    position: static;
   }
 
+  .pledge {
+    transform: rotate(-10deg);
+    align-self: flex-start;
+  }
   .pledge a {
     font-size: 40px;
   }
 
   .mailing-list-circle {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    align-self: center;
     width: 260px;
     height: 260px;
+    margin: 0 20px 15px 20px;
   }
-
-.mailing-list-circle h3 {
-  font-size: 45px;
-}
-.mailing-circle-image {
-  width: 250px;
-  /* filter: drop-shadow(0 0 5px var(--main-red)); */
-}
+  .mailing-list-circle h3 {
+    font-size: 50px;
+  }
+  .mailing-circle-image {
+    width: 300px;
+  }
+  .mailing-list-input {
+    font-size: 10px;
+  }
+  .mailing-list-join-btn {
+    top: 68%;
+    left: 71%;
+    font-size: 13px;
+    letter-spacing: 2px;
+  }
 
   .social-icons {
     margin: 5px 0;
+    align-self: center;
   }
-
   .social-icon {
     width: 40px;
     height: 40px;
     font-size: 1rem;
   }
 
-.intro-text {
-  font-size: 15px;
-  margin: 20px;
-  text-align: center;
-}
-
+  .contact-form-container {
+    margin: 0 20px 30px;
+  }
+  .form-group {
+    margin-left: 0;
+  }
+  .intro-text {
+    font-size: 15px;
+    margin: 0 0 20px;
+    text-align: center;
+  }
+  .send-button {
+    display: block;
+    margin: 20px auto 0;
+  }
   footer {
     padding: 10px 0;
   }
 }
 
-/* Larger phones */
-@media (min-width: 420px) and (max-width: 767px) {
-  .contact-hero {
-    padding: 50px 20px;
-  }
-
-  .contact-title {
-    font-size: 2.8rem;
-    margin-bottom: 50px;
-  }
-
-  .pledge a {
-    font-size: 2rem;
-  }
-
-  /* Stage resets: below stack breakpoint, go back to normal flex flow */
-  .contact-info {
-    position: static;
-    min-height: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 20px;
-  }
-
-  .pledge,
-  .mailing-list-circle,
-  .social-icons {
-    position: static;
-    transform: none;
-  }
-
-  .mailing-list-circle {
-    width: 300px;
-    height: 300px;
-  }
-  .intro-text {
-  font-size: 1rem;
-  margin: 0 0 20px 0;
-  text-align: center;
-}
-}
 
 /* Tablets */
 @media (min-width: 768px) and (max-width: 939px) {
@@ -504,5 +482,3 @@ footer p {
     height: min(50vw, 340px);
   }
 }
-
-
