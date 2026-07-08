@@ -4,7 +4,7 @@ import { initVideoReveal } from "/video-reveal.js";
 import { initNavigation } from "/navigation.js";
 import { initScrollEffects } from "/scroll-effect.js";
 import { initTeamSection } from "/team-members.js";
-import { initContactForm } from "/contact-form.js";
+import { initContactForm, initMailingList } from "/contact-form.js";
 import { initProjectParallax } from "/project.js";
 import { debounce } from "/utils.js";
 import { initVideoControls } from "/video-controls.js";
@@ -262,6 +262,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initScrollEffects();
   initTeamSection();
   initContactForm();
+  initMailingList();
   initProjectParallax();
 
   // hook up everything

@@ -1,5 +1,3 @@
-
-
 // Find form when page loads, set up events
 function initContactForm() {
   let formBox = document.querySelector(".contact-form-container");
@@ -37,12 +35,13 @@ function initContactForm() {
     data.append("recipient", "alexanderopera@gmail.com");
 
     // Send the form data
-    fetch("https://formsubmit.co/alexanderopera@gmail.com", {
+    fetch("https://formsubmit.co/ajax/alexanderopera@gmail.com", {
       method: "POST",
+      headers: { Accept: "application/json" },
       body: data,
     })
       .then((res) => {
-        if (res.ok) return res;
+        if (res.ok) return res.json();
         throw new Error("Server error");
       })
       .then(() => {
@@ -77,6 +76,86 @@ function initContactForm() {
       makeFooterVisible();
     }
   }
+}
+
+// Wire up the mailing list circle (email input + JOIN button)
+function initMailingList() {
+  let circle = document.querySelector(".mailing-list-circle");
+  if (!circle) {
+    console.error("Can't find the mailing list circle");
+    return;
+  }
+
+  let emailInput = circle.querySelector(".mailing-list-input");
+  let joinBtn = circle.querySelector(".mailing-list-join-btn");
+
+  if (!emailInput || !joinBtn) {
+    console.error("Mailing list input or button missing");
+    return;
+  }
+
+  let emailCheck = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  function submitEmail() {
+    let email = emailInput.value.trim();
+
+    if (!email) {
+      alert("Please enter your email address.");
+      return;
+    }
+
+    if (!emailCheck.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    let btnText = joinBtn.textContent;
+    joinBtn.disabled = true;
+    joinBtn.textContent = "...";
+
+    // Brevo signup form fields
+    let data = new FormData();
+    data.append("EMAIL", email);
+    data.append("email_address_check", ""); // honeypot - must stay empty
+    data.append("locale", "en");
+
+    // Brevo's form endpoint doesn't give a readable CORS response to a
+    // plain fetch, so this is sent in no-cors mode. That means we can't
+    // actually confirm success/failure from the response - only that the
+    // request went out. Verify real signups by checking the Contacts
+    // list in Brevo.
+    fetch(
+      "https://0eea910f.sibforms.com/serve/MUIFAIie5Lgs9HwRq9EW2cJH-v4i9trP0IMwmJGL7-YfCQUjDtjjfiJjBqQLHj3o4LmNUepRSXYQTH72uWooe7l65UU6NouhkIcuGZDS2Qwz_8xswKvVlI8LU7sDiTQ3LWDUxflglVgKXndV-Si0pRk30yGygjusFCptQeV2RPSJviQuVDbiBP2uO1QsmKPTHYllySlzrc0WVFtGdw==",
+      {
+        method: "POST",
+        mode: "no-cors",
+        body: data,
+      },
+    )
+      .then(() => {
+        alert("Thanks for joining our mailing list!");
+        emailInput.value = "";
+      })
+      .catch((err) => {
+        console.error("Mailing list signup problem:", err);
+        alert("Sorry, couldn't sign you up. Please try again later.");
+      })
+      .finally(() => {
+        joinBtn.disabled = false;
+        joinBtn.textContent = btnText;
+      });
+  }
+
+  // Click JOIN button
+  joinBtn.addEventListener("click", submitEmail);
+
+  // Also allow hitting Enter in the input
+  emailInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      submitEmail();
+    }
+  });
 }
 
 // Make sure all required fields are filled
@@ -127,7 +206,7 @@ function setupFadeEffects(container) {
         watcher.unobserve(items[0].target);
       }
     },
-    { threshold: 0.2 }
+    { threshold: 0.2 },
   );
 
   // Start watching
@@ -152,7 +231,7 @@ function setupFooterVisibility() {
         makeFooterVisible();
       }
     },
-    { threshold: 0.8 }
+    { threshold: 0.8 },
   );
 
   // Start watching
@@ -168,7 +247,7 @@ function isAtPageBottom() {
   let viewportHeight = window.innerHeight;
   let docHeight = Math.max(
     document.body.scrollHeight,
-    document.documentElement.scrollHeight
+    document.documentElement.scrollHeight,
   );
 
   // Within 100px of bottom
@@ -213,4 +292,4 @@ function fixPageSpacing() {
 }
 
 // Export these functions for use elsewhere
-export { initContactForm, makeFooterVisible as showFooter };
+export { initContactForm, makeFooterVisible as showFooter, initMailingList };
