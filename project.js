@@ -34,7 +34,6 @@ function initProjectParallax() {
   // Setup various effects
   setupTier1Effects(sectionTier1, imageBoxes, projectDesc);
   setupSimpleParallax();
-  setupTextReveal();
   addPosterHoverEffect();
 
   // Handle resize between mobile/desktop
@@ -282,10 +281,10 @@ function setupDesktopEffects(tier2) {
   var introTitle = fadeContainer.querySelector(".project-intro h2");
   var introParagraph = fadeContainer.querySelector(".project-intro p");
   var leftSections = fadeContainer.querySelectorAll(
-    ".project-left-col .tone-section"
+    ".project-left-col .tone-section",
   );
   var rightSections = fadeContainer.querySelectorAll(
-    ".project-right-col .tone-section"
+    ".project-right-col .tone-section",
   );
   var poster = fadeContainer.querySelector(".project-poster");
 
@@ -334,14 +333,14 @@ function setupDesktopEffects(tier2) {
           leftSections,
           rightSections,
           poster,
-          fadeContainer
+          fadeContainer,
         );
       });
     },
     {
       threshold: thresholds,
       rootMargin: "-5% 0px -5% 0px",
-    }
+    },
   );
 
   watchScroll.observe(tier2);
@@ -366,7 +365,7 @@ function setupDesktopEffects(tier2) {
         leftSections,
         rightSections,
         poster,
-        fadeContainer
+        fadeContainer,
       );
     }
   });
@@ -380,7 +379,7 @@ function animateTier2Stuff(
   leftSections,
   rightSections,
   poster,
-  fadeContainer
+  fadeContainer,
 ) {
   // Skip if mobile
   if (window.innerWidth <= 767) return;
@@ -427,7 +426,7 @@ function animateTier2Stuff(
   for (var j = 0; j < rightSections.length; j++) {
     var rightSectionProgress = Math.max(
       0,
-      Math.min(1, rightColProgress - j * 0.1)
+      Math.min(1, rightColProgress - j * 0.1),
     );
     var rightSectionX = 100 * (1 - rightSectionProgress);
     rightSections[j].style.transform = "translateX(" + rightSectionX + "%)";
@@ -499,7 +498,7 @@ function setupTier1Effects(tier1, parallaxBoxes, projectText) {
     {
       threshold: thresholds,
       rootMargin: "-5% 0px -5% 0px",
-    }
+    },
   );
 
   scrollWatcher.observe(tier1);
@@ -643,26 +642,6 @@ function setupSimpleParallax() {
       });
     }
   }
-}
-
-// Setup project text reveal animation
-function setupTextReveal() {
-  var projectText = document.querySelector(".project-text");
-
-  if (!projectText) return;
-
-  // Watch for text becoming visible
-  var watcher = new IntersectionObserver(
-    function (entries) {
-      if (entries[0].isIntersecting) {
-        projectText.classList.add("text-revealed");
-        watcher.unobserve(projectText);
-      }
-    },
-    { threshold: 0.3 }
-  );
-
-  watcher.observe(projectText);
 }
 
 // Add hover effect to poster

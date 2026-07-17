@@ -426,9 +426,9 @@ footer p {
     font-size: 10px;
   }
   .mailing-list-join-btn {
-    top: 68%;
-    left: 71%;
-    font-size: 13px;
+    top: 69.5%;
+    left: 72.5%;
+    font-size: 7px;
     letter-spacing: 2px;
     animation: pulse-pledge 1s ease-in-out infinite;
     background: radial-gradient(
