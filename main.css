@@ -245,11 +245,7 @@
   }
   40% {
     transform-origin: bottom right;
-    transform: scale(1.15) rotateY(1deg) rotateZ(1deg);
-  }
-  65% {
-    transform-origin: bottom right;
-    transform: scale(0.97) rotateY(-1eg) rotateZ(-1deg);
+    transform: scale(1.05) rotateY(1deg) rotateZ(1deg);
   }
   85% {
     transform-origin: bottom right;
